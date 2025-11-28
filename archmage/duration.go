@@ -1,4 +1,4 @@
-package soutils
+package archmage
 
 import (
 	"errors"

@@ -1,4 +1,4 @@
-package soutils
+package archmage
 
 type Tuple1[T1 any] struct {
 	Item1 T1
