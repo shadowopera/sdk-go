@@ -1,7 +1,7 @@
 package archmage
 
 type Tuple1[T1 any] struct {
-	Item1 T1
+	Item1 T1 `json:"item1"`
 }
 
 func MakeTuple1[T1 any](v1 T1) Tuple1[T1] {
@@ -17,8 +17,8 @@ func (t *Tuple1[T1]) Unpack() T1 {
 }
 
 type Tuple2[T1, T2 any] struct {
-	Item1 T1
-	Item2 T2
+	Item1 T1 `json:"item1"`
+	Item2 T2 `json:"item2"`
 }
 
 func MakeTuple2[T1, T2 any](v1 T1, v2 T2) Tuple2[T1, T2] {
@@ -34,9 +34,9 @@ func (t *Tuple2[T1, T2]) Unpack() (T1, T2) {
 }
 
 type Tuple3[T1, T2, T3 any] struct {
-	Item1 T1
-	Item2 T2
-	Item3 T3
+	Item1 T1 `json:"item1"`
+	Item2 T2 `json:"item2"`
+	Item3 T3 `json:"item3"`
 }
 
 func MakeTuple3[T1, T2, T3 any](v1 T1, v2 T2, v3 T3) Tuple3[T1, T2, T3] {
@@ -52,10 +52,10 @@ func (t *Tuple3[T1, T2, T3]) Unpack() (T1, T2, T3) {
 }
 
 type Tuple4[T1, T2, T3, T4 any] struct {
-	Item1 T1
-	Item2 T2
-	Item3 T3
-	Item4 T4
+	Item1 T1 `json:"item1"`
+	Item2 T2 `json:"item2"`
+	Item3 T3 `json:"item3"`
+	Item4 T4 `json:"item4"`
 }
 
 func MakeTuple4[T1, T2, T3, T4 any](v1 T1, v2 T2, v3 T3, v4 T4) Tuple4[T1, T2, T3, T4] {
@@ -71,11 +71,11 @@ func (t *Tuple4[T1, T2, T3, T4]) Unpack() (T1, T2, T3, T4) {
 }
 
 type Tuple5[T1, T2, T3, T4, T5 any] struct {
-	Item1 T1
-	Item2 T2
-	Item3 T3
-	Item4 T4
-	Item5 T5
+	Item1 T1 `json:"item1"`
+	Item2 T2 `json:"item2"`
+	Item3 T3 `json:"item3"`
+	Item4 T4 `json:"item4"`
+	Item5 T5 `json:"item5"`
 }
 
 func MakeTuple5[T1, T2, T3, T4, T5 any](
@@ -92,12 +92,12 @@ func (t *Tuple5[T1, T2, T3, T4, T5]) Unpack() (T1, T2, T3, T4, T5) {
 }
 
 type Tuple6[T1, T2, T3, T4, T5, T6 any] struct {
-	Item1 T1
-	Item2 T2
-	Item3 T3
-	Item4 T4
-	Item5 T5
-	Item6 T6
+	Item1 T1 `json:"item1"`
+	Item2 T2 `json:"item2"`
+	Item3 T3 `json:"item3"`
+	Item4 T4 `json:"item4"`
+	Item5 T5 `json:"item5"`
+	Item6 T6 `json:"item6"`
 }
 
 func MakeTuple6[T1, T2, T3, T4, T5, T6 any](
@@ -114,13 +114,13 @@ func (t *Tuple6[T1, T2, T3, T4, T5, T6]) Unpack() (T1, T2, T3, T4, T5, T6) {
 }
 
 type Tuple7[T1, T2, T3, T4, T5, T6, T7 any] struct {
-	Item1 T1
-	Item2 T2
-	Item3 T3
-	Item4 T4
-	Item5 T5
-	Item6 T6
-	Item7 T7
+	Item1 T1 `json:"item1"`
+	Item2 T2 `json:"item2"`
+	Item3 T3 `json:"item3"`
+	Item4 T4 `json:"item4"`
+	Item5 T5 `json:"item5"`
+	Item6 T6 `json:"item6"`
+	Item7 T7 `json:"item7"`
 }
 
 func MakeTuple7[T1, T2, T3, T4, T5, T6, T7 any](
