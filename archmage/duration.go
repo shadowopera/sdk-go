@@ -1,7 +1,10 @@
 package archmage
 
 import (
+	"encoding/json/jsontext"
+	"encoding/json/v2"
 	"errors"
+	"fmt"
 	"time"
 )
 
@@ -10,6 +13,88 @@ var (
 	_errInvalidDurationShardsLength = errors.New("invalid duration shards length")
 	_errInvalidDurationShardsFormat = errors.New("invalid duration shards format")
 )
+
+var (
+	_ json.MarshalerTo     = (*Duration)(nil)
+	_ json.UnmarshalerFrom = (*Duration)(nil)
+)
+
+type Duration struct {
+	time.Duration
+}
+
+func (d Duration) V() time.Duration {
+	return d.Duration
+}
+
+func (d *Duration) MarshalJSONTo(enc *jsontext.Encoder) error {
+	var a []int64
+	r := ShardDuration(d.Duration)
+	switch x := r.(type) {
+	case nil:
+		return enc.WriteToken(jsontext.Null)
+	case *[2]int64:
+		a = (*x)[:]
+	case *[3]int64:
+		a = (*x)[:]
+	default:
+		panic("unreachable")
+	}
+
+	err := enc.WriteToken(jsontext.BeginArray)
+	if err != nil {
+		return err
+	}
+	for _, v := range a {
+		if err = enc.WriteToken(jsontext.Int(v)); err != nil {
+			return err
+		}
+	}
+
+	return enc.WriteToken(jsontext.EndArray)
+}
+
+func (d *Duration) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+	tok, err := dec.ReadToken()
+	if err != nil {
+		return err
+	}
+
+	switch tok.Kind() {
+	case 'n':
+		d.Duration = 0
+		return nil
+	case '[':
+	default:
+		return fmt.Errorf("archmage.Duration: invalid JSON token kind %q, expected 'n' or '['", tok.Kind())
+	}
+
+	var pitch [3]int64
+	var a = pitch[:0]
+	for {
+		tok, err = dec.ReadToken()
+		if err != nil {
+			return err
+		}
+		switch tok.Kind() {
+		case '0':
+			a = append(a, tok.Int())
+			continue
+		case ']':
+		default:
+			return fmt.Errorf("archmage.Duration: invalid JSON token kind %q in array, expected '0' or ']'", tok.Kind())
+		}
+		break
+	}
+
+	r, err := parseDurationShardsImpl(a)
+	if err != nil {
+		return err
+	}
+
+	d.Duration = r
+	return nil
+}
 
 func ParseDurationShards(v any) (time.Duration, error) {
 	if v == nil {

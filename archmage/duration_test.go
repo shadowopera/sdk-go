@@ -1,6 +1,7 @@
 package archmage_test
 
 import (
+	"encoding/json/v2"
 	"reflect"
 	"strings"
 	"testing"
@@ -136,6 +137,32 @@ func TestParseDurationShards(t *testing.T) {
 				}
 				if r != tt.expected {
 					t.Fatalf("expected result %q, got %q", tt.expected, r)
+				}
+
+				d1 := archmage.Duration{Duration: tt.expected}
+				data, err := json.Marshal(d1)
+				if err != nil {
+					t.Fatalf("failed to marshal Duration: %v", err)
+				}
+				var d2 archmage.Duration
+				if err = json.Unmarshal(data, &d2); err != nil {
+					t.Fatalf("failed to unmarshal Duration: %v", err)
+				}
+				if d2.V() != tt.expected {
+					t.Fatalf("expected unmarshaled Duration to be %q, got %q", tt.expected, d2.V())
+				}
+
+				data, err = json.Marshal(tt.input)
+				if err != nil {
+					t.Fatalf("failed to marshal input: %v", err)
+				}
+				var d3 archmage.Duration
+				d3.Duration = time.Millisecond
+				if err = json.Unmarshal(data, &d3); err != nil {
+					t.Fatalf("failed to unmarshal input into Duration: %v", err)
+				}
+				if d3.V() != tt.expected {
+					t.Fatalf("expected unmarshaled input Duration to be %q, got %q", tt.expected, d3.V())
 				}
 
 				switch tt.subject {
