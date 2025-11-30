@@ -4,7 +4,7 @@ type Tuple1[T1 any] struct {
 	Item1 T1
 }
 
-func MakeT1[T1 any](v1 T1) Tuple1[T1] {
+func MakeTuple1[T1 any](v1 T1) Tuple1[T1] {
 	return Tuple1[T1]{v1}
 }
 
@@ -21,7 +21,7 @@ type Tuple2[T1, T2 any] struct {
 	Item2 T2
 }
 
-func MakeT2[T1, T2 any](v1 T1, v2 T2) Tuple2[T1, T2] {
+func MakeTuple2[T1, T2 any](v1 T1, v2 T2) Tuple2[T1, T2] {
 	return Tuple2[T1, T2]{v1, v2}
 }
 
@@ -39,7 +39,7 @@ type Tuple3[T1, T2, T3 any] struct {
 	Item3 T3
 }
 
-func MakeT3[T1, T2, T3 any](v1 T1, v2 T2, v3 T3) Tuple3[T1, T2, T3] {
+func MakeTuple3[T1, T2, T3 any](v1 T1, v2 T2, v3 T3) Tuple3[T1, T2, T3] {
 	return Tuple3[T1, T2, T3]{v1, v2, v3}
 }
 
@@ -58,7 +58,7 @@ type Tuple4[T1, T2, T3, T4 any] struct {
 	Item4 T4
 }
 
-func MakeT4[T1, T2, T3, T4 any](v1 T1, v2 T2, v3 T3, v4 T4) Tuple4[T1, T2, T3, T4] {
+func MakeTuple4[T1, T2, T3, T4 any](v1 T1, v2 T2, v3 T3, v4 T4) Tuple4[T1, T2, T3, T4] {
 	return Tuple4[T1, T2, T3, T4]{v1, v2, v3, v4}
 }
 
@@ -78,7 +78,7 @@ type Tuple5[T1, T2, T3, T4, T5 any] struct {
 	Item5 T5
 }
 
-func MakeT5[T1, T2, T3, T4, T5 any](
+func MakeTuple5[T1, T2, T3, T4, T5 any](
 	v1 T1, v2 T2, v3 T3, v4 T4, v5 T5) Tuple5[T1, T2, T3, T4, T5] {
 	return Tuple5[T1, T2, T3, T4, T5]{v1, v2, v3, v4, v5}
 }
@@ -100,7 +100,7 @@ type Tuple6[T1, T2, T3, T4, T5, T6 any] struct {
 	Item6 T6
 }
 
-func MakeT6[T1, T2, T3, T4, T5, T6 any](
+func MakeTuple6[T1, T2, T3, T4, T5, T6 any](
 	v1 T1, v2 T2, v3 T3, v4 T4, v5 T5, v6 T6) Tuple6[T1, T2, T3, T4, T5, T6] {
 	return Tuple6[T1, T2, T3, T4, T5, T6]{v1, v2, v3, v4, v5, v6}
 }
@@ -123,7 +123,7 @@ type Tuple7[T1, T2, T3, T4, T5, T6, T7 any] struct {
 	Item7 T7
 }
 
-func MakeT7[T1, T2, T3, T4, T5, T6, T7 any](
+func MakeTuple7[T1, T2, T3, T4, T5, T6, T7 any](
 	v1 T1, v2 T2, v3 T3, v4 T4, v5 T5, v6 T6, v7 T7) Tuple7[T1, T2, T3, T4, T5, T6, T7] {
 	return Tuple7[T1, T2, T3, T4, T5, T6, T7]{v1, v2, v3, v4, v5, v6, v7}
 }
