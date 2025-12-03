@@ -23,10 +23,6 @@ type Duration struct {
 	time.Duration
 }
 
-func (d Duration) V() time.Duration {
-	return d.Duration
-}
-
 func (d *Duration) MarshalJSONTo(enc *jsontext.Encoder) error {
 	var a []int64
 	r := ShardDuration(d.Duration)

@@ -148,8 +148,8 @@ func TestParseDurationShards(t *testing.T) {
 				if err = json.Unmarshal(data, &d2); err != nil {
 					t.Fatalf("failed to unmarshal Duration: %v", err)
 				}
-				if d2.V() != tt.expected {
-					t.Fatalf("expected unmarshaled Duration to be %q, got %q", tt.expected, d2.V())
+				if d2.Duration != tt.expected {
+					t.Fatalf("expected unmarshaled Duration to be %q, got %q", tt.expected, d2.Duration)
 				}
 
 				data, err = json.Marshal(tt.input)
@@ -161,8 +161,8 @@ func TestParseDurationShards(t *testing.T) {
 				if err = json.Unmarshal(data, &d3); err != nil {
 					t.Fatalf("failed to unmarshal input into Duration: %v", err)
 				}
-				if d3.V() != tt.expected {
-					t.Fatalf("expected unmarshaled input Duration to be %q, got %q", tt.expected, d3.V())
+				if d3.Duration != tt.expected {
+					t.Fatalf("expected unmarshaled input Duration to be %q, got %q", tt.expected, d3.Duration)
 				}
 
 				switch tt.subject {
