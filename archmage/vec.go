@@ -15,11 +15,11 @@ var (
 	_ json.UnmarshalerFrom = (*Vec4[int])(nil)
 )
 
-type Vec2[T any] struct {
+type Vec2[T comparable] struct {
 	X, Y T
 }
 
-func MakeVec2[T any](x, y T) Vec2[T] {
+func MakeVec2[T comparable](x, y T) Vec2[T] {
 	return Vec2[T]{X: x, Y: y}
 }
 
@@ -72,11 +72,11 @@ func (v *Vec2[T]) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
 	return nil
 }
 
-type Vec3[T any] struct {
+type Vec3[T comparable] struct {
 	X, Y, Z T
 }
 
-func MakeVec3[T any](x, y, z T) Vec3[T] {
+func MakeVec3[T comparable](x, y, z T) Vec3[T] {
 	return Vec3[T]{X: x, Y: y, Z: z}
 }
 
@@ -136,11 +136,11 @@ func (v *Vec3[T]) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
 	return nil
 }
 
-type Vec4[T any] struct {
+type Vec4[T comparable] struct {
 	X, Y, Z, W T
 }
 
-func MakeVec4[T any](x, y, z, w T) Vec4[T] {
+func MakeVec4[T comparable](x, y, z, w T) Vec4[T] {
 	return Vec4[T]{X: x, Y: y, Z: z, W: w}
 }
 
