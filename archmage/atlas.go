@@ -11,6 +11,7 @@ import (
 	"path/filepath"
 	"slices"
 	"strings"
+	"time"
 
 	"golang.org/x/sync/errgroup"
 )
@@ -186,6 +187,12 @@ func DumpAtlas(atlas Atlas, outputDir string, opts ...json.Options) error {
 		json.Deterministic(true),
 		json.FormatNilMapAsNull(true),
 		json.FormatNilSliceAsNull(true),
+		json.WithMarshalers(json.MarshalToFunc[time.Time](func(enc *jsontext.Encoder, t time.Time) error {
+			if t.IsZero() {
+				return enc.WriteToken(jsontext.Null)
+			}
+			return json.SkipFunc
+		})),
 	}, opts...)
 
 	for k, item := range atlas.AtlasItems() {
@@ -197,6 +204,7 @@ func DumpAtlas(atlas Atlas, outputDir string, opts ...json.Options) error {
 		if err = os.MkdirAll(filepath.Dir(p), 0755); err != nil {
 			return err
 		}
+		data = append(data, '\n')
 		if err = os.WriteFile(p, data, 0644); err != nil {
 			return err
 		}
