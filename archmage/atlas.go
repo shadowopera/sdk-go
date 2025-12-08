@@ -3,9 +3,11 @@ package archmage
 import (
 	"cmp"
 	"context"
+	"encoding/json/jsontext"
 	"encoding/json/v2"
 	"maps"
 	"os"
+	"path"
 	"path/filepath"
 	"slices"
 	"strings"
@@ -21,9 +23,10 @@ type Atlas interface {
 type AtlasItem struct {
 	Cfg   any
 	Arity string
+	File  string
 }
 
-func LoadAtlas(atlasFile string, rootDir string, out Atlas, opts ...Option) error {
+func LoadAtlas(atlasFile string, cfgRoot string, out Atlas, opts ...Option) error {
 	var atlOpts atlasOptions
 	atlOpts.Logger = &defaultLogger{}
 	atlOpts.cbNotFound = func(string, *AtlasItem) error { return nil }
@@ -59,7 +62,8 @@ func LoadAtlas(atlasFile string, rootDir string, out Atlas, opts ...Option) erro
 		switch item.Arity {
 		case "single":
 			if f, ok := atlasJSON.Single[k]; ok {
-				p = filepath.Join(rootDir, f)
+				item.File = f
+				p = filepath.Join(cfgRoot, f)
 				data, err = os.ReadFile(p)
 				if err != nil {
 					return err
@@ -74,12 +78,25 @@ func LoadAtlas(atlasFile string, rootDir string, out Atlas, opts ...Option) erro
 		case "multiple":
 			if m, ok := atlasJSON.Multiple[k]; ok {
 				if f, ok := m["/"]; ok {
-					p = filepath.Join(rootDir, f)
+					item.File = f
+					p = filepath.Join(cfgRoot, f)
 					data, err = os.ReadFile(p)
 					if err != nil {
 						return err
 					}
 				} else {
+					for _, v := range atlasJSON.Multiple[k] {
+						dir, file := path.Split(v)
+						if x1 := path.Ext(file); x1 != "" && x1 != file {
+							base1 := file[:len(file)-len(x1)]
+							if x2 := path.Ext(base1); x2 != "" && x2 != base1 {
+								base2 := base1[:len(base1)-len(x2)]
+								newFile := base2 + x1
+								item.File = path.Join(dir, newFile)
+								break
+							}
+						}
+					}
 					atlOpts.Warnf("cannot find $.multiple['%s']['/'] in %s", k, atlasFile)
 					if err = atlOpts.cbNotFound(k, item); err != nil {
 						return err
@@ -161,4 +178,29 @@ func WithNotFoundCallback(cb func(name string, atlasItem *AtlasItem) error) Opti
 	return func(opts *atlasOptions) {
 		opts.cbNotFound = cb
 	}
+}
+
+func DumpAtlas(atlas Atlas, outputDir string, opts ...json.Options) error {
+	opts = append([]json.Options{
+		jsontext.WithIndent("\t"),
+		json.Deterministic(true),
+		json.FormatNilMapAsNull(true),
+		json.FormatNilSliceAsNull(true),
+	}, opts...)
+
+	for k, item := range atlas.AtlasItems() {
+		data, err := json.Marshal(item.Cfg, opts...)
+		if err != nil {
+			return err
+		}
+		p := filepath.Join(outputDir, cmp.Or(item.File, k+".json"))
+		if err = os.MkdirAll(filepath.Dir(p), 0755); err != nil {
+			return err
+		}
+		if err = os.WriteFile(p, data, 0644); err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
