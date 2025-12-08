@@ -102,6 +102,11 @@ func LoadAtlas(atlasFile string, rootDir string, out Atlas, opts ...Option) erro
 			return err
 		}
 
+		akCfg, ok := item.Cfg.(interface{ ApplyKeys() })
+		if ok {
+			akCfg.ApplyKeys()
+		}
+
 		atlOpts.Infof("successfully loaded %s", p)
 		return nil
 	}
