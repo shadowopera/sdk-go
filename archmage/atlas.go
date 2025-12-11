@@ -5,10 +5,12 @@ import (
 	"context"
 	"encoding/json/jsontext"
 	"encoding/json/v2"
+	"fmt"
 	"maps"
 	"os"
 	"path"
 	"path/filepath"
+	"reflect"
 	"slices"
 	"strings"
 	"time"
@@ -24,7 +26,7 @@ type Atlas interface {
 }
 
 type AtlasItem struct {
-	Cfg   any
+	Cfg   interface{ ApplyOverride([]byte) error }
 	Arity string
 	File  string
 }
@@ -34,14 +36,23 @@ type AtlasJSON struct {
 	Multiple map[string]map[string]string `json:"multiple"`
 }
 
-func LoadAtlas(atlasFile string, cfgRoot string, out Atlas, opts ...Option) error {
+func LoadAtlas(atlasFile string, cfgRoot string, out Atlas, opts ...Option) (err error) {
 	var atlOpts atlasOptions
 	atlOpts.Logger = &defaultLogger{}
 	atlOpts.cbNotFound = func(string, *AtlasItem) error { return nil }
 	for _, opt := range opts {
 		opt(&atlOpts)
 	}
-	out.SaveOpts(&atlOpts)
+
+	defer func() {
+		if err != nil {
+			return
+		}
+		out.SaveOpts(&atlasOptions{
+			whitelist: atlOpts.whitelist,
+			blacklist: atlOpts.blacklist,
+		})
+	}()
 
 	atlasData, err := os.ReadFile(atlasFile)
 	if err != nil {
@@ -59,7 +70,7 @@ func LoadAtlas(atlasFile string, cfgRoot string, out Atlas, opts ...Option) erro
 		sortedKeys := slices.SortedFunc(maps.Keys(items), compareLower)
 		for _, k := range sortedKeys {
 			if cause, yes := atlOpts.shouldIgnore(k); yes {
-				atlOpts.Infof("skipping atlas item: %s. cause: %s", k, cause)
+				atlOpts.Infof("<archmage> skipping atlas item: %s. cause: %s", k, cause)
 				continue
 			}
 			if err = loadImpl(context.Background(), k, items[k], atlasJSON, atlasFile, cfgRoot, atlOpts); err != nil {
@@ -73,7 +84,7 @@ func LoadAtlas(atlasFile string, cfgRoot string, out Atlas, opts ...Option) erro
 	eg.SetLimit(atlOpts.maxConcurrency)
 	for k, item := range out.AtlasItems() {
 		if cause, yes := atlOpts.shouldIgnore(k); yes {
-			atlOpts.Infof("skipping atlas item: %s. cause: %s", k, cause)
+			atlOpts.Infof("<archmage> skipping atlas item: %s. cause: %s", k, cause)
 			continue
 		}
 		eg.Go(func() error {
@@ -92,6 +103,24 @@ func loadImpl(ctx context.Context, k string, item *AtlasItem,
 	default:
 	}
 
+	var overrideFiles []string
+	var overrides [][]byte
+	readOverrides := func(file string) error {
+		for _, dir := range atlOpts.overwriteRoots {
+			ovr := filepath.Join(dir, file)
+			if _, err := os.Stat(ovr); err == nil {
+				ovrData, err := os.ReadFile(ovr)
+				if err != nil {
+					return err
+				}
+				overrideFiles = append(overrideFiles, ovr)
+				overrides = append(overrides, ovrData)
+			}
+		}
+		return nil
+	}
+
+	start := time.Now()
 	var err error
 	var data []byte
 	var p string
@@ -104,8 +133,11 @@ func loadImpl(ctx context.Context, k string, item *AtlasItem,
 			if err != nil {
 				return err
 			}
+			if err = readOverrides(f); err != nil {
+				return err
+			}
 		} else {
-			atlOpts.Warnf("cannot find $.single['%s'] in %s", k, atlasFile)
+			atlOpts.Warnf("<archmage> cannot find $.single['%s'] in %s", k, atlasFile)
 			if err = atlOpts.cbNotFound(k, item); err != nil {
 				return err
 			}
@@ -118,6 +150,9 @@ func loadImpl(ctx context.Context, k string, item *AtlasItem,
 				p = filepath.Join(cfgRoot, f)
 				data, err = os.ReadFile(p)
 				if err != nil {
+					return err
+				}
+				if err = readOverrides(f); err != nil {
 					return err
 				}
 			} else {
@@ -133,14 +168,14 @@ func loadImpl(ctx context.Context, k string, item *AtlasItem,
 						}
 					}
 				}
-				atlOpts.Warnf("cannot find $.multiple['%s']['/'] in %s", k, atlasFile)
+				atlOpts.Warnf("<archmage> cannot find $.multiple['%s']['/'] in %s", k, atlasFile)
 				if err = atlOpts.cbNotFound(k, item); err != nil {
 					return err
 				}
 				return nil
 			}
 		} else {
-			atlOpts.Warnf("cannot find $.multiple['%s'] in %s", k, atlasFile)
+			atlOpts.Warnf("<archmage> cannot find $.multiple['%s'] in %s", k, atlasFile)
 			if err = atlOpts.cbNotFound(k, item); err != nil {
 				return err
 			}
@@ -154,13 +189,27 @@ func loadImpl(ctx context.Context, k string, item *AtlasItem,
 	if err != nil {
 		return err
 	}
+	for i, d := range overrides {
+		err = item.Cfg.ApplyOverride(d)
+		if err != nil {
+			return fmt.Errorf("applying override %s failed: %w", overrideFiles[i], err)
+		}
+	}
 
 	akCfg, ok := item.Cfg.(interface{ ApplyKeys() })
 	if ok {
 		akCfg.ApplyKeys()
 	}
 
-	atlOpts.Infof("successfully loaded %s", p)
+	var supplement string
+	switch len(overrides) {
+	case 0:
+	case 1:
+		supplement = " with 1 override"
+	default:
+		supplement = fmt.Sprintf(" with %d overrides", len(overrides))
+	}
+	atlOpts.Infof("<archmage> loaded %s%s (%dms)", p, supplement, time.Since(start).Milliseconds())
 	return nil
 }
 
@@ -171,6 +220,8 @@ func compareLower(a, b string) int {
 type atlasOptions struct {
 	Logger
 	maxConcurrency int
+
+	overwriteRoots []string
 
 	cbNotFound func(name string, atlasItem *AtlasItem) error
 
@@ -217,6 +268,99 @@ func WithBlacklist(blacklist []string) Option {
 	return func(opts *atlasOptions) {
 		opts.blacklist = blacklist
 	}
+}
+
+func WithOverridesRoot(dir string) Option {
+	return func(opts *atlasOptions) {
+		opts.overwriteRoots = append(opts.overwriteRoots, dir)
+	}
+}
+
+func ApplyMapOverride[K comparable, V any, T map[K]V](base *T, data []byte) error {
+	var ovr T
+	err := json.Unmarshal(data, &ovr)
+	if err != nil {
+		return err
+	}
+
+	m := *base
+	if m == nil {
+		if ovr != nil {
+			m = make(map[K]V)
+			*base = m
+		}
+	}
+
+	for k, v := range ovr {
+		m[k] = v
+	}
+	return nil
+}
+
+func BuildJSONKeyToFieldIndexMap[T any](fields map[string]int8) map[string]int {
+	var obj T
+	x := reflect.ValueOf(obj)
+	if x.Kind() != reflect.Struct {
+		return nil
+	}
+
+	typ := x.Type()
+	m := make(map[string]int)
+	for i := range typ.NumField() {
+		f := typ.Field(i)
+		t := f.Tag.Get("json")
+		if t == "" {
+			continue
+		}
+		k := t
+		p := strings.Index(t, ",")
+		if p >= 0 {
+			k = strings.TrimSpace(t[:p])
+		}
+		if fields[k] != 0 {
+			m[k] = i
+		}
+	}
+
+	return m
+}
+
+func ApplyStructOverride[T any](base *T, data []byte, typeName string, fields map[string]int8, fieldIndexMap map[string]int) error {
+	var tmp map[string]jsontext.Value
+	err := json.Unmarshal(data, &tmp)
+	if err != nil {
+		return err
+	}
+
+	x := reflect.ValueOf(base).Elem()
+	for k, d := range tmp {
+		if fields[k] == 0 {
+			return fmt.Errorf("%s: unknown object field name %q in override data", typeName, k)
+		}
+		index, ok := fieldIndexMap[k]
+		if !ok {
+			continue
+		}
+		switch fields[k] {
+		case 1:
+			field := x.Field(index).Addr().Interface()
+			err = json.Unmarshal(d, field)
+		case 2:
+			field := x.Field(index)
+			field.SetZero()
+			err = json.Unmarshal(d, field.Addr().Interface())
+		case 3:
+			field := x.Field(index).Addr().Interface()
+			err = field.(interface{ ApplyOverride([]byte) error }).ApplyOverride(d)
+		default:
+			panic("unreachable")
+		}
+		if err != nil {
+			return fmt.Errorf("%s: failed to apply override data to field %q: %w", typeName, k, err)
+		}
+	}
+
+	return nil
 }
 
 func DumpAtlas(atlas Atlas, outputDir string, opts ...json.Options) error {
