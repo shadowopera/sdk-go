@@ -19,6 +19,8 @@ import (
 type Atlas interface {
 	AtlasItems() map[string]*AtlasItem
 	BindRefs()
+	SaveOpts(opts any)
+	LoadOpts() any
 }
 
 type AtlasItem struct {
@@ -39,6 +41,7 @@ func LoadAtlas(atlasFile string, cfgRoot string, out Atlas, opts ...Option) erro
 	for _, opt := range opts {
 		opt(&atlOpts)
 	}
+	out.SaveOpts(&atlOpts)
 
 	atlasData, err := os.ReadFile(atlasFile)
 	if err != nil {
@@ -230,7 +233,17 @@ func DumpAtlas(atlas Atlas, outputDir string, opts ...json.Options) error {
 		})),
 	}, opts...)
 
+	var atlOpts *atlasOptions
+	if x := atlas.LoadOpts(); x != nil {
+		atlOpts, _ = x.(*atlasOptions)
+	}
+
 	for k, item := range atlas.AtlasItems() {
+		if atlOpts != nil {
+			if _, yes := atlOpts.shouldIgnore(k); yes {
+				continue
+			}
+		}
 		data, err := json.Marshal(item.Cfg, opts...)
 		if err != nil {
 			return err
