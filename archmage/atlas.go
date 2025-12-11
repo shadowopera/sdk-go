@@ -55,6 +55,10 @@ func LoadAtlas(atlasFile string, cfgRoot string, out Atlas, opts ...Option) erro
 		items := out.AtlasItems()
 		sortedKeys := slices.SortedFunc(maps.Keys(items), compareLower)
 		for _, k := range sortedKeys {
+			if cause, yes := atlOpts.shouldIgnore(k); yes {
+				atlOpts.Infof("skipping atlas item: %s. cause: %s", k, cause)
+				continue
+			}
 			if err = loadImpl(context.Background(), k, items[k], atlasJSON, atlasFile, cfgRoot, atlOpts); err != nil {
 				return err
 			}
@@ -65,6 +69,10 @@ func LoadAtlas(atlasFile string, cfgRoot string, out Atlas, opts ...Option) erro
 	eg, ctx := errgroup.WithContext(context.Background())
 	eg.SetLimit(atlOpts.maxConcurrency)
 	for k, item := range out.AtlasItems() {
+		if cause, yes := atlOpts.shouldIgnore(k); yes {
+			atlOpts.Infof("skipping atlas item: %s. cause: %s", k, cause)
+			continue
+		}
 		eg.Go(func() error {
 			return loadImpl(ctx, k, item, atlasJSON, atlasFile, cfgRoot, atlOpts)
 		})
@@ -162,6 +170,18 @@ type atlasOptions struct {
 	maxConcurrency int
 
 	cbNotFound func(name string, atlasItem *AtlasItem) error
+
+	whitelist []string
+	blacklist []string
+}
+
+func (opts *atlasOptions) shouldIgnore(key string) (string, bool) {
+	if opts.whitelist != nil {
+		return "whitelist", !slices.Contains(opts.whitelist, key)
+	} else if opts.blacklist != nil && slices.Contains(opts.blacklist, key) {
+		return "blacklist", true
+	}
+	return "", false
 }
 
 type Option func(*atlasOptions)
@@ -181,6 +201,18 @@ func WithMaxConcurrency(n int) Option {
 func WithNotFoundCallback(cb func(name string, atlasItem *AtlasItem) error) Option {
 	return func(opts *atlasOptions) {
 		opts.cbNotFound = cb
+	}
+}
+
+func WithWhitelist(whitelist []string) Option {
+	return func(opts *atlasOptions) {
+		opts.whitelist = whitelist
+	}
+}
+
+func WithBlacklist(blacklist []string) Option {
+	return func(opts *atlasOptions) {
+		opts.blacklist = blacklist
 	}
 }
 
