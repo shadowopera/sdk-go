@@ -27,6 +27,11 @@ type AtlasItem struct {
 	File  string
 }
 
+type AtlasJSON struct {
+	Single   map[string]string            `json:"single"`
+	Multiple map[string]map[string]string `json:"multiple"`
+}
+
 func LoadAtlas(atlasFile string, cfgRoot string, out Atlas, opts ...Option) error {
 	var atlOpts atlasOptions
 	atlOpts.Logger = &defaultLogger{}
@@ -40,100 +45,17 @@ func LoadAtlas(atlasFile string, cfgRoot string, out Atlas, opts ...Option) erro
 		return err
 	}
 
-	var atlasJSON struct {
-		Single   map[string]string            `json:"single"`
-		Multiple map[string]map[string]string `json:"multiple"`
-	}
-
+	var atlasJSON AtlasJSON
 	err = json.Unmarshal(atlasData, &atlasJSON)
 	if err != nil {
 		return err
-	}
-
-	loadImpl := func(ctx context.Context, k string, item *AtlasItem) error {
-		select {
-		case <-ctx.Done():
-			return nil
-		default:
-		}
-
-		var err error
-		var data []byte
-		var p string
-		switch item.Arity {
-		case "single":
-			if f, ok := atlasJSON.Single[k]; ok {
-				item.File = f
-				p = filepath.Join(cfgRoot, f)
-				data, err = os.ReadFile(p)
-				if err != nil {
-					return err
-				}
-			} else {
-				atlOpts.Warnf("cannot find $.single['%s'] in %s", k, atlasFile)
-				if err = atlOpts.cbNotFound(k, item); err != nil {
-					return err
-				}
-				return nil
-			}
-		case "multiple":
-			if m, ok := atlasJSON.Multiple[k]; ok {
-				if f, ok := m["/"]; ok {
-					item.File = f
-					p = filepath.Join(cfgRoot, f)
-					data, err = os.ReadFile(p)
-					if err != nil {
-						return err
-					}
-				} else {
-					for _, v := range atlasJSON.Multiple[k] {
-						dir, file := path.Split(v)
-						if x1 := path.Ext(file); x1 != "" && x1 != file {
-							base1 := file[:len(file)-len(x1)]
-							if x2 := path.Ext(base1); x2 != "" && x2 != base1 {
-								base2 := base1[:len(base1)-len(x2)]
-								newFile := base2 + x1
-								item.File = path.Join(dir, newFile)
-								break
-							}
-						}
-					}
-					atlOpts.Warnf("cannot find $.multiple['%s']['/'] in %s", k, atlasFile)
-					if err = atlOpts.cbNotFound(k, item); err != nil {
-						return err
-					}
-					return nil
-				}
-			} else {
-				atlOpts.Warnf("cannot find $.multiple['%s'] in %s", k, atlasFile)
-				if err = atlOpts.cbNotFound(k, item); err != nil {
-					return err
-				}
-				return nil
-			}
-		default:
-			panic("unsupported arity: " + item.Arity)
-		}
-
-		err = json.Unmarshal(data, item.Cfg)
-		if err != nil {
-			return err
-		}
-
-		akCfg, ok := item.Cfg.(interface{ ApplyKeys() })
-		if ok {
-			akCfg.ApplyKeys()
-		}
-
-		atlOpts.Infof("successfully loaded %s", p)
-		return nil
 	}
 
 	if atlOpts.maxConcurrency <= 1 {
 		items := out.AtlasItems()
 		sortedKeys := slices.SortedFunc(maps.Keys(items), compareLower)
 		for _, k := range sortedKeys {
-			if err = loadImpl(context.Background(), k, items[k]); err != nil {
+			if err = loadImpl(context.Background(), k, items[k], atlasJSON, atlasFile, cfgRoot, atlOpts); err != nil {
 				return err
 			}
 		}
@@ -144,10 +66,91 @@ func LoadAtlas(atlasFile string, cfgRoot string, out Atlas, opts ...Option) erro
 	eg.SetLimit(atlOpts.maxConcurrency)
 	for k, item := range out.AtlasItems() {
 		eg.Go(func() error {
-			return loadImpl(ctx, k, item)
+			return loadImpl(ctx, k, item, atlasJSON, atlasFile, cfgRoot, atlOpts)
 		})
 	}
 	return eg.Wait()
+}
+
+func loadImpl(ctx context.Context, k string, item *AtlasItem,
+	atlasJSON AtlasJSON, atlasFile string, cfgRoot string, atlOpts atlasOptions,
+) error {
+	select {
+	case <-ctx.Done():
+		return nil
+	default:
+	}
+
+	var err error
+	var data []byte
+	var p string
+	switch item.Arity {
+	case "single":
+		if f, ok := atlasJSON.Single[k]; ok {
+			item.File = f
+			p = filepath.Join(cfgRoot, f)
+			data, err = os.ReadFile(p)
+			if err != nil {
+				return err
+			}
+		} else {
+			atlOpts.Warnf("cannot find $.single['%s'] in %s", k, atlasFile)
+			if err = atlOpts.cbNotFound(k, item); err != nil {
+				return err
+			}
+			return nil
+		}
+	case "multiple":
+		if m, ok := atlasJSON.Multiple[k]; ok {
+			if f, ok := m["/"]; ok {
+				item.File = f
+				p = filepath.Join(cfgRoot, f)
+				data, err = os.ReadFile(p)
+				if err != nil {
+					return err
+				}
+			} else {
+				for _, v := range atlasJSON.Multiple[k] {
+					dir, file := path.Split(v)
+					if x1 := path.Ext(file); x1 != "" && x1 != file {
+						base1 := file[:len(file)-len(x1)]
+						if x2 := path.Ext(base1); x2 != "" && x2 != base1 {
+							base2 := base1[:len(base1)-len(x2)]
+							newFile := base2 + x1
+							item.File = path.Join(dir, newFile)
+							break
+						}
+					}
+				}
+				atlOpts.Warnf("cannot find $.multiple['%s']['/'] in %s", k, atlasFile)
+				if err = atlOpts.cbNotFound(k, item); err != nil {
+					return err
+				}
+				return nil
+			}
+		} else {
+			atlOpts.Warnf("cannot find $.multiple['%s'] in %s", k, atlasFile)
+			if err = atlOpts.cbNotFound(k, item); err != nil {
+				return err
+			}
+			return nil
+		}
+	default:
+		panic("unsupported arity: " + item.Arity)
+	}
+
+	err = json.Unmarshal(data, item.Cfg)
+	if err != nil {
+		return err
+	}
+
+	akCfg, ok := item.Cfg.(interface{ ApplyKeys() })
+	if ok {
+		akCfg.ApplyKeys()
+	}
+
+	atlOpts.Infof("successfully loaded %s", p)
+	return nil
 }
 
 func compareLower(a, b string) int {
