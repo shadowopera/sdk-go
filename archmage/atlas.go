@@ -26,8 +26,12 @@ type Atlas interface {
 	LoadOpts() any
 }
 
+type Overridable interface {
+	ApplyOverride(data []byte) error
+}
+
 type AtlasItem struct {
-	Cfg   interface{ ApplyOverride([]byte) error }
+	Cfg   Overridable
 	Arity string
 	File  string
 }
@@ -371,64 +375,20 @@ func ApplyStructOverride[T any](base *T, data []byte, typeName string, fields ma
 		if !ok {
 			continue
 		}
+		field := x.Field(index)
 		switch fields[k] {
 		case 1:
-			field := x.Field(index).Addr().Interface()
-			err = json.Unmarshal(d, field)
+			err = json.Unmarshal(d, field.Addr().Interface())
 		case 2:
-			field := x.Field(index)
 			field.SetZero()
 			err = json.Unmarshal(d, field.Addr().Interface())
 		case 3:
-			field := x.Field(index).Addr().Interface()
-			err = field.(interface{ ApplyOverride([]byte) error }).ApplyOverride(d)
+			err = field.Addr().Interface().(Overridable).ApplyOverride(d)
 		default:
 			panic("unreachable")
 		}
 		if err != nil {
 			return fmt.Errorf("%s: failed to apply override data to field %q: %w", typeName, k, err)
-		}
-	}
-
-	return nil
-}
-
-func DumpAtlas(atlas Atlas, outputDir string, opts ...json.Options) error {
-	opts = append([]json.Options{
-		jsontext.WithIndent("\t"),
-		json.Deterministic(true),
-		json.FormatNilMapAsNull(true),
-		json.FormatNilSliceAsNull(true),
-		json.WithMarshalers(json.MarshalToFunc[time.Time](func(enc *jsontext.Encoder, t time.Time) error {
-			if t.IsZero() {
-				return enc.WriteToken(jsontext.Null)
-			}
-			return json.SkipFunc
-		})),
-	}, opts...)
-
-	var atlOpts *atlasOptions
-	if x := atlas.LoadOpts(); x != nil {
-		atlOpts, _ = x.(*atlasOptions)
-	}
-
-	for k, item := range atlas.AtlasItems() {
-		if atlOpts != nil {
-			if _, yes := atlOpts.shouldIgnore(k); yes {
-				continue
-			}
-		}
-		data, err := json.Marshal(item.Cfg, opts...)
-		if err != nil {
-			return err
-		}
-		p := filepath.Join(outputDir, cmp.Or(item.File, k+".json"))
-		if err = os.MkdirAll(filepath.Dir(p), 0755); err != nil {
-			return err
-		}
-		data = append(data, '\n')
-		if err = os.WriteFile(p, data, 0644); err != nil {
-			return err
 		}
 	}
 
