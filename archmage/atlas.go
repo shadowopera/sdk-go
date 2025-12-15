@@ -140,6 +140,7 @@ func loadItem(ctx context.Context, key string, item *AtlasItem,
 		return nil
 	}
 
+	item.File = key
 	start := time.Now()
 	var err error
 	var data []byte
@@ -157,9 +158,12 @@ func loadItem(ctx context.Context, key string, item *AtlasItem,
 				return err
 			}
 		} else {
-			opts.Warnf("<archmage> cannot find $.single['%s'] in %s", key, atlasFile)
-			if err = opts.cbNotFound(key, item); err != nil {
+			var loaded bool
+			if err = opts.cbNotFound(key, item, &loaded); err != nil {
 				return err
+			}
+			if !loaded {
+				opts.Warnf("<archmage> cannot find $.single['%s'] in %s", key, atlasFile)
 			}
 			return nil
 		}
@@ -192,16 +196,22 @@ func loadItem(ctx context.Context, key string, item *AtlasItem,
 						}
 					}
 				}
-				opts.Warnf("<archmage> cannot find $.multiple['%s']['/'] in %s", key, atlasFile)
-				if err = opts.cbNotFound(key, item); err != nil {
+				var loaded bool
+				if err = opts.cbNotFound(key, item, &loaded); err != nil {
 					return err
+				}
+				if !loaded {
+					opts.Warnf("<archmage> cannot find $.multiple['%s']['/'] in %s", key, atlasFile)
 				}
 				return nil
 			}
 		} else {
-			opts.Warnf("<archmage> cannot find $.multiple['%s'] in %s", key, atlasFile)
-			if err = opts.cbNotFound(key, item); err != nil {
+			var loaded bool
+			if err = opts.cbNotFound(key, item, &loaded); err != nil {
 				return err
+			}
+			if !loaded {
+				opts.Warnf("<archmage> cannot find $.multiple['%s'] in %s", key, atlasFile)
 			}
 			return nil
 		}
@@ -247,7 +257,7 @@ type atlasOptions struct {
 
 	overwriteRoots []string
 
-	cbNotFound func(name string, atlasItem *AtlasItem) error
+	cbNotFound func(name string, atlasItem *AtlasItem, loaded *bool) error
 
 	whitelist []string
 	blacklist []string
@@ -258,7 +268,7 @@ type atlasOptions struct {
 func newAtlasOptions() *atlasOptions {
 	return &atlasOptions{
 		Logger: &defaultLogger{},
-		cbNotFound: func(string, *AtlasItem) error {
+		cbNotFound: func(string, *AtlasItem, *bool) error {
 			return nil
 		},
 	}
@@ -289,7 +299,7 @@ func WithMaxConcurrency(n int) Option {
 	}
 }
 
-func WithNotFoundCallback(cb func(name string, atlasItem *AtlasItem) error) Option {
+func WithNotFoundCallback(cb func(name string, atlasItem *AtlasItem, loaded *bool) error) Option {
 	return func(opts *atlasOptions) {
 		opts.cbNotFound = cb
 	}
