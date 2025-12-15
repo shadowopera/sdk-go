@@ -66,6 +66,7 @@ func loadAtlasImpl(atlasFile string, cfgRoot string, out Atlas, opts *atlasOptio
 		if err != nil {
 			return
 		}
+		out.BindRefs()
 		out.SaveOpts(&atlasOptions{
 			whitelist: opts.whitelist,
 			blacklist: opts.blacklist,
@@ -112,7 +113,7 @@ func loadAtlasImpl(atlasFile string, cfgRoot string, out Atlas, opts *atlasOptio
 	return eg.Wait()
 }
 
-func loadItem(ctx context.Context, k string, item *AtlasItem,
+func loadItem(ctx context.Context, key string, item *AtlasItem,
 	atlasJSON AtlasJSON, atlasFile string, cfgRoot string, opts *atlasOptions,
 ) error {
 	select {
@@ -145,7 +146,7 @@ func loadItem(ctx context.Context, k string, item *AtlasItem,
 	var p string
 	switch item.Arity {
 	case "single":
-		if f, ok := atlasJSON.Single[k]; ok {
+		if f, ok := atlasJSON.Single[key]; ok {
 			item.File = f
 			p = filepath.Join(cfgRoot, f)
 			data, err = opts.readFile(p)
@@ -156,14 +157,14 @@ func loadItem(ctx context.Context, k string, item *AtlasItem,
 				return err
 			}
 		} else {
-			opts.Warnf("<archmage> cannot find $.single['%s'] in %s", k, atlasFile)
-			if err = opts.cbNotFound(k, item); err != nil {
+			opts.Warnf("<archmage> cannot find $.single['%s'] in %s", key, atlasFile)
+			if err = opts.cbNotFound(key, item); err != nil {
 				return err
 			}
 			return nil
 		}
 	case "multiple":
-		if m, ok := atlasJSON.Multiple[k]; ok {
+		if m, ok := atlasJSON.Multiple[key]; ok {
 			if f, ok := m["/"]; ok {
 				item.File = f
 				p = filepath.Join(cfgRoot, f)
@@ -175,27 +176,31 @@ func loadItem(ctx context.Context, k string, item *AtlasItem,
 					return err
 				}
 			} else {
-				for _, v := range atlasJSON.Multiple[k] {
+				multiple := atlasJSON.Multiple[key]
+				sortedKeys := slices.SortedFunc(maps.Keys(multiple), compareLower)
+				for _, k := range sortedKeys {
+					v := multiple[k]
 					dir, file := path.Split(v)
+					item.File = file
 					if x1 := path.Ext(file); x1 != "" && x1 != file {
 						base1 := file[:len(file)-len(x1)]
 						if x2 := path.Ext(base1); x2 != "" && x2 != base1 {
 							base2 := base1[:len(base1)-len(x2)]
-							newFile := base2 + x1
-							item.File = path.Join(dir, newFile)
+							file2 := base2 + x1
+							item.File = path.Join(dir, file2)
 							break
 						}
 					}
 				}
-				opts.Warnf("<archmage> cannot find $.multiple['%s']['/'] in %s", k, atlasFile)
-				if err = opts.cbNotFound(k, item); err != nil {
+				opts.Warnf("<archmage> cannot find $.multiple['%s']['/'] in %s", key, atlasFile)
+				if err = opts.cbNotFound(key, item); err != nil {
 					return err
 				}
 				return nil
 			}
 		} else {
-			opts.Warnf("<archmage> cannot find $.multiple['%s'] in %s", k, atlasFile)
-			if err = opts.cbNotFound(k, item); err != nil {
+			opts.Warnf("<archmage> cannot find $.multiple['%s'] in %s", key, atlasFile)
+			if err = opts.cbNotFound(key, item); err != nil {
 				return err
 			}
 			return nil
