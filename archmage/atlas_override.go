@@ -8,18 +8,16 @@ import (
 	"strings"
 )
 
-func ApplyMapOverride[K comparable, V any, T map[K]V](base *T, data []byte) error {
+func ApplyMapOverride[K comparable, V any, T map[K]V](m T, data []byte) (T, error) {
 	var ovr T
 	err := json.Unmarshal(data, &ovr)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	m := *base
 	if m == nil {
 		if ovr != nil {
 			m = make(map[K]V)
-			*base = m
 		}
 	}
 
@@ -27,7 +25,7 @@ func ApplyMapOverride[K comparable, V any, T map[K]V](base *T, data []byte) erro
 		m[k] = v
 	}
 
-	return nil
+	return m, nil
 }
 
 type OverridablePtr[T any] interface {
@@ -35,18 +33,16 @@ type OverridablePtr[T any] interface {
 	Overridable
 }
 
-func ApplyMapValueOverride[K comparable, E any, V OverridablePtr[E], T map[K]V](base *T, data []byte) error {
+func ApplyMapValueOverride[K comparable, E any, V OverridablePtr[E], T map[K]V](m T, data []byte) (T, error) {
 	var ovr map[K]jsontext.Value
 	err := json.Unmarshal(data, &ovr)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	m := *base
 	if m == nil {
 		if ovr != nil {
 			m = make(map[K]V)
-			*base = m
 		}
 	}
 
@@ -54,19 +50,19 @@ func ApplyMapValueOverride[K comparable, E any, V OverridablePtr[E], T map[K]V](
 		if overridable, ok := m[k]; ok && overridable != nil {
 			err = overridable.ApplyOverride(d)
 			if err != nil {
-				return nil
+				return nil, err
 			}
 		} else {
 			var tmp E
 			err = json.Unmarshal(d, &tmp)
 			if err != nil {
-				return nil
+				return nil, err
 			}
 			m[k] = &tmp
 		}
 	}
 
-	return nil
+	return m, nil
 }
 
 func BuildJSONKeyToFieldIndexMap[T any](fields map[string]int8) map[string]int {
@@ -97,17 +93,24 @@ func BuildJSONKeyToFieldIndexMap[T any](fields map[string]int8) map[string]int {
 	return m
 }
 
-func ApplyStructOverride[T any](base *T, data []byte, typeName string, fields map[string]int8, fieldIndexMap map[string]int) error {
-	var tmp map[string]jsontext.Value
-	err := json.Unmarshal(data, &tmp)
+func ApplyStructOverride[T any](obj *T, data []byte, typeName string, fields map[string]int8, fieldIndexMap map[string]int) (*T, error) {
+	var ovr map[string]jsontext.Value
+	err := json.Unmarshal(data, &ovr)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	x := reflect.ValueOf(base).Elem()
-	for k, d := range tmp {
+	if obj == nil {
+		if ovr != nil {
+			var x T
+			obj = &x
+		}
+	}
+
+	x := reflect.ValueOf(obj).Elem()
+	for k, d := range ovr {
 		if fields[k] == 0 {
-			return fmt.Errorf("%s: unknown object field name %q in override data", typeName, k)
+			return nil, fmt.Errorf("%s: unknown object field name %q in override data", typeName, k)
 		}
 		index, ok := fieldIndexMap[k]
 		if !ok {
@@ -126,9 +129,9 @@ func ApplyStructOverride[T any](base *T, data []byte, typeName string, fields ma
 			panic("unreachable")
 		}
 		if err != nil {
-			return fmt.Errorf("%s: failed to apply override data to field %q: %w", typeName, k, err)
+			return nil, fmt.Errorf("%s: failed to apply override data to field %q: %w", typeName, k, err)
 		}
 	}
 
-	return nil
+	return obj, nil
 }
