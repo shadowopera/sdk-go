@@ -13,15 +13,20 @@ import (
 	"slices"
 	"strings"
 	"time"
+	"unique"
 
 	"golang.org/x/sync/errgroup"
+)
+
+var (
+	_optionsHandle = unique.Make("archmage.atlas.options")
 )
 
 type Atlas interface {
 	AtlasItems() map[string]*AtlasItem
 	BindRefs()
-	SaveOpts(opts any)
-	LoadOpts() any
+	Attach(key any, value any)
+	GetAttached(key any) any
 }
 
 type Overridable interface {
@@ -67,7 +72,7 @@ func loadAtlasImpl(atlasFile string, cfgRoot string, out Atlas, opts *atlasOptio
 			return
 		}
 		out.BindRefs()
-		out.SaveOpts(&atlasOptions{
+		out.Attach(_optionsHandle, &atlasOptions{
 			whitelist: opts.whitelist,
 			blacklist: opts.blacklist,
 		})

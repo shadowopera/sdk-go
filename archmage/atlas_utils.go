@@ -62,7 +62,7 @@ func DumpAtlas(atlas Atlas, outputDir string, opts ...json.Options) error {
 	}, opts...)
 
 	var atlOpts *atlasOptions
-	if x := atlas.LoadOpts(); x != nil {
+	if x := atlas.GetAttached(_optionsHandle); x != nil {
 		atlOpts, _ = x.(*atlasOptions)
 	}
 
