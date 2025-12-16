@@ -138,13 +138,18 @@ func ApplyStructOverride[T any](obj *T, data []byte, typeName string, fields map
 			err = json.Unmarshal(d, field.Addr().Interface())
 		case 3:
 			var r Overridable
-			r, err = field.Addr().Interface().(Overridable).ApplyOverride(d)
-			field.Set(reflect.ValueOf(r))
+			r, err = field.Interface().(Overridable).ApplyOverride(d)
+			v := reflect.ValueOf(r)
+			if v.IsZero() {
+				field.SetZero()
+			} else {
+				field.Set(v)
+			}
 		default:
 			panic("unreachable")
 		}
 		if err != nil {
-			return nil, fmt.Errorf("%s: failed to apply override data to field %q: %w", typeName, k, err)
+			return nil, fmt.Errorf("%s: failed to apply override data to field %q | %w", typeName, k, err)
 		}
 	}
 

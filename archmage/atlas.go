@@ -230,9 +230,14 @@ func loadItem(ctx context.Context, key string, item *AtlasItem,
 		for i, d := range overrides {
 			r, err := item.Cfg.ApplyOverride(d)
 			if err != nil {
-				return fmt.Errorf("applying override %s failed: %w", overrideFiles[i], err)
+				return fmt.Errorf("applying override %s failed | %w", overrideFiles[i], err)
 			}
-			reflect.ValueOf(item.Cfg).Elem().Set(reflect.ValueOf(r))
+			rVal := reflect.ValueOf(r)
+			if rVal.IsZero() {
+				reflect.ValueOf(item.Cfg).Elem().SetZero()
+			} else {
+				reflect.ValueOf(item.Cfg).Elem().Set(rVal.Elem())
+			}
 		}
 	}
 
