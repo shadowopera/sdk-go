@@ -254,7 +254,8 @@ type atlasOptions struct {
 
 	overwriteRoots []string
 
-	cbNotFound func(name string, atlasItem *AtlasItem) error
+	cbAtlasModifier func(atlasJSON *AtlasJSON)
+	cbNotFound      func(name string, atlasItem *AtlasItem) error
 
 	whitelist []string
 	blacklist []string
@@ -264,10 +265,9 @@ type atlasOptions struct {
 
 func newAtlasOptions() *atlasOptions {
 	return &atlasOptions{
-		Logger: &defaultLogger{},
-		cbNotFound: func(string, *AtlasItem) error {
-			return nil
-		},
+		Logger:          &defaultLogger{},
+		cbAtlasModifier: func(atlasJSON *AtlasJSON) {},
+		cbNotFound:      func(string, *AtlasItem) error { return nil },
 	}
 }
 
@@ -317,5 +317,11 @@ func WithBlacklist(blacklist []string) Option {
 func WithOverridesRoot(dir string) Option {
 	return func(opts *atlasOptions) {
 		opts.overwriteRoots = append(opts.overwriteRoots, dir)
+	}
+}
+
+func WithAtlasModifier(cb func(atlasJSON *AtlasJSON)) Option {
+	return func(opts *atlasOptions) {
+		opts.cbAtlasModifier = cb
 	}
 }
