@@ -8,16 +8,17 @@ import (
 	"strings"
 )
 
-func ApplyMapOverride[K comparable, V any, T map[K]V](m T, data []byte) (T, error) {
+func ApplyMapOverride[K comparable, V any, T ~map[K]V](base *T, data []byte) (*T, error) {
 	var ovr T
 	err := json.Unmarshal(data, &ovr)
 	if err != nil {
 		return nil, err
 	}
 
+	m := *base
 	if m == nil {
 		if ovr != nil {
-			m = make(map[K]V)
+			m = make(T)
 		}
 	}
 
@@ -25,7 +26,7 @@ func ApplyMapOverride[K comparable, V any, T map[K]V](m T, data []byte) (T, erro
 		m[k] = v
 	}
 
-	return m, nil
+	return &m, nil
 }
 
 type OverridablePtr[T any] interface {
@@ -33,25 +34,27 @@ type OverridablePtr[T any] interface {
 	Overridable
 }
 
-func ApplyMapValueOverride[K comparable, E any, V OverridablePtr[E], T map[K]V](m T, data []byte) (T, error) {
+func ApplyMapValueOverride[K comparable, E any, V OverridablePtr[E], T ~map[K]V](base *T, data []byte) (*T, error) {
 	var ovr map[K]jsontext.Value
 	err := json.Unmarshal(data, &ovr)
 	if err != nil {
 		return nil, err
 	}
 
+	m := *base
 	if m == nil {
 		if ovr != nil {
-			m = make(map[K]V)
+			m = make(T)
 		}
 	}
 
 	for k, d := range ovr {
 		if overridable, ok := m[k]; ok && overridable != nil {
-			err = overridable.ApplyOverride(d)
+			r, err := overridable.ApplyOverride(d)
 			if err != nil {
 				return nil, err
 			}
+			m[k] = r.(V)
 		} else {
 			var tmp E
 			err = json.Unmarshal(d, &tmp)
@@ -62,14 +65,23 @@ func ApplyMapValueOverride[K comparable, E any, V OverridablePtr[E], T map[K]V](
 		}
 	}
 
-	return m, nil
+	return &m, nil
+}
+
+func ApplyArrayOverride[E any, T ~[]E](_ *T, data []byte) (*T, error) {
+	var ovr *T
+	err := json.Unmarshal(data, &ovr)
+	if err != nil {
+		return nil, err
+	}
+	return ovr, nil
 }
 
 func BuildJSONKeyToFieldIndexMap[T any](fields map[string]int8) map[string]int {
 	var obj T
 	x := reflect.ValueOf(obj)
 	if x.Kind() != reflect.Struct {
-		return nil
+		panic("unreachable")
 	}
 
 	typ := x.Type()
@@ -109,7 +121,8 @@ func ApplyStructOverride[T any](obj *T, data []byte, typeName string, fields map
 
 	x := reflect.ValueOf(obj).Elem()
 	for k, d := range ovr {
-		if fields[k] == 0 {
+		fx := fields[k]
+		if fx == 0 {
 			return nil, fmt.Errorf("%s: unknown object field name %q in override data", typeName, k)
 		}
 		index, ok := fieldIndexMap[k]
@@ -117,14 +130,16 @@ func ApplyStructOverride[T any](obj *T, data []byte, typeName string, fields map
 			continue
 		}
 		field := x.Field(index)
-		switch fields[k] {
+		switch fx {
 		case 1:
 			err = json.Unmarshal(d, field.Addr().Interface())
 		case 2:
 			field.SetZero()
 			err = json.Unmarshal(d, field.Addr().Interface())
 		case 3:
-			err = field.Addr().Interface().(Overridable).ApplyOverride(d)
+			var r Overridable
+			r, err = field.Addr().Interface().(Overridable).ApplyOverride(d)
+			field.Set(reflect.ValueOf(r))
 		default:
 			panic("unreachable")
 		}

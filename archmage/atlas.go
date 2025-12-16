@@ -10,6 +10,7 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"reflect"
 	"slices"
 	"strings"
 	"time"
@@ -25,12 +26,13 @@ var (
 type Atlas interface {
 	AtlasItems() map[string]*AtlasItem
 	BindRefs()
+
 	Attach(key any, value any)
 	GetAttached(key any) any
 }
 
 type Overridable interface {
-	ApplyOverride(data []byte) error
+	ApplyOverride(data []byte) (Overridable, error)
 }
 
 type AtlasItem struct {
@@ -229,15 +231,16 @@ func loadItem(ctx context.Context, key string, item *AtlasItem,
 		return err
 	}
 	for i, d := range overrides {
-		err = item.Cfg.ApplyOverride(d)
+		r, err := item.Cfg.ApplyOverride(d)
 		if err != nil {
 			return fmt.Errorf("applying override %s failed: %w", overrideFiles[i], err)
 		}
+		reflect.ValueOf(item.Cfg).Elem().Set(reflect.ValueOf(r))
 	}
 
-	akCfg, ok := item.Cfg.(interface{ ApplyKeys() })
+	cfg, ok := item.Cfg.(interface{ ApplyKeys() })
 	if ok {
-		akCfg.ApplyKeys()
+		cfg.ApplyKeys()
 	}
 
 	var supplement string
