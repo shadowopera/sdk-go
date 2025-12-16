@@ -69,6 +69,16 @@ func loadAtlasImpl(atlasFile string, cfgRoot string, out Atlas, opts *atlasOptio
 		out.BindRefs()
 	}()
 
+	for _, root := range opts.overwriteRoots {
+		stat, err := os.Stat(root)
+		if err != nil {
+			return fmt.Errorf("<archmage> invalid override root %q | %w", root, err)
+		}
+		if !stat.IsDir() {
+			return fmt.Errorf("<archmage> override root %q is not a directory", root)
+		}
+	}
+
 	atlasData, err := opts.readFile(atlasFile)
 	if err != nil {
 		return err
