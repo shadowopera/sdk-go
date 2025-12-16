@@ -61,16 +61,9 @@ func DumpAtlas(atlas Atlas, outputDir string, opts ...json.Options) error {
 		)),
 	}, opts...)
 
-	var atlOpts *atlasOptions
-	if x := atlas.GetAttached(_optionsHandle); x != nil {
-		atlOpts, _ = x.(*atlasOptions)
-	}
-
 	for k, item := range atlas.AtlasItems() {
-		if atlOpts != nil {
-			if _, yes := atlOpts.shouldIgnore(k); yes {
-				continue
-			}
+		if !item.Ready {
+			continue
 		}
 		data, err := json.Marshal(item.Cfg, opts...)
 		if err != nil {

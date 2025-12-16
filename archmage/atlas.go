@@ -14,21 +14,13 @@ import (
 	"slices"
 	"strings"
 	"time"
-	"unique"
 
 	"golang.org/x/sync/errgroup"
-)
-
-var (
-	_optionsHandle = unique.Make("archmage.atlas.options")
 )
 
 type Atlas interface {
 	AtlasItems() map[string]*AtlasItem
 	BindRefs()
-
-	Attach(key any, value any)
-	GetAttached(key any) any
 }
 
 type Overridable interface {
@@ -39,6 +31,7 @@ type AtlasItem struct {
 	Cfg   Overridable
 	Arity string
 	File  string
+	Ready bool
 }
 
 type AtlasJSON struct {
@@ -74,10 +67,6 @@ func loadAtlasImpl(atlasFile string, cfgRoot string, out Atlas, opts *atlasOptio
 			return
 		}
 		out.BindRefs()
-		out.Attach(_optionsHandle, &atlasOptions{
-			whitelist: opts.whitelist,
-			blacklist: opts.blacklist,
-		})
 	}()
 
 	atlasData, err := opts.readFile(atlasFile)
@@ -165,11 +154,10 @@ func loadItem(ctx context.Context, key string, item *AtlasItem,
 				return err
 			}
 		} else {
-			var loaded bool
-			if err = opts.cbNotFound(key, item, &loaded); err != nil {
+			if err = opts.cbNotFound(key, item); err != nil {
 				return err
 			}
-			if !loaded {
+			if !item.Ready {
 				opts.Warnf("<archmage> cannot find $.single['%s'] in %s", key, atlasFile)
 			}
 			return nil
@@ -203,21 +191,19 @@ func loadItem(ctx context.Context, key string, item *AtlasItem,
 						}
 					}
 				}
-				var loaded bool
-				if err = opts.cbNotFound(key, item, &loaded); err != nil {
+				if err = opts.cbNotFound(key, item); err != nil {
 					return err
 				}
-				if !loaded {
+				if !item.Ready {
 					opts.Warnf("<archmage> cannot find $.multiple['%s']['/'] in %s", key, atlasFile)
 				}
 				return nil
 			}
 		} else {
-			var loaded bool
-			if err = opts.cbNotFound(key, item, &loaded); err != nil {
+			if err = opts.cbNotFound(key, item); err != nil {
 				return err
 			}
-			if !loaded {
+			if !item.Ready {
 				opts.Warnf("<archmage> cannot find $.multiple['%s'] in %s", key, atlasFile)
 			}
 			return nil
@@ -226,16 +212,18 @@ func loadItem(ctx context.Context, key string, item *AtlasItem,
 		panic("unsupported arity: " + item.Arity)
 	}
 
-	err = json.Unmarshal(data, item.Cfg)
-	if err != nil {
-		return err
-	}
-	for i, d := range overrides {
-		r, err := item.Cfg.ApplyOverride(d)
+	if !item.Ready {
+		err = json.Unmarshal(data, item.Cfg)
 		if err != nil {
-			return fmt.Errorf("applying override %s failed: %w", overrideFiles[i], err)
+			return err
 		}
-		reflect.ValueOf(item.Cfg).Elem().Set(reflect.ValueOf(r))
+		for i, d := range overrides {
+			r, err := item.Cfg.ApplyOverride(d)
+			if err != nil {
+				return fmt.Errorf("applying override %s failed: %w", overrideFiles[i], err)
+			}
+			reflect.ValueOf(item.Cfg).Elem().Set(reflect.ValueOf(r))
+		}
 	}
 
 	cfg, ok := item.Cfg.(interface{ ApplyKeys() })
@@ -252,6 +240,7 @@ func loadItem(ctx context.Context, key string, item *AtlasItem,
 		supplement = fmt.Sprintf(" with %d overrides", len(overrides))
 	}
 	opts.Infof("<archmage> loaded %s%s (%dms)", p, supplement, time.Since(start).Milliseconds())
+	item.Ready = true
 	return nil
 }
 
@@ -265,7 +254,7 @@ type atlasOptions struct {
 
 	overwriteRoots []string
 
-	cbNotFound func(name string, atlasItem *AtlasItem, loaded *bool) error
+	cbNotFound func(name string, atlasItem *AtlasItem) error
 
 	whitelist []string
 	blacklist []string
@@ -276,7 +265,7 @@ type atlasOptions struct {
 func newAtlasOptions() *atlasOptions {
 	return &atlasOptions{
 		Logger: &defaultLogger{},
-		cbNotFound: func(string, *AtlasItem, *bool) error {
+		cbNotFound: func(string, *AtlasItem) error {
 			return nil
 		},
 	}
@@ -307,7 +296,7 @@ func WithMaxConcurrency(n int) Option {
 	}
 }
 
-func WithNotFoundCallback(cb func(name string, atlasItem *AtlasItem, loaded *bool) error) Option {
+func WithNotFoundCallback(cb func(name string, atlasItem *AtlasItem) error) Option {
 	return func(opts *atlasOptions) {
 		opts.cbNotFound = cb
 	}
