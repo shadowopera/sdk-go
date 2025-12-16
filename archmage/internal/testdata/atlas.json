@@ -1,0 +1,22 @@
+{
+	"single": {
+		"characters": "characters.json",
+		"heroes": "heroes.json",
+		"Items": "clutter/items.json",
+		"Magics": "clutter/magics.json",
+		"matrix2": "matrix2.json",
+		"Races": "clutter/races.json",
+		"ref": "sdk/ref.json",
+		"string": "sdk/string.json",
+		"weapon-runes": "weapon-runes.json"
+	},
+	"multiple": {
+		"game": {
+			"/": "game.json"
+		},
+		"prop_floats": {
+			"x3": "sdk/prop-floats.x3.json",
+			"x5": "sdk/prop-floats.x5.json"
+		}
+	}
+}

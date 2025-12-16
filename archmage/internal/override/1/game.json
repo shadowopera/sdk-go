@@ -1,0 +1,30 @@
+{
+	"x-int32": 132,
+	"x-float64": 13.14,
+	"x-duration": [
+		1,
+		3600
+	],
+	"x-datetime": "0900-01-01T15:30:00+08:00",
+	"x-ref": 1,
+	"x-l10n": "l10n.xlsx[menu.start]",
+	"x-array1": null,
+	"x-array2": [
+		2,
+		3
+	],
+	"x-map": {
+		"9": "bar"
+	},
+	"x-object": {
+		"fieldY": "bar"
+	},
+	"x-tuple": {
+		"item1": 100
+	},
+	"x-vector": [
+		1,
+		2,
+		3
+	]
+}

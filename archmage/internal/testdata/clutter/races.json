@@ -1,0 +1,53 @@
+{
+	"Dwarf": {
+		"birthplace": "Races[Dwarf].birthplace",
+		"referrer1": 0,
+		"referrer2": "qux",
+		"heroes1": [
+			5,
+			5
+		],
+		"heroes2": [
+			5
+		]
+	},
+	"Dark Elf": {
+		"birthplace": "Races[Dark Elf].birthplace",
+		"referrer1": 2,
+		"referrer2": "",
+		"heroes1": [
+			2
+		],
+		"heroes2": [
+			2
+		]
+	},
+	"Halfling": {
+		"birthplace": "Races[Halfling].birthplace",
+		"referrer1": 1,
+		"referrer2": "foo",
+		"heroes1": [
+			2,
+			2,
+			3
+		],
+		"heroes2": [
+			2,
+			3
+		]
+	},
+	"Human": {
+		"birthplace": "Races[Human].birthplace",
+		"referrer1": 3,
+		"referrer2": "",
+		"heroes1": null,
+		"heroes2": null
+	},
+	"Undead": {
+		"birthplace": "Races[Undead].birthplace",
+		"referrer1": 0,
+		"referrer2": "",
+		"heroes1": null,
+		"heroes2": null
+	}
+}

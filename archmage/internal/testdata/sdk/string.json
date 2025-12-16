@@ -1,0 +1,59 @@
+{
+	"foo": {
+		"B": {
+			"bar": {
+				"foo": "hello1",
+				"qux": ""
+			},
+			"car": "hello2"
+		},
+		"E": "a\\tb",
+		"def-validate": "x",
+		"def-postprocess": "end",
+		"I": "a",
+		"K": "Halfling",
+		"referer1": 1,
+		"referer2": 1,
+		"referer-n": [
+			1
+		]
+	},
+	"bar": {
+		"B": {
+			"bar": {
+				"foo": "",
+				"qux": "hello3"
+			},
+			"car": "x\ty"
+		},
+		"E": "a\\tb",
+		"def-validate": "x",
+		"def-postprocess": "end",
+		"I": "b",
+		"K": "",
+		"referer1": 2,
+		"referer2": 2,
+		"referer-n": [
+			2
+		]
+	},
+	"qux": {
+		"B": {
+			"bar": {
+				"foo": "x\\ty",
+				"qux": ""
+			},
+			"car": ""
+		},
+		"E": "hello5",
+		"def-validate": "x",
+		"def-postprocess": "end",
+		"I": "c",
+		"K": "Dwarf",
+		"referer1": 2,
+		"referer2": 2,
+		"referer-n": [
+			2
+		]
+	}
+}

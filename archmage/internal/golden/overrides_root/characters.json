@@ -1,0 +1,17 @@
+[
+	{
+		"id": "char_003",
+		"name": "characters[2].name",
+		"race": "",
+		"health": 100,
+		"attack": 28.5,
+		"isPlayable": true,
+		"skills": [
+			"arrow_shot",
+			"multi_shot",
+			"stealth"
+		],
+		"ref-crude": null,
+		"runes": null
+	}
+]

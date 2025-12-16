@@ -1,0 +1,20 @@
+{
+	"l10n.xlsx[menu.start]": "Press START to begin",
+	"l10n.xlsx[MULTILINE_VERSE1]": "Found a bug,\nFixed with shrug.\nNow it's two -\nUndo!",
+	"l10n.xlsx[MULTILINE_VERSE2]": "Code won't run,\nDocs are fun.\nGod mode on—\nPoof! All gone.",
+	"l10n.xlsx[QuestComplete]": "Quest completed! (Exported only if --xflags is not set or --xflags includes \"c\")",
+	"l10n.xlsx[non-ref-example]": "{{menu.start}}",
+	"Races[Dwarf].birthplace": "Khazadrim",
+	"Races[Dark Elf].birthplace": "Vel'Xanith",
+	"Races[Halfling].birthplace": "Greenholm",
+	"Races[Human].birthplace": "TODO",
+	"Races[Undead].birthplace": "TODO",
+	"game.x-l10n": "it is a good day",
+	"heroes[2].heroName": "Aldric the Unbroken",
+	"heroes[3].heroName": "Seraphina of the Silver Veil",
+	"heroes[5].heroName": "Thaddeus Ironoak",
+	"characters[0].name": "Knight",
+	"characters[1].name": "Mage",
+	"characters[2].name": "Archer",
+	"characters[3].name": "Dragon"
+}

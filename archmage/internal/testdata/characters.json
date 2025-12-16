@@ -1,0 +1,68 @@
+[
+	{
+		"id": "char_001",
+		"name": "characters[0].name",
+		"race": "Human",
+		"health": 120,
+		"attack": 25.5,
+		"isPlayable": true,
+		"skills": [
+			"slash",
+			"block",
+			"charge"
+		],
+		"ref-crude": null,
+		"runes": null
+	},
+	{
+		"id": "char_002",
+		"name": "characters[1].name",
+		"race": "",
+		"health": 80,
+		"attack": 35,
+		"isPlayable": true,
+		"skills": [
+			"fireball",
+			"heal",
+			"teleport"
+		],
+		"ref-crude": null,
+		"runes": [
+			1,
+			3
+		]
+	},
+	{
+		"id": "char_003",
+		"name": "characters[2].name",
+		"race": "",
+		"health": 100,
+		"attack": 28.5,
+		"isPlayable": true,
+		"skills": [
+			"arrow_shot",
+			"multi_shot",
+			"stealth"
+		],
+		"ref-crude": null,
+		"runes": null
+	},
+	{
+		"id": "char_004",
+		"name": "characters[3].name",
+		"race": "",
+		"health": 500,
+		"attack": 45,
+		"isPlayable": false,
+		"skills": [
+			"flame_breath",
+			"fly",
+			"roar"
+		],
+		"ref-crude": {
+			"r1": 1,
+			"r2": "Human"
+		},
+		"runes": null
+	}
+]

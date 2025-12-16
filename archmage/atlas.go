@@ -6,6 +6,7 @@ import (
 	"encoding/json/v2"
 	"fmt"
 	"io/fs"
+	"iter"
 	"maps"
 	"os"
 	"path"
@@ -14,8 +15,6 @@ import (
 	"slices"
 	"strings"
 	"time"
-
-	"golang.org/x/sync/errgroup"
 )
 
 type Atlas interface {
@@ -61,14 +60,7 @@ func LoadAtlasFS(fsys fs.FS, atlasFile string, cfgRoot string, out Atlas, opts .
 	return loadAtlasImpl(atlasFile, cfgRoot, out, atlasOpts)
 }
 
-func loadAtlasImpl(atlasFile string, cfgRoot string, out Atlas, opts *atlasOptions) (err error) {
-	defer func() {
-		if err != nil {
-			return
-		}
-		out.BindRefs()
-	}()
-
+func loadAtlasImpl(atlasFile string, cfgRoot string, out Atlas, opts *atlasOptions) error {
 	for _, root := range opts.overwriteRoots {
 		stat, err := os.Stat(root)
 		if err != nil {
@@ -89,34 +81,44 @@ func loadAtlasImpl(atlasFile string, cfgRoot string, out Atlas, opts *atlasOptio
 	if err != nil {
 		return err
 	}
+	opts.cbAtlasModifier(&atlasJSON)
 
-	if opts.maxConcurrency <= 1 {
-		items := out.AtlasItems()
-		sortedKeys := slices.SortedFunc(maps.Keys(items), compareLower)
-		for _, k := range sortedKeys {
-			if cause, yes := opts.shouldIgnore(k); yes {
-				opts.Infof("<archmage> skipping atlas item: %s. cause: %s", k, cause)
-				continue
+	items := out.AtlasItems()
+	sortedKeys := slices.SortedFunc(maps.Keys(items), compareLower)
+	filtered := slices.DeleteFunc(sortedKeys, func(k string) bool {
+		cause, yes := opts.shouldIgnore(k)
+		if yes {
+			opts.Infof("<archmage> skipping atlas item: %s. cause: %s", k, cause)
+		}
+		return yes
+	})
+	seq := func(yield func(string, *AtlasItem) bool) {
+		for _, k := range filtered {
+			if !yield(k, items[k]) {
+				break
 			}
-			if err = loadItem(context.Background(), k, items[k], atlasJSON, atlasFile, cfgRoot, opts); err != nil {
+		}
+	}
+	loadWrapper := func(ctx context.Context, key string, item *AtlasItem) error {
+		return loadItem(ctx, key, item, atlasJSON, atlasFile, cfgRoot, opts)
+	}
+
+	if opts.customLoader == nil {
+		for key, item := range seq {
+			err = loadWrapper(context.Background(), key, item)
+			if err != nil {
 				return err
 			}
 		}
-		return nil
+	} else {
+		err = opts.customLoader(seq, loadWrapper)
+		if err != nil {
+			return err
+		}
 	}
 
-	eg, ctx := errgroup.WithContext(context.Background())
-	eg.SetLimit(opts.maxConcurrency)
-	for k, item := range out.AtlasItems() {
-		if cause, yes := opts.shouldIgnore(k); yes {
-			opts.Infof("<archmage> skipping atlas item: %s. cause: %s", k, cause)
-			continue
-		}
-		eg.Go(func() error {
-			return loadItem(ctx, k, item, atlasJSON, atlasFile, cfgRoot, opts)
-		})
-	}
-	return eg.Wait()
+	out.BindRefs()
+	return nil
 }
 
 func loadItem(ctx context.Context, key string, item *AtlasItem,
@@ -265,12 +267,12 @@ func compareLower(a, b string) int {
 
 type atlasOptions struct {
 	Logger
-	maxConcurrency int
 
 	overwriteRoots []string
 
+	customLoader    func(iter.Seq2[string, *AtlasItem], AtlasItemLoadFunc) error
 	cbAtlasModifier func(atlasJSON *AtlasJSON)
-	cbNotFound      func(name string, atlasItem *AtlasItem) error
+	cbNotFound      func(key string, atlasItem *AtlasItem) error
 
 	whitelist []string
 	blacklist []string
@@ -305,15 +307,23 @@ func WithLogger(logger Logger) Option {
 	}
 }
 
-func WithMaxConcurrency(n int) Option {
+type AtlasItemLoadFunc func(ctx context.Context, key string, item *AtlasItem) error
+
+func WithCustomLoader(loader func(all iter.Seq2[string, *AtlasItem], load AtlasItemLoadFunc) error) Option {
 	return func(opts *atlasOptions) {
-		opts.maxConcurrency = n
+		opts.customLoader = loader
 	}
 }
 
-func WithNotFoundCallback(cb func(name string, atlasItem *AtlasItem) error) Option {
+func WithNotFoundCallback(cb func(key string, atlasItem *AtlasItem) error) Option {
 	return func(opts *atlasOptions) {
 		opts.cbNotFound = cb
+	}
+}
+
+func WithAtlasModifier(cb func(atlasJSON *AtlasJSON)) Option {
+	return func(opts *atlasOptions) {
+		opts.cbAtlasModifier = cb
 	}
 }
 
@@ -332,11 +342,5 @@ func WithBlacklist(blacklist []string) Option {
 func WithOverridesRoot(dir string) Option {
 	return func(opts *atlasOptions) {
 		opts.overwriteRoots = append(opts.overwriteRoots, dir)
-	}
-}
-
-func WithAtlasModifier(cb func(atlasJSON *AtlasJSON)) Option {
-	return func(opts *atlasOptions) {
-		opts.cbAtlasModifier = cb
 	}
 }

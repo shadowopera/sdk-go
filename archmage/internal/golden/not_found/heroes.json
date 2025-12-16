@@ -1,0 +1,72 @@
+{
+	"2": {
+		"heroName": "heroes[2].heroName",
+		"startLevel": 5,
+		"referrer": [
+			3,
+			1
+		],
+		"race-combo": [
+			{
+				"race1": "Dark Elf",
+				"race2": "Halfling"
+			},
+			{
+				"race1": "Halfling",
+				"race2": ""
+			}
+		],
+		"referrer-sort": [
+			1,
+			3
+		],
+		"referrer-compact": [
+			3,
+			1
+		],
+		"referrer-sort-compact": [
+			1,
+			3
+		]
+	},
+	"3": {
+		"heroName": "heroes[3].heroName",
+		"startLevel": 7,
+		"referrer": null,
+		"race-combo": [
+			{
+				"race1": "Halfling",
+				"race2": ""
+			}
+		],
+		"referrer-sort": null,
+		"referrer-compact": null,
+		"referrer-sort-compact": null
+	},
+	"5": {
+		"heroName": "heroes[5].heroName",
+		"startLevel": 10,
+		"referrer": [
+			2
+		],
+		"race-combo": [
+			{
+				"race1": "",
+				"race2": "Dwarf"
+			},
+			{
+				"race1": "",
+				"race2": "Dwarf"
+			}
+		],
+		"referrer-sort": [
+			2
+		],
+		"referrer-compact": [
+			2
+		],
+		"referrer-sort-compact": [
+			2
+		]
+	}
+}
