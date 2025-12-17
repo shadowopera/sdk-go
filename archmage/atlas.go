@@ -66,11 +66,22 @@ func loadAtlasImpl(atlasFile string, cfgRoot string, out Atlas, opts *atlasOptio
 	var atlasJSON AtlasJSON
 	err = json.Unmarshal(atlasData, &atlasJSON)
 	if err != nil {
-		return err
+		return fmt.Errorf("<archmage> invalid %q | %w", atlasFile, err)
 	}
 	opts.cbAtlasModifier(&atlasJSON)
 
 	items := out.AtlasItems()
+	for _, v := range opts.whitelist {
+		if _, ok := items[v]; !ok {
+			return fmt.Errorf("<archmage> atlas whitelist: unknown item %q", v)
+		}
+	}
+	for _, v := range opts.blacklist {
+		if _, ok := items[v]; !ok {
+			return fmt.Errorf("<archmage> atlas blacklist: unknown item %q", v)
+		}
+	}
+
 	sortedKeys := slices.SortedFunc(maps.Keys(items), compareLower)
 	filtered := slices.DeleteFunc(sortedKeys, func(k string) bool {
 		cause, yes := opts.shouldIgnore(k)
@@ -214,18 +225,18 @@ func loadItem(ctx context.Context, key string, item *AtlasItem,
 			return nil
 		}
 	default:
-		panic("unsupported arity: " + item.Arity)
+		panic("<archmage> unsupported arity: " + item.Arity)
 	}
 
 	if !item.Ready {
 		err = json.Unmarshal(data, item.Cfg)
 		if err != nil {
-			return err
+			return fmt.Errorf("<archmage> invalid %q | %w", item.File, err)
 		}
 		for i, data := range overrides {
 			err = json.Unmarshal(data, item.Cfg)
 			if err != nil {
-				return fmt.Errorf("applying override %s failed | %w", overrideFiles[i], err)
+				return fmt.Errorf("<archmage> applying override %s failed | %w", overrideFiles[i], err)
 			}
 		}
 	}
