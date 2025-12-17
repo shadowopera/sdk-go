@@ -44,25 +44,17 @@ func LoadAtlas(atlasFile string, cfgRoot string, out Atlas, opts ...Option) erro
 	return loadAtlasImpl(atlasFile, cfgRoot, out, atlasOpts)
 }
 
-func LoadAtlasFS(fsys fs.FS, atlasFile string, cfgRoot string, out Atlas, opts ...Option) error {
-	atlasOpts := newAtlasOptions()
-	atlasOpts.readFile = func(name string) ([]byte, error) {
-		return fs.ReadFile(fsys, name)
-	}
-	for _, opt := range opts {
-		opt(atlasOpts)
-	}
-	return loadAtlasImpl(atlasFile, cfgRoot, out, atlasOpts)
-}
-
 func loadAtlasImpl(atlasFile string, cfgRoot string, out Atlas, opts *atlasOptions) error {
-	for _, root := range opts.overwriteRoots {
-		stat, err := os.Stat(root)
+	for _, cfg := range opts.overrideConfigs {
+		if cfg.fsys != nil {
+			continue
+		}
+		stat, err := os.Stat(cfg.root)
 		if err != nil {
-			return fmt.Errorf("<archmage> invalid override root %q | %w", root, err)
+			return fmt.Errorf("<archmage> invalid override root directory %q | %w", cfg.root, err)
 		}
 		if !stat.IsDir() {
-			return fmt.Errorf("<archmage> override root %q is not a directory", root)
+			return fmt.Errorf("<archmage> override root %q is not a directory", cfg.root)
 		}
 	}
 
@@ -128,17 +120,23 @@ func loadItem(ctx context.Context, key string, item *AtlasItem,
 	var overrideFiles []string
 	var overrides [][]byte
 	readOverrides := func(file string) error {
-		for _, dir := range opts.overwriteRoots {
-			ovr := filepath.Join(dir, file)
-			if _, err := os.Stat(ovr); err == nil {
-				var ovrData []byte
-				ovrData, err = opts.readFile(ovr)
-				if err != nil {
-					return err
+		for _, cfg := range opts.overrideConfigs {
+			if cfg.fsys != nil {
+				if _, err := fs.Stat(cfg.fsys, file); err != nil {
+					continue
 				}
-				overrideFiles = append(overrideFiles, ovr)
-				overrides = append(overrides, ovrData)
+			} else {
+				ovr := filepath.Join(cfg.root, file)
+				if _, err := os.Stat(ovr); err != nil {
+					continue
+				}
 			}
+			file, ovrData, err := readOverrideFile(cfg, file)
+			if err != nil {
+				return err
+			}
+			overrideFiles = append(overrideFiles, file)
+			overrides = append(overrides, ovrData)
 		}
 		return nil
 	}
@@ -254,10 +252,26 @@ func compareLower(a, b string) int {
 	return cmp.Compare(strings.ToLower(a), strings.ToLower(b))
 }
 
+func readOverrideFile(cfg overrideConfig, name string) (string, []byte, error) {
+	if cfg.fsys != nil {
+		data, err := fs.ReadFile(cfg.fsys, name)
+		return name, data, err
+	} else {
+		p := filepath.Join(cfg.root, name)
+		data, err := os.ReadFile(p)
+		return p, data, err
+	}
+}
+
+type overrideConfig struct {
+	fsys fs.FS
+	root string
+}
+
 type atlasOptions struct {
 	Logger
 
-	overwriteRoots []string
+	overrideConfigs []overrideConfig
 
 	customLoader    func(iter.Seq2[string, *AtlasItem], AtlasItemLoadFunc) error
 	cbAtlasModifier func(atlasJSON *AtlasJSON)
@@ -328,8 +342,14 @@ func WithBlacklist(blacklist []string) Option {
 	}
 }
 
-func WithOverridesRoot(dir string) Option {
+func WithOverrideRoot(dir string) Option {
 	return func(opts *atlasOptions) {
-		opts.overwriteRoots = append(opts.overwriteRoots, dir)
+		opts.overrideConfigs = append(opts.overrideConfigs, overrideConfig{root: dir})
+	}
+}
+
+func WithOverrideFS(fsys fs.FS) Option {
+	return func(opts *atlasOptions) {
+		opts.overrideConfigs = append(opts.overrideConfigs, overrideConfig{fsys: fsys})
 	}
 }

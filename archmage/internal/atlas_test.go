@@ -8,6 +8,7 @@ import (
 	"slices"
 	"strings"
 	"testing"
+	"testing/fstest"
 
 	"github.com/shadowopera/sdk-go/archmage"
 	"github.com/shadowopera/sdk-go/archmage/internal/conf"
@@ -253,12 +254,12 @@ func TestAtlas_WithBlacklist(t *testing.T) {
 	}
 }
 
-func TestAtlas_WithOverridesRoot(t *testing.T) {
+func TestAtlas_WithOverrideRoot(t *testing.T) {
 	logger := newScavenger()
 	opts := []archmage.Option{
 		archmage.WithLogger(logger),
-		archmage.WithOverridesRoot("override/1"),
-		archmage.WithOverridesRoot("override/2"),
+		archmage.WithOverrideRoot("override/1"),
+		archmage.WithOverrideRoot("override/2"),
 	}
 
 	atlas := conf.NewConfigAtlas()
@@ -266,7 +267,35 @@ func TestAtlas_WithOverridesRoot(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	err = archmage.DumpAtlas(atlas, "golden/overrides_root")
+	err = archmage.DumpAtlas(atlas, "golden/override_root")
+	if err != nil {
+		t.Fatal(err)
+	}
+}
+
+func TestAtlas_WithOverrideFS(t *testing.T) {
+	fsys := fstest.MapFS{}
+	fsys["game.json"] = &fstest.MapFile{
+		Data: []byte(`{"x-string":"foo bar","x-map":{"7":"xxx","9":"rab"}}`),
+	}
+	fsys["clutter/magic.json"] = &fstest.MapFile{
+		Data: []byte(`{"200":{"name":"Power Word: Shield"}}`),
+	}
+
+	logger := newScavenger()
+	opts := []archmage.Option{
+		archmage.WithLogger(logger),
+		archmage.WithWhitelist([]string{"game", "Magic", "weapon-rune"}),
+		archmage.WithOverrideRoot("override/2"),
+		archmage.WithOverrideFS(fsys),
+	}
+
+	atlas := conf.NewConfigAtlas()
+	err := archmage.LoadAtlas("testdata/atlas.json", "testdata", atlas, opts...)
+	if err != nil {
+		t.Fatal(err)
+	}
+	err = archmage.DumpAtlas(atlas, "golden/override_fs")
 	if err != nil {
 		t.Fatal(err)
 	}

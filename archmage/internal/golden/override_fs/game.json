@@ -1,0 +1,36 @@
+{
+	"x-int": 1000,
+	"x-int32": 1320,
+	"x-float64": 3.14,
+	"x-string": "foo bar",
+	"x-bool": false,
+	"x-duration": [
+		0,
+		3600
+	],
+	"x-path": "x/y/z.bin",
+	"x-datetime": "0100-01-01T15:30:00+08:00",
+	"x-ref": 3,
+	"x-l10n": "game.x-l10n",
+	"x-array1": [
+		1,
+		2,
+		3
+	],
+	"x-array2": null,
+	"x-map": {
+		"7": "xxx",
+		"8": "foo",
+		"9": "rab"
+	},
+	"x-object": {
+		"fieldX": 100,
+		"fieldY": "foo"
+	},
+	"x-tuple": {
+		"item1": 1,
+		"item2": 12.5,
+		"item3": " bar "
+	},
+	"x-vector": null
+}
