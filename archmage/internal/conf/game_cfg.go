@@ -23,7 +23,7 @@ type GameCfg struct {
 	XDuration Duration                      `json:"x-duration"` // desc-x-duration
 	XPath     string                        `json:"x-path"`     // desc-x-path
 	XDatetime time.Time                     `json:"x-datetime"` // desc-x-datetime
-	XRef      Ref[int, *WeaponRunesCfg]     `json:"x-ref"`      // desc-x-ref
+	XRef      Ref[int, *WeaponRuneCfg]      `json:"x-ref"`      // desc-x-ref
 	XL10n     L10n                          `json:"x-l10n"`     // desc-x-l10n
 	XArray1   []int                         `json:"x-array1"`   // desc-x-array1
 	XArray2   []int8                        `json:"x-array2"`   // desc-x-array2
@@ -42,7 +42,7 @@ type game_XObject struct {
 // region Trifles
 
 func (x *GameCfg) bindRefs(atlas *ConfigAtlas) {
-	x.XRef.Ref = atlas.WeaponRunesTable.MustLookup(x.XRef.RawValue)
+	x.XRef.Ref = atlas.WeaponRuneTable.MustLookup(x.XRef.RawValue)
 }
 
 // endregion

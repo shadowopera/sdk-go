@@ -17,16 +17,16 @@ var (
 type StringTable map[string]*StringCfg
 
 type StringCfg struct {
-	ID             string                 `json:"-"`
-	B              *string_B              `json:"B"`
-	E              string                 `json:"E"`               // desc-E
-	DefValidate    string                 `json:"def-validate"`    // def-validate
-	DefPostprocess string                 `json:"def-postprocess"` // def-postprocess
-	I              string                 `json:"I"`               // desc-I
-	K              Ref[string, *RacesCfg] `json:"K"`               // desc-K
-	Referer1       Ref[int, *RefCfg]      `json:"referer1"`        // desc-referer1
-	Referer2       Ref[int, *RefCfg]      `json:"referer2"`        // desc-referer2
-	RefererN       []Ref[int, *RefCfg]    `json:"referer-n"`       // desc-referer-n
+	ID             string                `json:"-"`
+	B              *string_B             `json:"B"`
+	E              string                `json:"E"`               // desc-E
+	DefValidate    string                `json:"def-validate"`    // def-validate
+	DefPostprocess string                `json:"def-postprocess"` // def-postprocess
+	I              string                `json:"I"`               // desc-I
+	K              Ref[string, *RaceCfg] `json:"K"`               // desc-K
+	Referer1       Ref[int, *RefCfg]     `json:"referer1"`        // desc-referer1
+	Referer2       Ref[int, *RefCfg]     `json:"referer2"`        // desc-referer2
+	RefererN       []Ref[int, *RefCfg]   `json:"referer-n"`       // desc-referer-n
 }
 
 // string_B represents $.*.B
@@ -68,7 +68,7 @@ func (x StringTable) bindRefs(atlas *ConfigAtlas) {
 }
 
 func (x *StringCfg) bindRefs(atlas *ConfigAtlas) {
-	x.K.Ref = atlas.RacesTable.MustLookup(x.K.RawValue)
+	x.K.Ref = atlas.RaceTable.MustLookup(x.K.RawValue)
 	x.Referer1.Ref = atlas.RefTable.MustLookup(x.Referer1.RawValue)
 	x.Referer2.Ref = atlas.RefTable.MustLookup(x.Referer2.RawValue)
 	for i, ref := range x.RefererN {

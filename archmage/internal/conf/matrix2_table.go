@@ -14,7 +14,7 @@ var (
 	_ *archmage.Duration
 )
 
-type Matrix2Table map[string]map[string][][]Ref[int, *HeroesCfg]
+type Matrix2Table map[string]map[string][][]Ref[int, *HeroCfg]
 
 // region Trifles
 
@@ -23,7 +23,7 @@ func (x Matrix2Table) bindRefs(atlas *ConfigAtlas) {
 		for _, v2 := range v1 {
 			for _, v3 := range v2 {
 				for i, v4 := range v3 {
-					v3[i].Ref = atlas.HeroesTable.MustLookup(v4.RawValue)
+					v3[i].Ref = atlas.HeroTable.MustLookup(v4.RawValue)
 				}
 			}
 		}

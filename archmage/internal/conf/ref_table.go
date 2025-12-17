@@ -18,15 +18,15 @@ type RefTable map[int]*RefCfg
 
 type RefCfg struct {
 	ID int                       `json:"-"`
-	B  Ref[int, *WeaponRunesCfg] `json:"B"` // desc-B
+	B  Ref[int, *WeaponRuneCfg]  `json:"B"` // desc-B
 	C  int                       `json:"C"` // desc-C
-	D  Ref[int, *ItemsCfg]       `json:"D"` // desc-D
-	E  Ref[int, *MagicsCfg]      `json:"E"` // desc-E
-	F  Ref[string, *RacesCfg]    `json:"F"` // desc-F
-	G  Ref[int, *HeroesCfg]      `json:"G"` // desc-G
+	D  Ref[int, *ItemCfg]        `json:"D"` // desc-D
+	E  Ref[int, *MagicCfg]       `json:"E"` // desc-E
+	F  Ref[string, *RaceCfg]     `json:"F"` // desc-F
+	G  Ref[int, *HeroCfg]        `json:"G"` // desc-G
 	H  []Ref[string, *StringCfg] `json:"H"` // desc-H
-	J  Ref[int, *ItemsCfg]       `json:"J"` // desc-J
-	K  Ref[string, *RacesCfg]    `json:"K"` // desc-K
+	J  Ref[int, *ItemCfg]        `json:"J"` // desc-J
+	K  Ref[string, *RaceCfg]     `json:"K"` // desc-K
 }
 
 func (x RefTable) Lookup(cfgID int) (*RefCfg, error) {
@@ -56,16 +56,16 @@ func (x RefTable) bindRefs(atlas *ConfigAtlas) {
 }
 
 func (x *RefCfg) bindRefs(atlas *ConfigAtlas) {
-	x.B.Ref = atlas.WeaponRunesTable.MustLookup(x.B.RawValue)
-	x.D.Ref = atlas.ItemsTable.MustLookup(x.D.RawValue)
-	x.E.Ref = atlas.MagicsTable.MustLookup(x.E.RawValue)
-	x.F.Ref = atlas.RacesTable.MustLookup(x.F.RawValue)
-	x.G.Ref = atlas.HeroesTable.MustLookup(x.G.RawValue)
+	x.B.Ref = atlas.WeaponRuneTable.MustLookup(x.B.RawValue)
+	x.D.Ref = atlas.ItemTable.MustLookup(x.D.RawValue)
+	x.E.Ref = atlas.MagicTable.MustLookup(x.E.RawValue)
+	x.F.Ref = atlas.RaceTable.MustLookup(x.F.RawValue)
+	x.G.Ref = atlas.HeroTable.MustLookup(x.G.RawValue)
 	for i, v1 := range x.H {
 		x.H[i].Ref = atlas.StringTable.MustLookup(v1.RawValue)
 	}
-	x.J.Ref = atlas.ItemsTable.MustLookup(x.J.RawValue)
-	x.K.Ref = atlas.RacesTable.MustLookup(x.K.RawValue)
+	x.J.Ref = atlas.ItemTable.MustLookup(x.J.RawValue)
+	x.K.Ref = atlas.RaceTable.MustLookup(x.K.RawValue)
 }
 
 // endregion

@@ -1,7 +1,7 @@
 [
 	{
 		"id": "char_001",
-		"name": "characters[0].name",
+		"name": "character[0].name",
 		"race": "Human",
 		"health": 120,
 		"attack": 25.5,
@@ -16,7 +16,7 @@
 	},
 	{
 		"id": "char_002",
-		"name": "characters[1].name",
+		"name": "character[1].name",
 		"race": "",
 		"health": 80,
 		"attack": 35,
@@ -34,7 +34,7 @@
 	},
 	{
 		"id": "char_003",
-		"name": "characters[2].name",
+		"name": "character[2].name",
 		"race": "",
 		"health": 100,
 		"attack": 28.5,
@@ -49,7 +49,7 @@
 	},
 	{
 		"id": "char_004",
-		"name": "characters[3].name",
+		"name": "character[3].name",
 		"race": "",
 		"health": 500,
 		"attack": 45,

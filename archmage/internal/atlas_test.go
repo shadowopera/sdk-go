@@ -143,13 +143,13 @@ func TestAtlas_NotFoundCallback(t *testing.T) {
 func TestAtlas_WithAtlasModifier(t *testing.T) {
 	atlasModifier := func(atlasJSON *archmage.AtlasJSON) {
 		atlasJSON.Multiple["prop_floats"]["/"] = atlasJSON.Multiple["prop_floats"]["x5"]
-		delete(atlasJSON.Single, "characters")
+		delete(atlasJSON.Single, "character")
 		delete(atlasJSON.Single, "matrix2")
 		delete(atlasJSON.Multiple, "game")
 	}
 	notFound := func(key string, atlasItem *archmage.AtlasItem) error {
 		switch key {
-		case "characters":
+		case "character":
 		case "matrix2":
 		case "game":
 		default:
@@ -176,7 +176,7 @@ func TestAtlas_WithAtlasModifier(t *testing.T) {
 	}
 
 	if !slices.ContainsFunc(logger.Lines, func(line string) bool {
-		return line == "WRN <archmage> cannot find $.single['characters'] in testdata/atlas.json"
+		return line == "WRN <archmage> cannot find $.single['character'] in testdata/atlas.json"
 	}) {
 		t.Fatalf("expected warning log not found")
 	}
@@ -201,7 +201,7 @@ func TestAtlas_WithWhitelist(t *testing.T) {
 	logger := newScavenger()
 	opts := []archmage.Option{
 		archmage.WithLogger(logger),
-		archmage.WithWhitelist([]string{"Items", "game", "prop_floats", "weapon-runes"}),
+		archmage.WithWhitelist([]string{"Item", "game", "prop_floats", "weapon-rune"}),
 	}
 
 	atlas := conf.NewConfigAtlas()
@@ -229,7 +229,7 @@ func TestAtlas_WithBlacklist(t *testing.T) {
 	logger := newScavenger()
 	opts := []archmage.Option{
 		archmage.WithLogger(logger),
-		archmage.WithBlacklist([]string{"game", "prop_floats", "characters"}),
+		archmage.WithBlacklist([]string{"game", "prop_floats", "character"}),
 	}
 
 	atlas := conf.NewConfigAtlas()

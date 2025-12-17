@@ -4,11 +4,6 @@ import (
 	"fmt"
 )
 
-type Logger interface {
-	Infof(format string, args ...any)
-	Warnf(format string, args ...any)
-}
-
 type scavenger struct {
 	Lines []string
 }

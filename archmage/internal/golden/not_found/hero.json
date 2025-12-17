@@ -1,6 +1,6 @@
 {
 	"2": {
-		"heroName": "heroes[2].heroName",
+		"heroName": "hero[2].heroName",
 		"startLevel": 5,
 		"referrer": [
 			3,
@@ -30,7 +30,7 @@
 		]
 	},
 	"3": {
-		"heroName": "heroes[3].heroName",
+		"heroName": "hero[3].heroName",
 		"startLevel": 7,
 		"referrer": null,
 		"race-combo": [
@@ -44,7 +44,7 @@
 		"referrer-sort-compact": null
 	},
 	"5": {
-		"heroName": "heroes[5].heroName",
+		"heroName": "hero[5].heroName",
 		"startLevel": 10,
 		"referrer": [
 			2

@@ -12,17 +12,17 @@ type ConfigAtlas struct {
 	m map[string]*AtlasItem
 	AtlasExtension
 
-	CharactersArray  CharactersArray
-	GameCfg          GameCfg
-	HeroesTable      HeroesTable
-	ItemsTable       ItemsTable
-	MagicsTable      MagicsTable
-	Matrix2Table     Matrix2Table
-	PropFloatsCfg    PropFloatsCfg
-	RacesTable       RacesTable
-	RefTable         RefTable
-	StringTable      StringTable
-	WeaponRunesTable WeaponRunesTable
+	CharacterArray  CharacterArray
+	GameCfg         GameCfg
+	HeroTable       HeroTable
+	ItemTable       ItemTable
+	MagicTable      MagicTable
+	Matrix2Table    Matrix2Table
+	PropFloatsCfg   PropFloatsCfg
+	RaceTable       RaceTable
+	RefTable        RefTable
+	StringTable     StringTable
+	WeaponRuneTable WeaponRuneTable
 }
 
 func NewConfigAtlas() *ConfigAtlas {
@@ -33,17 +33,17 @@ func NewConfigAtlas() *ConfigAtlas {
 
 func (atlas *ConfigAtlas) buildMap() {
 	atlas.m = map[string]*AtlasItem{
-		"characters":   {Cfg: &atlas.CharactersArray, Arity: "single"},
-		"game":         {Cfg: &atlas.GameCfg, Arity: "multiple"},
-		"heroes":       {Cfg: &atlas.HeroesTable, Arity: "single"},
-		"Items":        {Cfg: &atlas.ItemsTable, Arity: "single"},
-		"Magics":       {Cfg: &atlas.MagicsTable, Arity: "single"},
-		"matrix2":      {Cfg: &atlas.Matrix2Table, Arity: "single"},
-		"prop_floats":  {Cfg: &atlas.PropFloatsCfg, Arity: "multiple"},
-		"Races":        {Cfg: &atlas.RacesTable, Arity: "single"},
-		"ref":          {Cfg: &atlas.RefTable, Arity: "single"},
-		"string":       {Cfg: &atlas.StringTable, Arity: "single"},
-		"weapon-runes": {Cfg: &atlas.WeaponRunesTable, Arity: "single"},
+		"character":   {Cfg: &atlas.CharacterArray, Arity: "single"},
+		"game":        {Cfg: &atlas.GameCfg, Arity: "multiple"},
+		"hero":        {Cfg: &atlas.HeroTable, Arity: "single"},
+		"Item":        {Cfg: &atlas.ItemTable, Arity: "single"},
+		"Magic":       {Cfg: &atlas.MagicTable, Arity: "single"},
+		"matrix2":     {Cfg: &atlas.Matrix2Table, Arity: "single"},
+		"prop_floats": {Cfg: &atlas.PropFloatsCfg, Arity: "multiple"},
+		"Race":        {Cfg: &atlas.RaceTable, Arity: "single"},
+		"ref":         {Cfg: &atlas.RefTable, Arity: "single"},
+		"string":      {Cfg: &atlas.StringTable, Arity: "single"},
+		"weapon-rune": {Cfg: &atlas.WeaponRuneTable, Arity: "single"},
 	}
 }
 
@@ -73,7 +73,7 @@ func genericLookup[V comparable, R any](cfgID V, tbl map[V]R, tblName string) (R
 		return e, nil
 	}
 
-	err := fmt.Errorf("%s: config entry with ID %v not found", tblName, cfgID)
+	err := fmt.Errorf("%s: config entry not found for ID %v", tblName, cfgID)
 	return zero, err
 }
 
