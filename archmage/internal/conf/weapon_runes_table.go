@@ -34,28 +34,10 @@ func (x WeaponRunesTable) MustLookup(cfgID int) *WeaponRunesCfg {
 
 func (x WeaponRunesTable) ApplyKeys() {
 	for k, v := range x {
-		v.ID = k
+		if v != nil {
+			v.ID = k
+		}
 	}
-}
-
-func (x *WeaponRunesTable) ApplyOverride(data []byte) (Overridable, error) {
-	return archmage.ApplyMapValueOverride(x, data)
-}
-
-var (
-	_WeaponRunesCfgFields = map[string]int8{
-		"id":       1,
-		"runeName": 1,
-		"power":    1,
-	}
-	_WeaponRunesCfgFieldIndexMap = archmage.BuildJSONKeyToFieldIndexMap[WeaponRunesCfg](
-		_WeaponRunesCfgFields,
-	)
-)
-
-func (x *WeaponRunesCfg) ApplyOverride(data []byte) (Overridable, error) {
-	return archmage.ApplyStructOverride(
-		x, data, "WeaponRunesCfg", _WeaponRunesCfgFields, _WeaponRunesCfgFieldIndexMap)
 }
 
 // endregion

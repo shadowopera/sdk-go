@@ -53,65 +53,10 @@ func (x StringTable) MustLookup(cfgID string) *StringCfg {
 
 func (x StringTable) ApplyKeys() {
 	for k, v := range x {
-		v.ID = k
+		if v != nil {
+			v.ID = k
+		}
 	}
-}
-
-func (x *StringTable) ApplyOverride(data []byte) (Overridable, error) {
-	return archmage.ApplyMapValueOverride(x, data)
-}
-
-var (
-	_StringCfgFields = map[string]int8{
-		"id":              1,
-		"B":               3,
-		"E":               1,
-		"def-validate":    1,
-		"def-postprocess": 1,
-		"I":               1,
-		"K":               1,
-		"referer1":        1,
-		"referer2":        1,
-		"referer-n":       1,
-	}
-	_StringCfgFieldIndexMap = archmage.BuildJSONKeyToFieldIndexMap[StringCfg](
-		_StringCfgFields,
-	)
-)
-
-func (x *StringCfg) ApplyOverride(data []byte) (Overridable, error) {
-	return archmage.ApplyStructOverride(
-		x, data, "StringCfg", _StringCfgFields, _StringCfgFieldIndexMap)
-}
-
-var (
-	_string_BFields = map[string]int8{
-		"bar": 3,
-		"car": 1,
-	}
-	_string_BFieldIndexMap = archmage.BuildJSONKeyToFieldIndexMap[string_B](
-		_string_BFields,
-	)
-)
-
-func (x *string_B) ApplyOverride(data []byte) (Overridable, error) {
-	return archmage.ApplyStructOverride(
-		x, data, "string_B", _string_BFields, _string_BFieldIndexMap)
-}
-
-var (
-	_RabFields = map[string]int8{
-		"foo": 1,
-		"qux": 1,
-	}
-	_RabFieldIndexMap = archmage.BuildJSONKeyToFieldIndexMap[Rab](
-		_RabFields,
-	)
-)
-
-func (x *Rab) ApplyOverride(data []byte) (Overridable, error) {
-	return archmage.ApplyStructOverride(
-		x, data, "Rab", _RabFields, _RabFieldIndexMap)
 }
 
 func (x StringTable) bindRefs(atlas *ConfigAtlas) {

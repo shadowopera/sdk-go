@@ -40,43 +40,10 @@ func (x ItemsTable) MustLookup(cfgID int) *ItemsCfg {
 
 func (x ItemsTable) ApplyKeys() {
 	for k, v := range x {
-		v.ID = k
+		if v != nil {
+			v.ID = k
+		}
 	}
-}
-
-func (x *ItemsTable) ApplyOverride(data []byte) (Overridable, error) {
-	return archmage.ApplyMapValueOverride(x, data)
-}
-
-var (
-	_ItemsCfgFields = map[string]int8{
-		"id":    1,
-		"name":  1,
-		"price": 3,
-	}
-	_ItemsCfgFieldIndexMap = archmage.BuildJSONKeyToFieldIndexMap[ItemsCfg](
-		_ItemsCfgFields,
-	)
-)
-
-func (x *ItemsCfg) ApplyOverride(data []byte) (Overridable, error) {
-	return archmage.ApplyStructOverride(
-		x, data, "ItemsCfg", _ItemsCfgFields, _ItemsCfgFieldIndexMap)
-}
-
-var (
-	_items_PriceFields = map[string]int8{
-		"one":   1,
-		"stack": 1,
-	}
-	_items_PriceFieldIndexMap = archmage.BuildJSONKeyToFieldIndexMap[items_Price](
-		_items_PriceFields,
-	)
-)
-
-func (x *items_Price) ApplyOverride(data []byte) (Overridable, error) {
-	return archmage.ApplyStructOverride(
-		x, data, "items_Price", _items_PriceFields, _items_PriceFieldIndexMap)
 }
 
 // endregion

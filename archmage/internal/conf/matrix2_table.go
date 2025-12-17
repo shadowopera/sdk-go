@@ -18,10 +18,6 @@ type Matrix2Table map[string]map[string][][]Ref[int, *HeroesCfg]
 
 // region Trifles
 
-func (x *Matrix2Table) ApplyOverride(data []byte) (Overridable, error) {
-	return archmage.ApplyMapOverride(x, data)
-}
-
 func (x Matrix2Table) bindRefs(atlas *ConfigAtlas) {
 	for _, v1 := range x {
 		for _, v2 := range v1 {

@@ -37,7 +37,3 @@ type (
 type (
 	AtlasItem = archmage.AtlasItem
 )
-
-type (
-	Overridable = archmage.Overridable
-)

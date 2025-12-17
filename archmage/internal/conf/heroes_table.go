@@ -45,33 +45,10 @@ func (x HeroesTable) MustLookup(cfgID int) *HeroesCfg {
 
 func (x HeroesTable) ApplyKeys() {
 	for k, v := range x {
-		v.ID = k
+		if v != nil {
+			v.ID = k
+		}
 	}
-}
-
-func (x *HeroesTable) ApplyOverride(data []byte) (Overridable, error) {
-	return archmage.ApplyMapValueOverride(x, data)
-}
-
-var (
-	_HeroesCfgFields = map[string]int8{
-		"id":                    1,
-		"heroName":              1,
-		"startLevel":            1,
-		"referrer":              1,
-		"race-combo":            1,
-		"referrer-sort":         1,
-		"referrer-compact":      1,
-		"referrer-sort-compact": 1,
-	}
-	_HeroesCfgFieldIndexMap = archmage.BuildJSONKeyToFieldIndexMap[HeroesCfg](
-		_HeroesCfgFields,
-	)
-)
-
-func (x *HeroesCfg) ApplyOverride(data []byte) (Overridable, error) {
-	return archmage.ApplyStructOverride(
-		x, data, "HeroesCfg", _HeroesCfgFields, _HeroesCfgFieldIndexMap)
 }
 
 func (x HeroesTable) bindRefs(atlas *ConfigAtlas) {

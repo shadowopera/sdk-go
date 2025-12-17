@@ -41,35 +41,10 @@ func (x RefTable) MustLookup(cfgID int) *RefCfg {
 
 func (x RefTable) ApplyKeys() {
 	for k, v := range x {
-		v.ID = k
+		if v != nil {
+			v.ID = k
+		}
 	}
-}
-
-func (x *RefTable) ApplyOverride(data []byte) (Overridable, error) {
-	return archmage.ApplyMapValueOverride(x, data)
-}
-
-var (
-	_RefCfgFields = map[string]int8{
-		"id": 1,
-		"B":  1,
-		"C":  1,
-		"D":  1,
-		"E":  1,
-		"F":  1,
-		"G":  1,
-		"H":  1,
-		"J":  1,
-		"K":  1,
-	}
-	_RefCfgFieldIndexMap = archmage.BuildJSONKeyToFieldIndexMap[RefCfg](
-		_RefCfgFields,
-	)
-)
-
-func (x *RefCfg) ApplyOverride(data []byte) (Overridable, error) {
-	return archmage.ApplyStructOverride(
-		x, data, "RefCfg", _RefCfgFields, _RefCfgFieldIndexMap)
 }
 
 func (x RefTable) bindRefs(atlas *ConfigAtlas) {

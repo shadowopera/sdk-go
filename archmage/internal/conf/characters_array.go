@@ -36,10 +36,6 @@ type characters_RefCrude struct {
 
 // region Trifles
 
-func (x *CharactersArray) ApplyOverride(data []byte) (Overridable, error) {
-	return archmage.ApplyArrayOverride(x, data)
-}
-
 func (x CharactersArray) bindRefs(atlas *ConfigAtlas) {
 	for _, v1 := range x {
 		if v1 != nil {

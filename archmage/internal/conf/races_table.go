@@ -37,31 +37,10 @@ func (x RacesTable) MustLookup(cfgID string) *RacesCfg {
 
 func (x RacesTable) ApplyKeys() {
 	for k, v := range x {
-		v.ID = k
+		if v != nil {
+			v.ID = k
+		}
 	}
-}
-
-func (x *RacesTable) ApplyOverride(data []byte) (Overridable, error) {
-	return archmage.ApplyMapValueOverride(x, data)
-}
-
-var (
-	_RacesCfgFields = map[string]int8{
-		"id":         1,
-		"birthplace": 1,
-		"referrer1":  1,
-		"referrer2":  1,
-		"heroes1":    1,
-		"heroes2":    1,
-	}
-	_RacesCfgFieldIndexMap = archmage.BuildJSONKeyToFieldIndexMap[RacesCfg](
-		_RacesCfgFields,
-	)
-)
-
-func (x *RacesCfg) ApplyOverride(data []byte) (Overridable, error) {
-	return archmage.ApplyStructOverride(
-		x, data, "RacesCfg", _RacesCfgFields, _RacesCfgFieldIndexMap)
 }
 
 func (x RacesTable) bindRefs(atlas *ConfigAtlas) {

@@ -25,23 +25,4 @@ type PropFloatsCfg struct {
 
 // region Trifles
 
-var (
-	_PropFloatsCfgFields = map[string]int8{
-		"B": 1,
-		"C": 1,
-		"D": 1,
-		"E": 1,
-		"F": 1,
-		"G": 1,
-	}
-	_PropFloatsCfgFieldIndexMap = archmage.BuildJSONKeyToFieldIndexMap[PropFloatsCfg](
-		_PropFloatsCfgFields,
-	)
-)
-
-func (x *PropFloatsCfg) ApplyOverride(data []byte) (Overridable, error) {
-	return archmage.ApplyStructOverride(
-		x, data, "PropFloatsCfg", _PropFloatsCfgFields, _PropFloatsCfgFieldIndexMap)
-}
-
 // endregion

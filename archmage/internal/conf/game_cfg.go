@@ -41,50 +41,6 @@ type game_XObject struct {
 
 // region Trifles
 
-var (
-	_GameCfgFields = map[string]int8{
-		"x-int":      1,
-		"x-int32":    1,
-		"x-float64":  1,
-		"x-string":   1,
-		"x-bool":     1,
-		"x-duration": 1,
-		"x-path":     1,
-		"x-datetime": 1,
-		"x-ref":      1,
-		"x-l10n":     1,
-		"x-array1":   1,
-		"x-array2":   1,
-		"x-map":      2,
-		"x-object":   3,
-		"x-tuple":    1,
-		"x-vector":   1,
-	}
-	_GameCfgFieldIndexMap = archmage.BuildJSONKeyToFieldIndexMap[GameCfg](
-		_GameCfgFields,
-	)
-)
-
-func (x *GameCfg) ApplyOverride(data []byte) (Overridable, error) {
-	return archmage.ApplyStructOverride(
-		x, data, "GameCfg", _GameCfgFields, _GameCfgFieldIndexMap)
-}
-
-var (
-	_game_XObjectFields = map[string]int8{
-		"fieldX": 1,
-		"fieldY": 1,
-	}
-	_game_XObjectFieldIndexMap = archmage.BuildJSONKeyToFieldIndexMap[game_XObject](
-		_game_XObjectFields,
-	)
-)
-
-func (x *game_XObject) ApplyOverride(data []byte) (Overridable, error) {
-	return archmage.ApplyStructOverride(
-		x, data, "game_XObject", _game_XObjectFields, _game_XObjectFieldIndexMap)
-}
-
 func (x *GameCfg) bindRefs(atlas *ConfigAtlas) {
 	x.XRef.Ref = atlas.WeaponRunesTable.MustLookup(x.XRef.RawValue)
 }

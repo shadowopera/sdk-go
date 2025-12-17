@@ -33,27 +33,10 @@ func (x MagicsTable) MustLookup(cfgID int) *MagicsCfg {
 
 func (x MagicsTable) ApplyKeys() {
 	for k, v := range x {
-		v.ID = k
+		if v != nil {
+			v.ID = k
+		}
 	}
-}
-
-func (x *MagicsTable) ApplyOverride(data []byte) (Overridable, error) {
-	return archmage.ApplyMapValueOverride(x, data)
-}
-
-var (
-	_MagicsCfgFields = map[string]int8{
-		"id":   1,
-		"name": 1,
-	}
-	_MagicsCfgFieldIndexMap = archmage.BuildJSONKeyToFieldIndexMap[MagicsCfg](
-		_MagicsCfgFields,
-	)
-)
-
-func (x *MagicsCfg) ApplyOverride(data []byte) (Overridable, error) {
-	return archmage.ApplyStructOverride(
-		x, data, "MagicsCfg", _MagicsCfgFields, _MagicsCfgFieldIndexMap)
 }
 
 // endregion
