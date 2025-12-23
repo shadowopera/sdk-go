@@ -226,6 +226,23 @@ func TestAtlas_WithWhitelist(t *testing.T) {
 	}
 }
 
+func TestAtlas_WithWhitelist_Error(t *testing.T) {
+	logger := newScavenger()
+	opts := []archmage.Option{
+		archmage.WithLogger(logger),
+		archmage.WithWhitelist([]string{"Item", "prop_float"}),
+	}
+
+	atlas := conf.NewConfigAtlas()
+	err := archmage.LoadAtlas("testdata/atlas.json", "testdata", atlas, opts...)
+	if err == nil {
+		t.Fatal("expected error, got nil")
+	}
+	if !strings.HasPrefix(err.Error(), `<archmage> atlas whitelist: unknown item "prop_float"`) {
+		t.Fatalf("unexpected error: %v", err)
+	}
+}
+
 func TestAtlas_WithBlacklist(t *testing.T) {
 	logger := newScavenger()
 	opts := []archmage.Option{
@@ -254,6 +271,23 @@ func TestAtlas_WithBlacklist(t *testing.T) {
 	}
 }
 
+func TestAtlas_WithBlacklist_Error(t *testing.T) {
+	logger := newScavenger()
+	opts := []archmage.Option{
+		archmage.WithLogger(logger),
+		archmage.WithBlacklist([]string{"gm"}),
+	}
+
+	atlas := conf.NewConfigAtlas()
+	err := archmage.LoadAtlas("testdata/atlas.json", "testdata", atlas, opts...)
+	if err == nil {
+		t.Fatal("expected error, got nil")
+	}
+	if !strings.HasPrefix(err.Error(), `<archmage> atlas blacklist: unknown item "gm"`) {
+		t.Fatalf("unexpected error: %v", err)
+	}
+}
+
 func TestAtlas_WithOverrideRoot(t *testing.T) {
 	logger := newScavenger()
 	opts := []archmage.Option{
@@ -270,6 +304,40 @@ func TestAtlas_WithOverrideRoot(t *testing.T) {
 	err = archmage.DumpAtlas(atlas, "golden/override_root")
 	if err != nil {
 		t.Fatal(err)
+	}
+}
+
+func TestAtlas_WithOverrideRoot_Error1(t *testing.T) {
+	logger := newScavenger()
+	opts := []archmage.Option{
+		archmage.WithLogger(logger),
+		archmage.WithOverrideRoot("override/9"),
+	}
+
+	atlas := conf.NewConfigAtlas()
+	err := archmage.LoadAtlas("testdata/atlas.json", "testdata", atlas, opts...)
+	if err == nil {
+		t.Fatal("expected error, got nil")
+	}
+	if !strings.HasPrefix(err.Error(), `<archmage> invalid override root directory "override/9"`) {
+		t.Fatalf("unexpected error: %v", err)
+	}
+}
+
+func TestAtlas_WithOverrideRoot_Error2(t *testing.T) {
+	logger := newScavenger()
+	opts := []archmage.Option{
+		archmage.WithLogger(logger),
+		archmage.WithOverrideRoot("override/1/game.json"),
+	}
+
+	atlas := conf.NewConfigAtlas()
+	err := archmage.LoadAtlas("testdata/atlas.json", "testdata", atlas, opts...)
+	if err == nil {
+		t.Fatal("expected error, got nil")
+	}
+	if !strings.HasPrefix(err.Error(), `<archmage> override root "override/1/game.json" is not a directory`) {
+		t.Fatalf("unexpected error: %v", err)
 	}
 }
 
