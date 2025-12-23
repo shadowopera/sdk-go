@@ -10,10 +10,10 @@ import (
 	"testing"
 	"testing/fstest"
 
-	"github.com/shadowopera/sdk-go/archmage"
-	"github.com/shadowopera/sdk-go/archmage/internal/conf"
 	"golang.org/x/sync/errgroup"
 	"golang.org/x/text/language"
+	"shadop.dev/pkg/sdk-go/archmage"
+	"shadop.dev/pkg/sdk-go/archmage/internal/conf"
 )
 
 func TestAtlas_Basic(t *testing.T) {

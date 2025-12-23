@@ -6,7 +6,7 @@ package conf
 import (
 	"time"
 
-	"github.com/shadowopera/sdk-go/archmage"
+	"shadop.dev/pkg/sdk-go/archmage"
 )
 
 var (

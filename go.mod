@@ -1,4 +1,4 @@
-module github.com/shadowopera/sdk-go
+module shadop.dev/pkg/sdk-go
 
 go 1.25.0
 

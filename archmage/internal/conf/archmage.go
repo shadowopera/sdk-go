@@ -3,7 +3,7 @@
 package conf
 
 import (
-	"github.com/shadowopera/sdk-go/archmage"
+	"shadop.dev/pkg/sdk-go/archmage"
 )
 
 type (

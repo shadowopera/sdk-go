@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/shadowopera/sdk-go/archmage"
+	"shadop.dev/pkg/sdk-go/archmage"
 )
 
 func NewPCG(seeds ...uint64) *rand.Rand {

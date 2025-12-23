@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/shadowopera/sdk-go/archmage"
+	"shadop.dev/pkg/sdk-go/archmage"
 )
 
 func TestRef(t *testing.T) {

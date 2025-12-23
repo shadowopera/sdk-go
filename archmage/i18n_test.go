@@ -6,8 +6,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/shadowopera/sdk-go/archmage"
 	"golang.org/x/text/language"
+	"shadop.dev/pkg/sdk-go/archmage"
 )
 
 func TestNewI18n(t *testing.T) {

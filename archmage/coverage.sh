@@ -31,6 +31,6 @@ function printImportantMessage() {
     $colorful && tput setaf 7
 }
 
-go test -v -cover -coverprofile=c.out -coverpkg=github.com/shadowopera/sdk-go/archmage "$@" ./... && \
+go test -v -cover -coverprofile=c.out -coverpkg=shadop.dev/pkg/sdk-go/archmage "$@" ./... && \
 go tool cover -html=c.out && \
 rm c.out
