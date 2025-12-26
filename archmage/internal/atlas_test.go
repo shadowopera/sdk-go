@@ -86,7 +86,7 @@ func TestAtlas_WithCustomLoader(t *testing.T) {
 	}
 
 	if !slices.ContainsFunc(logger.Lines, func(line string) bool {
-		return line == "WRN <archmage> cannot find $.multiple['prop_floats']['/'] in testdata/atlas.json"
+		return line == "WRN <archmage> cannot find $.exclusive['prop_floats']['/'] in testdata/atlas.json"
 	}) {
 		t.Fatalf("expected warning log not found")
 	}
@@ -143,10 +143,10 @@ func TestAtlas_NotFoundCallback(t *testing.T) {
 
 func TestAtlas_WithAtlasModifier(t *testing.T) {
 	atlasModifier := func(atlasJSON *archmage.AtlasJSON) {
-		atlasJSON.Multiple["prop_floats"]["/"] = atlasJSON.Multiple["prop_floats"]["x5"]
+		atlasJSON.Exclusive["prop_floats"]["/"] = atlasJSON.Exclusive["prop_floats"]["x5"]
 		delete(atlasJSON.Single, "character")
 		delete(atlasJSON.Single, "matrix2")
-		delete(atlasJSON.Multiple, "game")
+		delete(atlasJSON.Exclusive, "game")
 	}
 	notFound := func(key string, atlasItem *archmage.AtlasItem) error {
 		switch key {
@@ -182,7 +182,7 @@ func TestAtlas_WithAtlasModifier(t *testing.T) {
 		t.Fatalf("expected warning log not found")
 	}
 	if !slices.ContainsFunc(logger.Lines, func(line string) bool {
-		return line == "WRN <archmage> cannot find $.multiple['game'] in testdata/atlas.json"
+		return line == "WRN <archmage> cannot find $.exclusive['game'] in testdata/atlas.json"
 	}) {
 		t.Fatalf("expected warning log not found")
 	}

@@ -67,7 +67,7 @@ func (i18n *I18n) GetText(key string, lang language.Tag) (string, error) {
 		}
 	}
 
-	return "", fmt.Errorf("i18n: text not found. key: %s, lang: %s", key, lang.String())
+	return "", fmt.Errorf("i18n: text not found. key: %q, lang: %s", key, lang.String())
 }
 
 func (i18n *I18n) MustGetText(key string, lang language.Tag) string {

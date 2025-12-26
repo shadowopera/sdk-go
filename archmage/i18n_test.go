@@ -293,6 +293,15 @@ func TestI18n_GetText(t *testing.T) {
 			expected:   "",
 		},
 		{
+			subject:    "empty key",
+			setupTexts: map[language.Tag]map[string]string{},
+			fallback:   language.English,
+			key:        "",
+			lang:       language.Chinese,
+			expErr:     `i18n: text not found. key: "", lang: zh`,
+			expected:   "",
+		},
+		{
 			subject: "key exists in fallback but not requested language",
 			setupTexts: map[language.Tag]map[string]string{
 				language.English: {"welcome": "Welcome"},

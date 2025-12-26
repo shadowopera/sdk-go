@@ -3,8 +3,8 @@
 package conf
 
 import (
-	"shadop.dev/pkg/sdk-go/archmage"
 	"golang.org/x/text/language"
+	"shadop.dev/pkg/sdk-go/archmage"
 )
 
 var (

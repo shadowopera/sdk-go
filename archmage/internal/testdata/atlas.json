@@ -10,7 +10,7 @@
 		"string": "sdk/string.json",
 		"weapon-rune": "weapon-rune.json"
 	},
-	"multiple": {
+	"exclusive": {
 		"game": {
 			"/": "game.json"
 		},

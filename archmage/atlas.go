@@ -23,14 +23,15 @@ type Atlas interface {
 
 type AtlasItem struct {
 	Cfg   any
-	Arity string
+	Card  string // Cardinality
 	File  string
 	Ready bool
 }
 
 type AtlasJSON struct {
-	Single   map[string]string            `json:"single"`
-	Multiple map[string]map[string]string `json:"multiple"`
+	Single    map[string]string            `json:"single"`
+	Exclusive map[string]map[string]string `json:"exclusive"`
+	Multiple  map[string]map[string]string `json:"multiple"`
 }
 
 func LoadAtlas(atlasFile string, cfgRoot string, out Atlas, opts ...Option) error {
@@ -157,7 +158,7 @@ func loadItem(ctx context.Context, key string, item *AtlasItem,
 	var err error
 	var data []byte
 	var p string
-	switch item.Arity {
+	switch item.Card {
 	case "single":
 		if f, ok := atlasJSON.Single[key]; ok {
 			item.File = f
@@ -178,8 +179,8 @@ func loadItem(ctx context.Context, key string, item *AtlasItem,
 			}
 			return nil
 		}
-	case "multiple":
-		if m, ok := atlasJSON.Multiple[key]; ok {
+	case "exclusive":
+		if m, ok := atlasJSON.Exclusive[key]; ok {
 			if f, ok := m["/"]; ok {
 				item.File = f
 				p = filepath.Join(cfgRoot, f)
@@ -191,10 +192,10 @@ func loadItem(ctx context.Context, key string, item *AtlasItem,
 					return err
 				}
 			} else {
-				multiple := atlasJSON.Multiple[key]
-				sortedKeys := slices.SortedFunc(maps.Keys(multiple), compareLower)
+				excl := atlasJSON.Exclusive[key]
+				sortedKeys := slices.SortedFunc(maps.Keys(excl), compareLower)
 				for _, k := range sortedKeys {
-					v := multiple[k]
+					v := excl[k]
 					dir, file := path.Split(v)
 					item.File = file
 					if x1 := path.Ext(file); x1 != "" && x1 != file {
@@ -211,7 +212,7 @@ func loadItem(ctx context.Context, key string, item *AtlasItem,
 					return err
 				}
 				if !item.Ready {
-					opts.Warnf("<archmage> cannot find $.multiple['%s']['/'] in %s", key, atlasFile)
+					opts.Warnf("<archmage> cannot find $.exclusive['%s']['/'] in %s", key, atlasFile)
 				}
 				return nil
 			}
@@ -220,12 +221,12 @@ func loadItem(ctx context.Context, key string, item *AtlasItem,
 				return err
 			}
 			if !item.Ready {
-				opts.Warnf("<archmage> cannot find $.multiple['%s'] in %s", key, atlasFile)
+				opts.Warnf("<archmage> cannot find $.exclusive['%s'] in %s", key, atlasFile)
 			}
 			return nil
 		}
 	default:
-		panic("<archmage> unsupported arity: " + item.Arity)
+		panic("<archmage> unsupported cardinality: " + item.Card)
 	}
 
 	if !item.Ready {
