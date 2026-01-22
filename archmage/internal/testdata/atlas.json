@@ -1,5 +1,5 @@
 {
-	"single": {
+	"unique": {
 		"character": "character.json",
 		"hero": "hero.json",
 		"Item": "clutter/item.json",
@@ -10,7 +10,7 @@
 		"string": "sdk/string.json",
 		"weapon-rune": "weapon-rune.json"
 	},
-	"exclusive": {
+	"single": {
 		"game": {
 			"/": "game.json"
 		},

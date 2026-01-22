@@ -113,7 +113,7 @@ func TestAtlas_WithCustomLoader(t *testing.T) {
 	}
 
 	if !slices.ContainsFunc(logger.Lines, func(line string) bool {
-		return line == "WRN <archmage> cannot find $.exclusive['prop_floats']['/'] in testdata/atlas.json"
+		return line == "WRN <archmage> cannot find $.single['prop_floats']['/'] in testdata/atlas.json"
 	}) {
 		t.Fatalf("expected warning log not found")
 	}
@@ -170,10 +170,10 @@ func TestAtlas_NotFoundCallback(t *testing.T) {
 
 func TestAtlas_WithAtlasModifier(t *testing.T) {
 	atlasModifier := func(atlasJSON *archmage.AtlasJSON) {
-		atlasJSON.Exclusive["prop_floats"]["/"] = atlasJSON.Exclusive["prop_floats"]["x5"]
-		delete(atlasJSON.Single, "character")
-		delete(atlasJSON.Single, "matrix2")
-		delete(atlasJSON.Exclusive, "game")
+		atlasJSON.Single["prop_floats"]["/"] = atlasJSON.Single["prop_floats"]["x5"]
+		delete(atlasJSON.Unique, "character")
+		delete(atlasJSON.Unique, "matrix2")
+		delete(atlasJSON.Single, "game")
 	}
 	notFound := func(key string, atlasItem *archmage.AtlasItem) error {
 		switch key {
@@ -204,12 +204,12 @@ func TestAtlas_WithAtlasModifier(t *testing.T) {
 	}
 
 	if !slices.ContainsFunc(logger.Lines, func(line string) bool {
-		return line == "WRN <archmage> cannot find $.single['character'] in testdata/atlas.json"
+		return line == "WRN <archmage> cannot find $.unique['character'] in testdata/atlas.json"
 	}) {
 		t.Fatalf("expected warning log not found")
 	}
 	if !slices.ContainsFunc(logger.Lines, func(line string) bool {
-		return line == "WRN <archmage> cannot find $.exclusive['game'] in testdata/atlas.json"
+		return line == "WRN <archmage> cannot find $.single['game'] in testdata/atlas.json"
 	}) {
 		t.Fatalf("expected warning log not found")
 	}

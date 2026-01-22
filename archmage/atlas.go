@@ -22,16 +22,16 @@ type Atlas interface {
 }
 
 type AtlasItem struct {
-	Cfg   any
-	Card  string // Cardinality
-	File  string
-	Ready bool
+	Cfg     any
+	Mapping string
+	File    string
+	Ready   bool
 }
 
 type AtlasJSON struct {
-	Single    map[string]string            `json:"single"`
-	Exclusive map[string]map[string]string `json:"exclusive"`
-	Multiple  map[string]map[string]string `json:"multiple"`
+	Unique   map[string]string            `json:"unique"`
+	Single   map[string]map[string]string `json:"single"`
+	Multiple map[string]map[string]string `json:"multiple"`
 }
 
 func LoadAtlas(atlasFile string, cfgRoot string, out Atlas, opts ...Option) error {
@@ -158,9 +158,9 @@ func loadItem(ctx context.Context, key string, item *AtlasItem,
 	var err error
 	var data []byte
 	var p string
-	switch item.Card {
-	case "single":
-		if f, ok := atlasJSON.Single[key]; ok {
+	switch item.Mapping {
+	case "unique":
+		if f, ok := atlasJSON.Unique[key]; ok {
 			item.File = f
 			p = filepath.Join(cfgRoot, f)
 			data, err = opts.readFile(p)
@@ -175,12 +175,12 @@ func loadItem(ctx context.Context, key string, item *AtlasItem,
 				return err
 			}
 			if !item.Ready {
-				opts.Warnf("<archmage> cannot find $.single['%s'] in %s", key, atlasFile)
+				opts.Warnf("<archmage> cannot find $.unique['%s'] in %s", key, atlasFile)
 			}
 			return nil
 		}
-	case "exclusive":
-		if m, ok := atlasJSON.Exclusive[key]; ok {
+	case "single":
+		if m, ok := atlasJSON.Single[key]; ok {
 			if f, ok := m["/"]; ok {
 				item.File = f
 				p = filepath.Join(cfgRoot, f)
@@ -192,7 +192,7 @@ func loadItem(ctx context.Context, key string, item *AtlasItem,
 					return err
 				}
 			} else {
-				excl := atlasJSON.Exclusive[key]
+				excl := atlasJSON.Single[key]
 				sortedKeys := slices.SortedFunc(maps.Keys(excl), compareLower)
 				for _, k := range sortedKeys {
 					v := excl[k]
@@ -212,7 +212,7 @@ func loadItem(ctx context.Context, key string, item *AtlasItem,
 					return err
 				}
 				if !item.Ready {
-					opts.Warnf("<archmage> cannot find $.exclusive['%s']['/'] in %s", key, atlasFile)
+					opts.Warnf("<archmage> cannot find $.single['%s']['/'] in %s", key, atlasFile)
 				}
 				return nil
 			}
@@ -221,12 +221,12 @@ func loadItem(ctx context.Context, key string, item *AtlasItem,
 				return err
 			}
 			if !item.Ready {
-				opts.Warnf("<archmage> cannot find $.exclusive['%s'] in %s", key, atlasFile)
+				opts.Warnf("<archmage> cannot find $.single['%s'] in %s", key, atlasFile)
 			}
 			return nil
 		}
 	default:
-		panic("<archmage> unsupported cardinality: " + item.Card)
+		panic("<archmage> unsupported mapping: " + item.Mapping)
 	}
 
 	if !item.Ready {

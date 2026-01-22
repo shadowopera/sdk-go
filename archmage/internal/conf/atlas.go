@@ -33,17 +33,17 @@ func NewConfigAtlas() *ConfigAtlas {
 
 func (atlas *ConfigAtlas) buildMap() {
 	atlas.m = map[string]*AtlasItem{
-		"character":   {Cfg: &atlas.CharacterArray, Card: "single"},
-		"game":        {Cfg: &atlas.GameCfg, Card: "exclusive"},
-		"hero":        {Cfg: &atlas.HeroTable, Card: "single"},
-		"Item":        {Cfg: &atlas.ItemTable, Card: "single"},
-		"Magic":       {Cfg: &atlas.MagicTable, Card: "single"},
-		"matrix2":     {Cfg: &atlas.Matrix2Table, Card: "single"},
-		"prop_floats": {Cfg: &atlas.PropFloatsCfg, Card: "exclusive"},
-		"Race":        {Cfg: &atlas.RaceTable, Card: "single"},
-		"ref":         {Cfg: &atlas.RefTable, Card: "single"},
-		"string":      {Cfg: &atlas.StringTable, Card: "single"},
-		"weapon-rune": {Cfg: &atlas.WeaponRuneTable, Card: "single"},
+		"character":   {Cfg: &atlas.CharacterArray, Mapping: "unique"},
+		"game":        {Cfg: &atlas.GameCfg, Mapping: "single"},
+		"hero":        {Cfg: &atlas.HeroTable, Mapping: "unique"},
+		"Item":        {Cfg: &atlas.ItemTable, Mapping: "unique"},
+		"Magic":       {Cfg: &atlas.MagicTable, Mapping: "unique"},
+		"matrix2":     {Cfg: &atlas.Matrix2Table, Mapping: "unique"},
+		"prop_floats": {Cfg: &atlas.PropFloatsCfg, Mapping: "single"},
+		"Race":        {Cfg: &atlas.RaceTable, Mapping: "unique"},
+		"ref":         {Cfg: &atlas.RefTable, Mapping: "unique"},
+		"string":      {Cfg: &atlas.StringTable, Mapping: "unique"},
+		"weapon-rune": {Cfg: &atlas.WeaponRuneTable, Mapping: "unique"},
 	}
 }
 
