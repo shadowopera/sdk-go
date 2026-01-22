@@ -47,6 +47,33 @@ func TestAtlas_Basic(t *testing.T) {
 	if atlas.GameCfg.XL10n.MustGetText(cn) != "今儿天气真好" {
 		t.Fatalf("unexpected l10n cn value: %s", atlas.GameCfg.XL10n.MustGetText(cn))
 	}
+
+	itemEntry, ok := atlas.ItemTable[20]
+	if !ok {
+		t.Fatalf("item 20 not found")
+	}
+	if itemEntry.ID != 20 {
+		t.Fatalf("unexpected item ID: %d", itemEntry.ID)
+	}
+
+	if atlas.CharacterArray[0].Race.Ref == nil {
+		t.Fatalf("expected Race.Ref to be bound, got nil")
+	}
+	if atlas.CharacterArray[1].Runes[0].Ref == nil {
+		t.Fatalf("expected Runes[0].Ref to be bound, got nil")
+	}
+	if atlas.GameCfg.XRef.Ref == nil {
+		t.Fatalf("expected GameCfg.XRef.Ref to be bound, got nil")
+	}
+	if atlas.RaceTable["Dwarf"].Referrer2.Ref == nil {
+		t.Fatalf("expected RaceTable['Dwarf'].Referrer2.Ref to be bound, got nil")
+	}
+	if atlas.RefTable[3].B.Ref == nil {
+		t.Fatalf("expected RefTable[3].B.Ref to be bound, got nil")
+	}
+	if atlas.Matrix2Table["key1"]["key2"][0][0].Ref == nil {
+		t.Fatalf("expected Matrix2Table['key1']['key2'][0][0].Ref to be bound, got nil")
+	}
 }
 
 func TestAtlas_WithCustomLoader(t *testing.T) {
