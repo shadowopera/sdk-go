@@ -5,13 +5,10 @@ package conf
 
 import (
 	"time"
-
-	"shadop.dev/pkg/sdk-go/archmage"
 )
 
 var (
 	_ *time.Time
-	_ *archmage.Duration
 )
 
 type Matrix2Table map[string]map[string][][]Ref[int, *HeroCfg]
