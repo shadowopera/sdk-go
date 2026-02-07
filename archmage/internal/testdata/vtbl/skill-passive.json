@@ -1,0 +1,46 @@
+{
+	"101": {
+		"name": "Arcane Mastery",
+		"class": "Mage",
+		"Foo": {
+			"10": {
+				"X5": 100,
+				"X1": "X1-1"
+			}
+		},
+		"weapons": null
+	},
+	"102": {
+		"name": "Toughness",
+		"class": "Warrior",
+		"Foo": {
+			"20": {
+				"X5": 200,
+				"X1": "X1-2-1"
+			},
+			"25": {
+				"X5": 201,
+				"X1": "X1-2-2"
+			}
+		},
+		"weapons": [
+			1,
+			13,
+			1103
+		]
+	},
+	"103": {
+		"name": "Spiritual Guidance",
+		"class": "Priest",
+		"Foo": {
+			"30": {
+				"X5": 300,
+				"X1": "X1-3"
+			}
+		},
+		"weapons": [
+			1101,
+			1201
+		]
+	}
+}

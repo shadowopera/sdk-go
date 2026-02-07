@@ -1,0 +1,17 @@
+{
+	"1000": {
+		"name": "Dragonfang Blade",
+		"price": 1000,
+		"dps": 36.5
+	},
+	"1001": {
+		"name": "Shadowrend",
+		"price": 2000,
+		"dps": 47.8
+	},
+	"1002": {
+		"name": "Emberheart",
+		"price": 3000,
+		"dps": 168
+	}
+}

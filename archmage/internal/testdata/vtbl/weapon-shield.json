@@ -1,0 +1,42 @@
+{
+	"1100": {
+		"name": "Aegis Ward",
+		"price": 1000,
+		"armor": 500,
+		"dps": 89,
+		"shield-skills": null
+	},
+	"1101": {
+		"name": "Iron Bastion",
+		"price": 2000,
+		"armor": 1000,
+		"dps": 99,
+		"shield-skills": [
+			3,
+			103
+		]
+	},
+	"1102": {
+		"name": "Frostguard",
+		"price": 3000,
+		"armor": 1500,
+		"dps": 105,
+		"shield-skills": null
+	},
+	"1103": {
+		"name": "Stormveil",
+		"price": 4000,
+		"armor": 2000,
+		"dps": 109,
+		"shield-skills": [
+			102
+		]
+	},
+	"1104": {
+		"name": "Void Mirror",
+		"price": 5000,
+		"armor": 2500,
+		"dps": 112,
+		"shield-skills": null
+	}
+}

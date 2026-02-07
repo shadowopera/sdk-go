@@ -1,0 +1,48 @@
+{
+	"1": {
+		"name": "Fireball",
+		"class": "Mage",
+		"Foo": {
+			"10": {
+				"X1": "X1-1",
+				"X2": [
+					0,
+					1
+				]
+			}
+		},
+		"reagent": 1
+	},
+	"2": {
+		"name": "Cleave",
+		"class": "Warrior",
+		"Foo": {
+			"20": {
+				"X1": "X1-2-1",
+				"X2": null
+			},
+			"27": {
+				"X1": "X1-2-2",
+				"X2": [
+					0,
+					2
+				]
+			}
+		},
+		"reagent": 11
+	},
+	"3": {
+		"name": "Power Word",
+		"class": "Priest",
+		"Foo": {
+			"30": {
+				"X1": "X1-3",
+				"X2": [
+					0,
+					3
+				]
+			}
+		},
+		"reagent": 1101
+	}
+}

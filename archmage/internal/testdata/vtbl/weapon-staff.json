@@ -1,0 +1,30 @@
+{
+	"1200": {
+		"name": "Arcane Flare",
+		"price": 1500,
+		"power": 120,
+		"dps": 1,
+		"attributeBonus": [
+			{
+				"attr": "intelligence",
+				"bonus": 21
+			}
+		]
+	},
+	"1201": {
+		"name": "Verdant Scepter",
+		"price": 2000,
+		"power": 150,
+		"dps": 1,
+		"attributeBonus": [
+			{
+				"attr": "intelligence",
+				"bonus": 36
+			},
+			{
+				"attr": "sprite",
+				"bonus": 15
+			}
+		]
+	}
+}

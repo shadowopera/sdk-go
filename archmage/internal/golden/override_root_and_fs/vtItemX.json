@@ -1,0 +1,197 @@
+{
+	"1": {
+		"name": "Potion",
+		"price": 100,
+		"desc": "",
+		"special-skill": 0,
+		"armor": 0,
+		"dps": 0,
+		"shield-skills": null,
+		"power": 0,
+		"attributeBonus": null
+	},
+	"1000": {
+		"name": "Dragonfang Blade",
+		"price": 1200,
+		"desc": "",
+		"special-skill": 0,
+		"armor": 0,
+		"dps": 36.5,
+		"shield-skills": null,
+		"power": 0,
+		"attributeBonus": null
+	},
+	"1001": {
+		"name": "Shadowrend",
+		"price": 2000,
+		"desc": "",
+		"special-skill": 0,
+		"armor": 0,
+		"dps": 47.8,
+		"shield-skills": null,
+		"power": 0,
+		"attributeBonus": null
+	},
+	"1002": {
+		"name": "Emberheart",
+		"price": 3000,
+		"desc": "",
+		"special-skill": 0,
+		"armor": 0,
+		"dps": 168,
+		"shield-skills": null,
+		"power": 0,
+		"attributeBonus": null
+	},
+	"11": {
+		"name": "Dark Crystal",
+		"price": 0,
+		"desc": "A mysterious crystal pulsating with dark energy. It is linked to the eighth element and essential for accessing the final confrontation beneath the surface of the moon.",
+		"special-skill": 2,
+		"armor": 0,
+		"dps": 0,
+		"shield-skills": null,
+		"power": 0,
+		"attributeBonus": null
+	},
+	"1100": {
+		"name": "Aegis Ward",
+		"price": 1000,
+		"desc": "",
+		"special-skill": 0,
+		"armor": 500,
+		"dps": 89,
+		"shield-skills": null,
+		"power": 0,
+		"attributeBonus": null
+	},
+	"1101": {
+		"name": "Iron Bastion",
+		"price": 2000,
+		"desc": "",
+		"special-skill": 0,
+		"armor": 1000,
+		"dps": 99,
+		"shield-skills": [
+			3,
+			103
+		],
+		"power": 0,
+		"attributeBonus": null
+	},
+	"1102": {
+		"name": "Frostguard",
+		"price": 3000,
+		"desc": "",
+		"special-skill": 0,
+		"armor": 1500,
+		"dps": 105,
+		"shield-skills": null,
+		"power": 0,
+		"attributeBonus": null
+	},
+	"1103": {
+		"name": "Stormveil",
+		"price": 4000,
+		"desc": "",
+		"special-skill": 0,
+		"armor": 2000,
+		"dps": 109,
+		"shield-skills": [
+			102
+		],
+		"power": 0,
+		"attributeBonus": null
+	},
+	"1104": {
+		"name": "Void Mirror",
+		"price": 5000,
+		"desc": "",
+		"special-skill": 0,
+		"armor": 2500,
+		"dps": 112,
+		"shield-skills": null,
+		"power": 0,
+		"attributeBonus": null
+	},
+	"12": {
+		"name": "Adamantite",
+		"price": 0,
+		"desc": "A rare, super-hard metal ore sought by craftsmen and warriors alike. Used to forge some of the strongest weapons and armor in the realm.",
+		"special-skill": 0,
+		"armor": 0,
+		"dps": 0,
+		"shield-skills": null,
+		"power": 0,
+		"attributeBonus": null
+	},
+	"1200": {
+		"name": "Arcane Flare",
+		"price": 1500,
+		"desc": "",
+		"special-skill": 0,
+		"armor": 0,
+		"dps": 1,
+		"shield-skills": null,
+		"power": 120,
+		"attributeBonus": [
+			{
+				"attr": "intelligence",
+				"bonus": 21
+			}
+		]
+	},
+	"1201": {
+		"name": "Verdant Scepter Plus",
+		"price": 2050,
+		"desc": "",
+		"special-skill": 0,
+		"armor": 0,
+		"dps": 2,
+		"shield-skills": null,
+		"power": 150,
+		"attributeBonus": [
+			{
+				"attr": "intelligence",
+				"bonus": 36
+			},
+			{
+				"attr": "sprite",
+				"bonus": 15
+			}
+		]
+	},
+	"13": {
+		"name": "Airship Parts",
+		"price": 0,
+		"desc": "A collection of mechanical components needed to repair or assemble an airship. Once restored, it grants the party free travel across the world’s skies.",
+		"special-skill": 102,
+		"armor": 0,
+		"dps": 0,
+		"shield-skills": null,
+		"power": 0,
+		"attributeBonus": null
+	},
+	"2": {
+		"name": "Hi-Potion",
+		"price": 200,
+		"desc": "",
+		"special-skill": 0,
+		"armor": 0,
+		"dps": 0,
+		"shield-skills": null,
+		"power": 0,
+		"attributeBonus": null
+	},
+	"3": {
+		"name": "Ether",
+		"price": 300,
+		"desc": "",
+		"special-skill": 0,
+		"armor": 0,
+		"dps": 0,
+		"shield-skills": null,
+		"power": 0,
+		"attributeBonus": null
+	}
+}

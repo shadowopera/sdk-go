@@ -9,7 +9,6 @@ import (
 	"iter"
 	"maps"
 	"os"
-	"path"
 	"path/filepath"
 	"slices"
 	"strings"
@@ -24,20 +23,40 @@ type Atlas interface {
 type AtlasItem struct {
 	Cfg     any
 	Mapping string
-	File    string
+	Key     string
 	Ready   bool
 }
 
 type AtlasJSON struct {
 	Unique   map[string]string            `json:"unique"`
 	Single   map[string]map[string]string `json:"single"`
-	Multiple map[string]map[string]string `json:"multiple"`
+	Multiple map[string][]string          `json:"multiple"`
+}
+
+func (atlas *AtlasJSON) pickSingle(key string) (string, bool) {
+	m, ok := atlas.Single[key]
+	if ok {
+		f, ok := m["/"]
+		if ok {
+			return f, ok
+		}
+	}
+	return "", false
 }
 
 func LoadAtlas(atlasFile string, cfgRoot string, out Atlas, opts ...Option) error {
 	atlasOpts := newAtlasOptions()
 	atlasOpts.readFile = func(name string) ([]byte, error) {
 		return os.ReadFile(name)
+	}
+	atlasOpts.customLoader = func(seq iter.Seq2[string, *AtlasItem], itemLoadFunc AtlasItemLoadFunc) error {
+		for key, item := range seq {
+			err := itemLoadFunc(context.Background(), key, item)
+			if err != nil {
+				return err
+			}
+		}
+		return nil
 	}
 	for _, opt := range opts {
 		opt(atlasOpts)
@@ -83,37 +102,26 @@ func loadAtlasImpl(atlasFile string, cfgRoot string, out Atlas, opts *atlasOptio
 		}
 	}
 
-	sortedKeys := slices.SortedFunc(maps.Keys(items), compareLower)
-	filtered := slices.DeleteFunc(sortedKeys, func(k string) bool {
-		cause, yes := opts.shouldIgnore(k)
+	keys := slices.SortedFunc(maps.Keys(items), compareLower)
+	filtered := slices.DeleteFunc(keys, func(k string) bool {
+		cause, yes := opts.shouldSkip(k)
 		if yes {
 			opts.Infof("<archmage> skipping atlas item: %s. cause: %s", k, cause)
 		}
 		return yes
 	})
-	seq := func(yield func(string, *AtlasItem) bool) {
+	filteredItemSeq := func(yield func(string, *AtlasItem) bool) {
 		for _, k := range filtered {
 			if !yield(k, items[k]) {
 				break
 			}
 		}
 	}
-	loadWrapper := func(ctx context.Context, key string, item *AtlasItem) error {
+	err = opts.customLoader(filteredItemSeq, func(ctx context.Context, key string, item *AtlasItem) error {
 		return loadItem(ctx, key, item, atlasJSON, atlasFile, cfgRoot, opts)
-	}
-
-	if opts.customLoader == nil {
-		for key, item := range seq {
-			err = loadWrapper(context.Background(), key, item)
-			if err != nil {
-				return err
-			}
-		}
-	} else {
-		err = opts.customLoader(seq, loadWrapper)
-		if err != nil {
-			return err
-		}
+	})
+	if err != nil {
+		return err
 	}
 
 	out.BindRefs()
@@ -129,8 +137,12 @@ func loadItem(ctx context.Context, key string, item *AtlasItem,
 	default:
 	}
 
-	var overrideFiles []string
-	var overrides [][]byte
+	var fd struct {
+		paths         string
+		overrideFiles []string
+		overrides     [][]byte
+	}
+
 	readOverrides := func(file string) error {
 		for _, cfg := range opts.overrideConfigs {
 			if cfg.fsys != nil {
@@ -143,33 +155,37 @@ func loadItem(ctx context.Context, key string, item *AtlasItem,
 					continue
 				}
 			}
-			file, ovrData, err := readOverrideFile(cfg, file)
+			ovrFile, ovrData, err := readOverrideFile(cfg, file)
 			if err != nil {
 				return err
 			}
-			overrideFiles = append(overrideFiles, file)
-			overrides = append(overrides, ovrData)
+			fd.overrideFiles = append(fd.overrideFiles, ovrFile)
+			fd.overrides = append(fd.overrides, ovrData)
 		}
 		return nil
 	}
 
-	item.File = key
+	item.Key = key
+	fd.paths = key
 	start := time.Now()
 	var err error
-	var data []byte
-	var p string
 	switch item.Mapping {
 	case "unique":
-		if f, ok := atlasJSON.Unique[key]; ok {
-			item.File = f
-			p = filepath.Join(cfgRoot, f)
-			data, err = opts.readFile(p)
+		f, ok := atlasJSON.Unique[key]
+		if ok {
+			filePath := filepath.Join(cfgRoot, f)
+			fileData, err := opts.readFile(filePath)
 			if err != nil {
 				return err
+			}
+			err = json.Unmarshal(fileData, item.Cfg)
+			if err != nil {
+				return fmt.Errorf("<archmage> invalid %q | %w", f, err)
 			}
 			if err = readOverrides(f); err != nil {
 				return err
 			}
+			fd.paths = filePath
 		} else {
 			if err = opts.cbNotFound(key, item); err != nil {
 				return err
@@ -179,65 +195,73 @@ func loadItem(ctx context.Context, key string, item *AtlasItem,
 			}
 			return nil
 		}
+
 	case "single":
-		if m, ok := atlasJSON.Single[key]; ok {
-			if f, ok := m["/"]; ok {
-				item.File = f
-				p = filepath.Join(cfgRoot, f)
-				data, err = opts.readFile(p)
+		f, ok := atlasJSON.pickSingle(key)
+		if ok {
+			filePath := filepath.Join(cfgRoot, f)
+			fileData, err := opts.readFile(filePath)
+			if err != nil {
+				return err
+			}
+			err = json.Unmarshal(fileData, item.Cfg)
+			if err != nil {
+				return fmt.Errorf("<archmage> invalid %q | %w", f, err)
+			}
+			if err = readOverrides(f); err != nil {
+				return err
+			}
+			fd.paths = filePath
+		} else {
+			if err = opts.cbNotFound(key, item); err != nil {
+				return err
+			}
+			if !item.Ready {
+				opts.Warnf("<archmage> cannot find $.single['%s']['/'] in %s", key, atlasFile)
+			}
+			return nil
+		}
+
+	case "multiple":
+		files, ok := atlasJSON.Multiple[key]
+		if ok {
+			for i, f := range files {
+				filePath := filepath.Join(cfgRoot, f)
+				fileData, err := opts.readFile(filePath)
 				if err != nil {
 					return err
+				}
+				err = json.Unmarshal(fileData, item.Cfg)
+				if err != nil {
+					return fmt.Errorf("<archmage> invalid %q | %w", f, err)
 				}
 				if err = readOverrides(f); err != nil {
 					return err
 				}
-			} else {
-				excl := atlasJSON.Single[key]
-				sortedKeys := slices.SortedFunc(maps.Keys(excl), compareLower)
-				for _, k := range sortedKeys {
-					v := excl[k]
-					dir, file := path.Split(v)
-					item.File = file
-					if x1 := path.Ext(file); x1 != "" && x1 != file {
-						base1 := file[:len(file)-len(x1)]
-						if x2 := path.Ext(base1); x2 != "" && x2 != base1 {
-							base2 := base1[:len(base1)-len(x2)]
-							file2 := base2 + x1
-							item.File = path.Join(dir, file2)
-							break
-						}
-					}
+				if i > 0 {
+					fd.paths += ", "
 				}
-				if err = opts.cbNotFound(key, item); err != nil {
-					return err
-				}
-				if !item.Ready {
-					opts.Warnf("<archmage> cannot find $.single['%s']['/'] in %s", key, atlasFile)
-				}
-				return nil
+				fd.paths += filePath
 			}
 		} else {
 			if err = opts.cbNotFound(key, item); err != nil {
 				return err
 			}
 			if !item.Ready {
-				opts.Warnf("<archmage> cannot find $.single['%s'] in %s", key, atlasFile)
+				opts.Warnf("<archmage> cannot find $.multiple['%s'] in %s", key, atlasFile)
 			}
 			return nil
 		}
+
 	default:
 		panic("<archmage> unsupported mapping: " + item.Mapping)
 	}
 
 	if !item.Ready {
-		err = json.Unmarshal(data, item.Cfg)
-		if err != nil {
-			return fmt.Errorf("<archmage> invalid %q | %w", item.File, err)
-		}
-		for i, data := range overrides {
+		for i, data := range fd.overrides {
 			err = json.Unmarshal(data, item.Cfg)
 			if err != nil {
-				return fmt.Errorf("<archmage> applying override %s failed | %w", overrideFiles[i], err)
+				return fmt.Errorf("<archmage> applying override %s failed | %w", fd.overrideFiles[i], err)
 			}
 		}
 	}
@@ -248,14 +272,15 @@ func loadItem(ctx context.Context, key string, item *AtlasItem,
 	}
 
 	var supplement string
-	switch len(overrides) {
+	switch len(fd.overrides) {
 	case 0:
 	case 1:
 		supplement = " with 1 override"
 	default:
-		supplement = fmt.Sprintf(" with %d overrides", len(overrides))
+		supplement = fmt.Sprintf(" with %d overrides", len(fd.overrides))
 	}
-	opts.Infof("<archmage> loaded %s%s (%dms)", p, supplement, time.Since(start).Milliseconds())
+	elapsed := time.Since(start).Milliseconds()
+	opts.Infof("<archmage> loaded (%s) %s%s (%dms)", item.Mapping, fd.paths, supplement, elapsed)
 	item.Ready = true
 	return nil
 }
@@ -268,11 +293,11 @@ func readOverrideFile(cfg overrideConfig, name string) (string, []byte, error) {
 	if cfg.fsys != nil {
 		data, err := fs.ReadFile(cfg.fsys, name)
 		return name, data, err
-	} else {
-		p := filepath.Join(cfg.root, name)
-		data, err := os.ReadFile(p)
-		return p, data, err
 	}
+
+	p := filepath.Join(cfg.root, name)
+	data, err := os.ReadFile(p)
+	return p, data, err
 }
 
 type overrideConfig struct {
@@ -303,7 +328,7 @@ func newAtlasOptions() *atlasOptions {
 	}
 }
 
-func (opts *atlasOptions) shouldIgnore(key string) (string, bool) {
+func (opts *atlasOptions) shouldSkip(key string) (string, bool) {
 	switch {
 	case opts.whitelist != nil:
 		return "whitelist", !slices.Contains(opts.whitelist, key)
@@ -319,20 +344,6 @@ type Option func(*atlasOptions)
 func WithLogger(logger Logger) Option {
 	return func(opts *atlasOptions) {
 		opts.Logger = logger
-	}
-}
-
-type AtlasItemLoadFunc func(ctx context.Context, key string, item *AtlasItem) error
-
-func WithCustomLoader(loader func(all iter.Seq2[string, *AtlasItem], load AtlasItemLoadFunc) error) Option {
-	return func(opts *atlasOptions) {
-		opts.customLoader = loader
-	}
-}
-
-func WithNotFoundCallback(cb func(key string, atlasItem *AtlasItem) error) Option {
-	return func(opts *atlasOptions) {
-		opts.cbNotFound = cb
 	}
 }
 
@@ -363,5 +374,19 @@ func WithOverrideRoot(dir string) Option {
 func WithOverrideFS(fsys fs.FS) Option {
 	return func(opts *atlasOptions) {
 		opts.overrideConfigs = append(opts.overrideConfigs, overrideConfig{fsys: fsys})
+	}
+}
+
+type AtlasItemLoadFunc func(ctx context.Context, key string, item *AtlasItem) error
+
+func WithCustomLoader(loader func(all iter.Seq2[string, *AtlasItem], load AtlasItemLoadFunc) error) Option {
+	return func(opts *atlasOptions) {
+		opts.customLoader = loader
+	}
+}
+
+func WithNotFoundCallback(cb func(key string, atlasItem *AtlasItem) error) Option {
+	return func(opts *atlasOptions) {
+		opts.cbNotFound = cb
 	}
 }

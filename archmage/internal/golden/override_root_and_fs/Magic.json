@@ -1,0 +1,12 @@
+{
+	"100": null,
+	"200": {
+		"name": "Fire Blast"
+	},
+	"300": {
+		"name": "Flamestrike"
+	},
+	"900": {
+		"name": "Ice Lance"
+	}
+}

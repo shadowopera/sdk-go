@@ -1,0 +1,14 @@
+{
+	"1": {
+		"name": "Potion",
+		"price": 100
+	},
+	"2": {
+		"name": "Hi-Potion",
+		"price": 200
+	},
+	"3": {
+		"name": "Ether",
+		"price": 300
+	}
+}

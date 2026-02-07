@@ -11,8 +11,9 @@
 			"block",
 			"charge"
 		],
-		"ref-crude": null,
-		"runes": null
+		"runes": null,
+		"ultimateSkill": 1,
+		"ref-crude": null
 	},
 	{
 		"id": "char_002",
@@ -26,11 +27,12 @@
 			"heal",
 			"teleport"
 		],
-		"ref-crude": null,
 		"runes": [
 			1,
 			3
-		]
+		],
+		"ultimateSkill": 2,
+		"ref-crude": null
 	},
 	{
 		"id": "char_003",
@@ -44,8 +46,9 @@
 			"multi_shot",
 			"stealth"
 		],
-		"ref-crude": null,
-		"runes": null
+		"runes": null,
+		"ultimateSkill": 3,
+		"ref-crude": null
 	},
 	{
 		"id": "char_004",
@@ -59,10 +62,11 @@
 			"fly",
 			"roar"
 		],
+		"runes": null,
+		"ultimateSkill": 102,
 		"ref-crude": {
 			"r1": 1,
 			"r2": "Human"
-		},
-		"runes": null
+		}
 	}
 ]

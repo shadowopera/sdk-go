@@ -1,0 +1,17 @@
+{
+	"11": {
+		"name": "Dark Crystal",
+		"desc": "A mysterious crystal pulsating with dark energy. It is linked to the eighth element and essential for accessing the final confrontation beneath the surface of the moon.",
+		"special-skill": 2
+	},
+	"12": {
+		"name": "Adamantite",
+		"desc": "A rare, super-hard metal ore sought by craftsmen and warriors alike. Used to forge some of the strongest weapons and armor in the realm.",
+		"special-skill": 0
+	},
+	"13": {
+		"name": "Airship Parts",
+		"desc": "A collection of mechanical components needed to repair or assemble an airship. Once restored, it grants the party free travel across the world’s skies.",
+		"special-skill": 102
+	}
+}

@@ -1,7 +1,6 @@
 package archmage
 
 import (
-	"cmp"
 	"encoding/json/jsontext"
 	"encoding/json/v2"
 	"os"
@@ -69,7 +68,7 @@ func DumpAtlas(atlas Atlas, outputDir string, opts ...json.Options) error {
 		if err != nil {
 			return err
 		}
-		p := filepath.Join(outputDir, cmp.Or(item.File, k+".json"))
+		p := filepath.Join(outputDir, k+".json")
 		if err = os.MkdirAll(filepath.Dir(p), 0755); err != nil {
 			return err
 		}

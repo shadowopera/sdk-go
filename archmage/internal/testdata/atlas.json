@@ -18,5 +18,18 @@
 			"x3": "sdk/prop-floats.x3.json",
 			"x5": "sdk/prop-floats.x5.json"
 		}
+	},
+	"multiple": {
+		"vtItemX": [
+			"vtbl/item1-common.json",
+			"vtbl/item1-special.json",
+			"vtbl/weapon-shield.json",
+			"vtbl/weapon-staff.json",
+			"vtbl/weapon-sword.json"
+		],
+		"vtSkill": [
+			"vtbl/skill-active.json",
+			"vtbl/skill-passive.json"
+		]
 	}
 }

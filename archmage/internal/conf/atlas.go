@@ -22,6 +22,8 @@ type ConfigAtlas struct {
 	RaceTable       RaceTable
 	RefTable        RefTable
 	StringTable     StringTable
+	VtItemXTable    VtItemXTable
+	VtSkillTable    VtSkillTable
 	WeaponRuneTable WeaponRuneTable
 }
 
@@ -43,6 +45,8 @@ func (atlas *ConfigAtlas) buildMap() {
 		"Race":        {Cfg: &atlas.RaceTable, Mapping: "unique"},
 		"ref":         {Cfg: &atlas.RefTable, Mapping: "unique"},
 		"string":      {Cfg: &atlas.StringTable, Mapping: "unique"},
+		"vtItemX":     {Cfg: &atlas.VtItemXTable, Mapping: "multiple"},
+		"vtSkill":     {Cfg: &atlas.VtSkillTable, Mapping: "multiple"},
 		"weapon-rune": {Cfg: &atlas.WeaponRuneTable, Mapping: "unique"},
 	}
 }
