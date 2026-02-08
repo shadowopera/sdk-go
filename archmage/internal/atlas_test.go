@@ -41,11 +41,11 @@ func TestAtlas_Basic(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if atlas.GameCfg.XL10n.MustGetText(en) != "it is a good day" {
-		t.Fatalf("unexpected l10n en value: %s", atlas.GameCfg.XL10n.MustGetText(en))
+	if atlas.GameCfg.XL10n.Text(en) != "it is a good day" {
+		t.Fatalf("unexpected l10n en value: %s", atlas.GameCfg.XL10n.Text(en))
 	}
-	if atlas.GameCfg.XL10n.MustGetText(cn) != "今儿天气真好" {
-		t.Fatalf("unexpected l10n cn value: %s", atlas.GameCfg.XL10n.MustGetText(cn))
+	if atlas.GameCfg.XL10n.Text(cn) != "今儿天气真好" {
+		t.Fatalf("unexpected l10n cn value: %s", atlas.GameCfg.XL10n.Text(cn))
 	}
 
 	itemEntry, ok := atlas.ItemTable[20]

@@ -5,15 +5,21 @@ import (
 	"encoding/json/v2"
 )
 
+// Ref stores a raw value and a resolved reference.
+// It marshals only RawValue to JSON.
 type Ref[V int | string, T any] struct {
+	// RawValue is the original unresolved value.
 	RawValue V
-	Ref      T `json:"-"`
+	// Ref is the resolved reference, not included in JSON.
+	Ref T `json:"-"`
 }
 
+// MarshalJSONTo encodes RawValue to the JSON encoder.
 func (r *Ref[V, T]) MarshalJSONTo(enc *jsontext.Encoder) error {
 	return json.MarshalEncode(enc, r.RawValue)
 }
 
+// UnmarshalJSONFrom decodes RawValue from the JSON decoder and resets Ref.
 func (r *Ref[V, T]) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
 	var zero T
 	r.Ref = zero

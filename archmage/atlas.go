@@ -15,17 +15,25 @@ import (
 	"time"
 )
 
+const (
+	// MappingUnique indicates one-to-one mapping between key and file.
+	MappingUnique = "unique"
+	// MappingSingle indicates a key maps to a single variant file.
+	MappingSingle = "single"
+	// MappingMultiple indicates a key maps to multiple files.
+	MappingMultiple = "multiple"
+)
+
+// Atlas represents a collection of configuration items that can be loaded
+// from JSON files and bound to references after loading.
 type Atlas interface {
 	AtlasItems() map[string]*AtlasItem
 	BindRefs()
 }
 
-const (
-	MappingUnique   = "unique"
-	MappingSingle   = "single"
-	MappingMultiple = "multiple"
-)
-
+// AtlasItem represents a single configuration item in the atlas.
+// The Cfg field holds the unmarshaled configuration data, and Ready
+// indicates whether the item has been successfully loaded.
 type AtlasItem struct {
 	Cfg     any
 	Mapping string
@@ -33,6 +41,9 @@ type AtlasItem struct {
 	Ready   bool
 }
 
+// AtlasJSON defines the structure of the atlas index file.
+// It maps configuration keys to their corresponding file paths using three
+// different mapping strategies: unique, single, and multiple.
 type AtlasJSON struct {
 	Unique   map[string]string            `json:"unique"`
 	Single   map[string]map[string]string `json:"single"`
@@ -50,6 +61,9 @@ func (atlas *AtlasJSON) pickSingle(key string) (string, bool) {
 	return "", false
 }
 
+// LoadAtlas loads configuration items from an atlas index file and populates
+// the provided Atlas with data from JSON files in cfgRoot. It applies any
+// override configurations before calling BindRefs on the atlas.
 func LoadAtlas(atlasFile string, cfgRoot string, atlas Atlas, opts ...Option) error {
 	atlasOpts := newAtlasOptions()
 	atlasOpts.readFile = func(name string) ([]byte, error) {
@@ -304,52 +318,122 @@ func (opts *atlasOptions) shouldSkip(key string) (string, bool) {
 	}
 }
 
+// Option configures the atlas loading behavior.
 type Option func(*atlasOptions)
 
+// WithLogger sets a custom logger for atlas loading operations.
 func WithLogger(logger Logger) Option {
 	return func(opts *atlasOptions) {
 		opts.Logger = logger
 	}
 }
 
+// WithAtlasModifier registers a callback to modify the atlas JSON data
+// after it's loaded but before processing items.
+//
+// Example:
+//
+//	archmage.LoadAtlas("atlas.json", "config", atlas,
+//	    archmage.WithAtlasModifier(func(aj *archmage.AtlasJSON) {
+//	        aj.Single["game"]["/"] = aj.Single["game"]["dev"]
+//	    }))
 func WithAtlasModifier(cb func(atlasJSON *AtlasJSON)) Option {
 	return func(opts *atlasOptions) {
 		opts.cbAtlasModifier = cb
 	}
 }
 
+// WithWhitelist restricts loading to only the specified item keys.
+//
+// Example:
+//
+//	archmage.LoadAtlas("atlas.json", "config", atlas,
+//	    archmage.WithWhitelist([]string{"item", "hero", "skill"}))
 func WithWhitelist(whitelist []string) Option {
 	return func(opts *atlasOptions) {
 		opts.whitelist = whitelist
 	}
 }
 
+// WithBlacklist prevents loading of the specified item keys.
+//
+// Example:
+//
+//	archmage.LoadAtlas("atlas.json", "config", atlas,
+//	    archmage.WithBlacklist([]string{"hero", "skill"}))
 func WithBlacklist(blacklist []string) Option {
 	return func(opts *atlasOptions) {
 		opts.blacklist = blacklist
 	}
 }
 
+// WithOverrideRoot adds a directory to search for override JSON files
+// that will be merged into loaded configurations.
+//
+// Example:
+//
+//	archmage.LoadAtlas("atlas.json", "config", atlas,
+//	    archmage.WithOverrideRoot("new_feature_override"),
+//	    archmage.WithOverrideRoot("local_override"))
 func WithOverrideRoot(dir string) Option {
 	return func(opts *atlasOptions) {
 		opts.overrideConfigs = append(opts.overrideConfigs, overrideConfig{root: dir})
 	}
 }
 
+// WithOverrideFS adds a filesystem to search for override JSON files
+// that will be merged into loaded configurations.
+//
+// Example:
+//
+//	fsys := fstest.MapFS{
+//	    "item.json": &fstest.MapFile{Data: []byte(`{"1":{"name":"Sword++"}}`)},
+//	}
+//	archmage.LoadAtlas("atlas.json", "config", atlas,
+//	    archmage.WithOverrideFS(fsys))
 func WithOverrideFS(fsys fs.FS) Option {
 	return func(opts *atlasOptions) {
 		opts.overrideConfigs = append(opts.overrideConfigs, overrideConfig{fsys: fsys})
 	}
 }
 
+// AtlasItemLoadFunc is called to load each atlas item.
 type AtlasItemLoadFunc func(ctx context.Context, key string, item *AtlasItem) error
 
+// WithCustomLoader replaces the default sequential loader with a custom
+// implementation, allowing for parallel or specialized loading strategies.
+//
+// Example:
+//
+//	archmage.LoadAtlas("atlas.json", "config", atlas,
+//	    archmage.WithCustomLoader(func(all iter.Seq2[string, *archmage.AtlasItem], load archmage.AtlasItemLoadFunc) error {
+//	        eg, ctx := errgroup.WithContext(context.Background())
+//	        eg.SetLimit(10)
+//	        for k, item := range all {
+//	            eg.Go(func() error { return load(ctx, k, item) })
+//	        }
+//	        return eg.Wait()
+//	    }))
 func WithCustomLoader(loader func(all iter.Seq2[string, *AtlasItem], load AtlasItemLoadFunc) error) Option {
 	return func(opts *atlasOptions) {
 		opts.customLoader = loader
 	}
 }
 
+// WithNotFoundCallback registers a callback invoked when a configuration
+// file isn't found for an item key.
+// The callback can set item.Ready to suppress the not-found warning.
+//
+// Example:
+//
+//	archmage.LoadAtlas("atlas.json", "config", atlas,
+//	    archmage.WithNotFoundCallback(func(key string, item *archmage.AtlasItem) error {
+//	        if key == "special_gift" {
+//	            item.Cfg = &readyMadeSpecialGiftTable
+//	            item.Ready = true
+//	        }
+//	        return nil
+//	    }))
 func WithNotFoundCallback(cb func(key string, atlasItem *AtlasItem) error) Option {
 	return func(opts *atlasOptions) {
 		opts.cbNotFound = cb

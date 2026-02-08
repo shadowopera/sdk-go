@@ -342,10 +342,10 @@ func TestI18n_GetText(t *testing.T) {
 	}
 }
 
-func TestI18n_MustGetText(t *testing.T) {
+func TestI18n_Text(t *testing.T) {
 	i18n := archmage.NewI18n(language.English)
 	i18n.MergeTexts(map[string]string{"hello": "Hello"}, language.English)
-	r1 := i18n.MustGetText("hello", language.English)
+	r1 := i18n.Text("hello", language.English)
 	if r1 != "Hello" {
 		t.Fatalf("expected 'Hello', got %q", r1)
 	}
@@ -355,5 +355,5 @@ func TestI18n_MustGetText(t *testing.T) {
 			t.Fatalf("expected panic for missing key, but did not panic")
 		}
 	}()
-	i18n.MustGetText("world", language.English)
+	i18n.Text("world", language.English)
 }

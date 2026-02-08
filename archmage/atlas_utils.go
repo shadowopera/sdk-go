@@ -8,6 +8,8 @@ import (
 	"time"
 )
 
+// DumpAtlas writes all loaded atlas items to JSON files in outputDir.
+// Each item is written to a separate file named <key>.json.
 func DumpAtlas(atlas Atlas, outputDir string, opts ...json.Options) error {
 	opts = append([]json.Options{
 		jsontext.WithIndent("\t"),

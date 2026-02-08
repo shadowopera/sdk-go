@@ -19,10 +19,13 @@ var (
 	_ json.UnmarshalerFrom = (*Duration)(nil)
 )
 
+// Duration wraps time.Duration with custom JSON marshaling.
+// It serializes to/from an array format optimized for different time units.
 type Duration struct {
 	time.Duration
 }
 
+// MarshalJSONTo encodes Duration as a JSON array of integers.
 func (d *Duration) MarshalJSONTo(enc *jsontext.Encoder) error {
 	var a []int64
 	r := ShardDuration(d.Duration)
@@ -50,6 +53,7 @@ func (d *Duration) MarshalJSONTo(enc *jsontext.Encoder) error {
 	return enc.WriteToken(jsontext.EndArray)
 }
 
+// UnmarshalJSONFrom decodes a JSON array or null into Duration.
 func (d *Duration) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
 	tok, err := dec.ReadToken()
 	if err != nil {
@@ -92,6 +96,8 @@ func (d *Duration) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
 	return nil
 }
 
+// ParseDurationShards converts a duration shard array to time.Duration.
+// Accepts *[2]int64, *[3]int64, []int64, or nil.
 func ParseDurationShards(v any) (time.Duration, error) {
 	if v == nil {
 		return 0, nil
@@ -141,6 +147,8 @@ func parseDurationShardsImpl(a []int64) (time.Duration, error) {
 	}
 }
 
+// ShardDuration converts time.Duration to an optimized shard array.
+// Returns nil for zero duration, otherwise *[2]int64 or *[3]int64.
 func ShardDuration(d time.Duration) any {
 	if d == 0 {
 		return nil

@@ -18,6 +18,6 @@ func (l L10n) GetText(lang language.Tag) (string, error) {
 	return GetI18n().GetText(string(l), lang)
 }
 
-func (l L10n) MustGetText(lang language.Tag) string {
-	return GetI18n().MustGetText(string(l), lang)
+func (l L10n) Text(lang language.Tag) string {
+	return GetI18n().Text(string(l), lang)
 }
