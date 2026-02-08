@@ -20,6 +20,12 @@ type Atlas interface {
 	BindRefs()
 }
 
+const (
+	MappingUnique   = "unique"
+	MappingSingle   = "single"
+	MappingMultiple = "multiple"
+)
+
 type AtlasItem struct {
 	Cfg     any
 	Mapping string
@@ -44,7 +50,7 @@ func (atlas *AtlasJSON) pickSingle(key string) (string, bool) {
 	return "", false
 }
 
-func LoadAtlas(atlasFile string, cfgRoot string, out Atlas, opts ...Option) error {
+func LoadAtlas(atlasFile string, cfgRoot string, atlas Atlas, opts ...Option) error {
 	atlasOpts := newAtlasOptions()
 	atlasOpts.readFile = func(name string) ([]byte, error) {
 		return os.ReadFile(name)
@@ -61,10 +67,10 @@ func LoadAtlas(atlasFile string, cfgRoot string, out Atlas, opts ...Option) erro
 	for _, opt := range opts {
 		opt(atlasOpts)
 	}
-	return loadAtlasImpl(atlasFile, cfgRoot, out, atlasOpts)
+	return loadAtlasImpl(atlasFile, cfgRoot, atlas, atlasOpts)
 }
 
-func loadAtlasImpl(atlasFile string, cfgRoot string, out Atlas, opts *atlasOptions) error {
+func loadAtlasImpl(atlasFile string, cfgRoot string, atlas Atlas, opts *atlasOptions) error {
 	for _, cfg := range opts.overrideConfigs {
 		if cfg.fsys != nil {
 			continue
@@ -90,7 +96,7 @@ func loadAtlasImpl(atlasFile string, cfgRoot string, out Atlas, opts *atlasOptio
 	}
 	opts.cbAtlasModifier(&atlasJSON)
 
-	items := out.AtlasItems()
+	items := atlas.AtlasItems()
 	for _, v := range opts.whitelist {
 		if _, ok := items[v]; !ok {
 			return fmt.Errorf("<archmage> atlas whitelist: unknown item %q", v)
@@ -124,7 +130,7 @@ func loadAtlasImpl(atlasFile string, cfgRoot string, out Atlas, opts *atlasOptio
 		return err
 	}
 
-	out.BindRefs()
+	atlas.BindRefs()
 	return nil
 }
 
@@ -133,7 +139,7 @@ func loadItem(ctx context.Context, key string, item *AtlasItem,
 ) error {
 	select {
 	case <-ctx.Done():
-		return nil
+		return ctx.Err()
 	default:
 	}
 
@@ -168,101 +174,60 @@ func loadItem(ctx context.Context, key string, item *AtlasItem,
 	item.Key = key
 	fd.paths = key
 	start := time.Now()
-	var err error
+
+	var files []string
+	var notFoundHint string
 	switch item.Mapping {
-	case "unique":
-		f, ok := atlasJSON.Unique[key]
-		if ok {
-			filePath := filepath.Join(cfgRoot, f)
-			fileData, err := opts.readFile(filePath)
-			if err != nil {
-				return err
-			}
-			err = json.Unmarshal(fileData, item.Cfg)
-			if err != nil {
-				return fmt.Errorf("<archmage> invalid %q | %w", f, err)
-			}
-			if err = readOverrides(f); err != nil {
-				return err
-			}
-			fd.paths = filePath
-		} else {
-			if err = opts.cbNotFound(key, item); err != nil {
-				return err
-			}
-			if !item.Ready {
-				opts.Warnf("<archmage> cannot find $.unique['%s'] in %s", key, atlasFile)
-			}
-			return nil
+	case MappingUnique:
+		if f, ok := atlasJSON.Unique[key]; ok {
+			files = []string{f}
 		}
-
-	case "single":
-		f, ok := atlasJSON.pickSingle(key)
-		if ok {
-			filePath := filepath.Join(cfgRoot, f)
-			fileData, err := opts.readFile(filePath)
-			if err != nil {
-				return err
-			}
-			err = json.Unmarshal(fileData, item.Cfg)
-			if err != nil {
-				return fmt.Errorf("<archmage> invalid %q | %w", f, err)
-			}
-			if err = readOverrides(f); err != nil {
-				return err
-			}
-			fd.paths = filePath
-		} else {
-			if err = opts.cbNotFound(key, item); err != nil {
-				return err
-			}
-			if !item.Ready {
-				opts.Warnf("<archmage> cannot find $.single['%s']['/'] in %s", key, atlasFile)
-			}
-			return nil
+		notFoundHint = fmt.Sprintf("$.unique['%s']", key)
+	case MappingSingle:
+		if f, ok := atlasJSON.pickSingle(key); ok {
+			files = []string{f}
 		}
-
-	case "multiple":
-		files, ok := atlasJSON.Multiple[key]
-		if ok {
-			for i, f := range files {
-				filePath := filepath.Join(cfgRoot, f)
-				fileData, err := opts.readFile(filePath)
-				if err != nil {
-					return err
-				}
-				err = json.Unmarshal(fileData, item.Cfg)
-				if err != nil {
-					return fmt.Errorf("<archmage> invalid %q | %w", f, err)
-				}
-				if err = readOverrides(f); err != nil {
-					return err
-				}
-				if i > 0 {
-					fd.paths += ", "
-				}
-				fd.paths += filePath
-			}
-		} else {
-			if err = opts.cbNotFound(key, item); err != nil {
-				return err
-			}
-			if !item.Ready {
-				opts.Warnf("<archmage> cannot find $.multiple['%s'] in %s", key, atlasFile)
-			}
-			return nil
-		}
-
+		notFoundHint = fmt.Sprintf("$.single['%s']['/']", key)
+	case MappingMultiple:
+		files = atlasJSON.Multiple[key]
+		notFoundHint = fmt.Sprintf("$.multiple['%s']", key)
 	default:
-		panic("<archmage> unsupported mapping: " + item.Mapping)
+		return fmt.Errorf("<archmage> unsupported mapping: %s", item.Mapping)
 	}
 
-	if !item.Ready {
-		for i, data := range fd.overrides {
-			err = json.Unmarshal(data, item.Cfg)
-			if err != nil {
-				return fmt.Errorf("<archmage> applying override %s failed | %w", fd.overrideFiles[i], err)
-			}
+	if len(files) == 0 {
+		if err := opts.cbNotFound(key, item); err != nil {
+			return err
+		}
+		if !item.Ready {
+			opts.Warnf("<archmage> cannot find %s in %s", notFoundHint, atlasFile)
+		}
+		return nil
+	}
+
+	for i, f := range files {
+		filePath := filepath.Join(cfgRoot, f)
+		fileData, err := opts.readFile(filePath)
+		if err != nil {
+			return err
+		}
+		err = json.Unmarshal(fileData, item.Cfg)
+		if err != nil {
+			return fmt.Errorf("<archmage> invalid %q | %w", f, err)
+		}
+		if err = readOverrides(f); err != nil {
+			return err
+		}
+		if i > 0 {
+			fd.paths += ", "
+		}
+		fd.paths += filePath
+	}
+
+	for i, data := range fd.overrides {
+		err := json.Unmarshal(data, item.Cfg)
+		if err != nil {
+			return fmt.Errorf("<archmage> applying override %s failed | %w", fd.overrideFiles[i], err)
 		}
 	}
 
