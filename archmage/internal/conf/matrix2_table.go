@@ -11,7 +11,7 @@ var (
 	_ *time.Time
 )
 
-type Matrix2Table map[string]map[string][][]Ref[int, *HeroCfg]
+type Matrix2Table map[string]map[string][][]Ref[int, HeroCfg]
 
 // region Trifles
 

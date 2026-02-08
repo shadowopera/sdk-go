@@ -20,7 +20,7 @@ type GameCfg struct {
 	XDuration Duration                      `json:"x-duration"` // desc-x-duration
 	XPath     string                        `json:"x-path"`     // desc-x-path
 	XDatetime time.Time                     `json:"x-datetime"` // desc-x-datetime
-	XRef      Ref[int, *WeaponRuneCfg]      `json:"x-ref"`      // desc-x-ref
+	XRef      Ref[int, WeaponRuneCfg]       `json:"x-ref"`      // desc-x-ref
 	XL10n     L10n                          `json:"x-l10n"`     // desc-x-l10n
 	XArray1   []int                         `json:"x-array1"`   // desc-x-array1
 	XArray2   []int8                        `json:"x-array2"`   // desc-x-array2

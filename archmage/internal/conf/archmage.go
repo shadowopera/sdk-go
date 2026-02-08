@@ -14,7 +14,7 @@ type (
 	Ref[V int | string, T any] = archmage.Ref[V, T]
 )
 
-func makeRef[V int | string, T any](v V, r T) Ref[V, T] {
+func makeRef[V int | string, T any](v V, r *T) Ref[V, T] {
 	return Ref[V, T]{RawValue: v, Ref: r}
 }
 

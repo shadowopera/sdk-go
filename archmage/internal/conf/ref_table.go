@@ -14,16 +14,16 @@ var (
 type RefTable map[int]*RefCfg
 
 type RefCfg struct {
-	ID int                       `json:"-"`
-	B  Ref[int, *WeaponRuneCfg]  `json:"B"` // desc-B
-	C  int                       `json:"C"` // desc-C
-	D  Ref[int, *ItemCfg]        `json:"D"` // desc-D
-	E  Ref[int, *MagicCfg]       `json:"E"` // desc-E
-	F  Ref[string, *RaceCfg]     `json:"F"` // desc-F
-	G  Ref[int, *HeroCfg]        `json:"G"` // desc-G
-	H  []Ref[string, *StringCfg] `json:"H"` // desc-H
-	J  Ref[int, *ItemCfg]        `json:"J"` // desc-J
-	K  Ref[string, *RaceCfg]     `json:"K"` // desc-K
+	ID int                      `json:"-"`
+	B  Ref[int, WeaponRuneCfg]  `json:"B"` // desc-B
+	C  int                      `json:"C"` // desc-C
+	D  Ref[int, ItemCfg]        `json:"D"` // desc-D
+	E  Ref[int, MagicCfg]       `json:"E"` // desc-E
+	F  Ref[string, RaceCfg]     `json:"F"` // desc-F
+	G  Ref[int, HeroCfg]        `json:"G"` // desc-G
+	H  []Ref[string, StringCfg] `json:"H"` // desc-H
+	J  Ref[int, ItemCfg]        `json:"J"` // desc-J
+	K  Ref[string, RaceCfg]     `json:"K"` // desc-K
 }
 
 func (x RefTable) Lookup(cfgID int) (*RefCfg, error) {

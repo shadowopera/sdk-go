@@ -17,17 +17,17 @@ type HeroCfg struct {
 	ID                  int                    `json:"-"`
 	HeroName            L10n                   `json:"heroName"`
 	StartLevel          int                    `json:"startLevel"`
-	Referrer            []Ref[int, *RefCfg]    `json:"referrer"`
+	Referrer            []Ref[int, RefCfg]     `json:"referrer"`
 	RaceCombo           []*hero_RaceComboEntry `json:"race-combo"`
-	ReferrerSort        []Ref[int, *RefCfg]    `json:"referrer-sort"`
-	ReferrerCompact     []Ref[int, *RefCfg]    `json:"referrer-compact"`
-	ReferrerSortCompact []Ref[int, *RefCfg]    `json:"referrer-sort-compact"`
+	ReferrerSort        []Ref[int, RefCfg]     `json:"referrer-sort"`
+	ReferrerCompact     []Ref[int, RefCfg]     `json:"referrer-compact"`
+	ReferrerSortCompact []Ref[int, RefCfg]     `json:"referrer-sort-compact"`
 }
 
 // hero_RaceComboEntry represents $.*['race-combo'].*
 type hero_RaceComboEntry struct {
-	Race1 Ref[string, *RaceCfg] `json:"race1"`
-	Race2 Ref[string, *RaceCfg] `json:"race2"`
+	Race1 Ref[string, RaceCfg] `json:"race1"`
+	Race2 Ref[string, RaceCfg] `json:"race2"`
 }
 
 func (x HeroTable) Lookup(cfgID int) (*HeroCfg, error) {
