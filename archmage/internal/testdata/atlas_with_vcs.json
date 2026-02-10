@@ -1,0 +1,47 @@
+{
+	"vcs": {
+		"tags": [],
+		"branch": "main",
+		"id": "7f3a2b9c8e1d4f6a5b2c9e8d7f3a2b9c8e1d4f6a",
+		"shortId": "7f3a2b9",
+		"timestamp": "2025-02-09T10:23:45Z",
+		"message": "feat: add i18n support with language fallback",
+		"author": "Alice Wang <alice@example.com>",
+		"status": [
+			"1 AM N... 000000 100644 100644 0000000000000000000000000000000000000000 338bd9e0596e5f03c6f80cf27c7907c1454d6a39 godoc.md"
+		]
+	},
+	"unique": {
+		"character": "character.json",
+		"hero": "hero.json",
+		"Item": "clutter/item.json",
+		"Magic": "clutter/magic.json",
+		"matrix2": "matrix2.json",
+		"Race": "clutter/race.json",
+		"ref": "sdk/ref.json",
+		"string": "sdk/string.json",
+		"weapon-rune": "weapon-rune.json"
+	},
+	"single": {
+		"game": {
+			"/": "game.json"
+		},
+		"prop_floats": {
+			"x3": "sdk/prop-floats.x3.json",
+			"x5": "sdk/prop-floats.x5.json"
+		}
+	},
+	"multiple": {
+		"vtItemX": [
+			"vtbl/item1-common.json",
+			"vtbl/item1-special.json",
+			"vtbl/weapon-shield.json",
+			"vtbl/weapon-staff.json",
+			"vtbl/weapon-sword.json"
+		],
+		"vtSkill": [
+			"vtbl/skill-active.json",
+			"vtbl/skill-passive.json"
+		]
+	}
+}

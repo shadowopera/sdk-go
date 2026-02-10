@@ -77,6 +77,30 @@ func TestAtlas_Basic(t *testing.T) {
 	if len(atlas.VtItemXTable) != 16 {
 		t.Fatalf("expected len(vtItemXTable) = 16, got %d", len(atlas.VtItemXTable))
 	}
+	if atlas.VersionInfo != nil {
+		t.Fatalf("expected VersionInfo to be nil, got %v", atlas.VersionInfo)
+	}
+}
+
+func TestAtlas_VersionInfo(t *testing.T) {
+	logger := newScavenger()
+	opts := []archmage.Option{
+		archmage.WithLogger(logger),
+	}
+
+	var err error
+	atlas := conf.NewConfigAtlas()
+	err = archmage.LoadAtlas("testdata/atlas_with_vcs.json", "testdata", atlas, opts...)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if atlas.VersionInfo == nil {
+		t.Fatalf("expected VersionInfo to be not nil")
+	}
+	if atlas.VersionInfo["branch"] != "main" {
+		t.Fatalf(`expected atlas.VersionInfo["branch"] to be "main", got "%s"`, atlas.VersionInfo["branch"])
+	}
 }
 
 func TestAtlas_WithAtlasModifier(t *testing.T) {

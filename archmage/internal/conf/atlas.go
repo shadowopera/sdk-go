@@ -12,6 +12,8 @@ type ConfigAtlas struct {
 	m map[string]*AtlasItem
 	AtlasExtension
 
+	VersionInfo map[string]any
+
 	CharacterArray  CharacterArray
 	GameCfg         GameCfg
 	HeroTable       HeroTable
@@ -49,6 +51,10 @@ func (atlas *ConfigAtlas) buildMap() {
 		"vtSkill":     {Cfg: &atlas.VtSkillTable, Mapping: "multiple"},
 		"weapon-rune": {Cfg: &atlas.WeaponRuneTable, Mapping: "unique"},
 	}
+}
+
+func (atlas *ConfigAtlas) SetVersionInfo(verInfo map[string]any) {
+	atlas.VersionInfo = verInfo
 }
 
 type refBinder interface {
