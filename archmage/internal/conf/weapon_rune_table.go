@@ -3,14 +3,6 @@
 
 package conf
 
-import (
-	"time"
-)
-
-var (
-	_ *time.Time
-)
-
 type WeaponRuneTable map[int]*WeaponRuneCfg
 
 type WeaponRuneCfg struct {

@@ -3,14 +3,6 @@
 
 package conf
 
-import (
-	"time"
-)
-
-var (
-	_ *time.Time
-)
-
 type StringTable map[string]*StringCfg
 
 type StringCfg struct {

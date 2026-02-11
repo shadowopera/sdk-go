@@ -3,14 +3,6 @@
 
 package conf
 
-import (
-	"time"
-)
-
-var (
-	_ *time.Time
-)
-
 type ItemTable map[int]*ItemCfg
 
 type ItemCfg struct {

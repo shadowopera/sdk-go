@@ -3,14 +3,6 @@
 
 package conf
 
-import (
-	"time"
-)
-
-var (
-	_ *time.Time
-)
-
 type MagicTable map[int]*MagicCfg
 
 type MagicCfg struct {

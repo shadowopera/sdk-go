@@ -3,14 +3,6 @@
 
 package conf
 
-import (
-	"time"
-)
-
-var (
-	_ *time.Time
-)
-
 type HeroTable map[int]*HeroCfg
 
 type HeroCfg struct {

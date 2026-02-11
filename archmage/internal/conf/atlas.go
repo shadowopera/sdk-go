@@ -6,6 +6,12 @@ import (
 	"fmt"
 	"maps"
 	"slices"
+
+	"shadop.dev/pkg/sdk-go/archmage"
+)
+
+var (
+	_ archmage.Atlas = (*ConfigAtlas)(nil)
 )
 
 type ConfigAtlas struct {

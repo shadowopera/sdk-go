@@ -3,14 +3,6 @@
 
 package conf
 
-import (
-	"time"
-)
-
-var (
-	_ *time.Time
-)
-
 type RefTable map[int]*RefCfg
 
 type RefCfg struct {

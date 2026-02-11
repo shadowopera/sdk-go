@@ -3,13 +3,7 @@
 
 package conf
 
-import (
-	"time"
-)
-
-var (
-	_ *time.Time
-)
+import "time"
 
 type GameCfg struct {
 	XInt      int                           `json:"x-int"`      // desc-x-int

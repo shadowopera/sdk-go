@@ -3,14 +3,6 @@
 
 package conf
 
-import (
-	"time"
-)
-
-var (
-	_ *time.Time
-)
-
 type Matrix2Table map[string]map[string][][]Ref[int, HeroCfg]
 
 // region Trifles

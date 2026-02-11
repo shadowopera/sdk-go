@@ -3,14 +3,6 @@
 
 package conf
 
-import (
-	"time"
-)
-
-var (
-	_ *time.Time
-)
-
 type CharacterArray []*CharacterCfg
 
 type CharacterCfg struct {

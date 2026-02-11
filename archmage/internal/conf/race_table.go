@@ -3,14 +3,6 @@
 
 package conf
 
-import (
-	"time"
-)
-
-var (
-	_ *time.Time
-)
-
 type RaceTable map[string]*RaceCfg
 
 type RaceCfg struct {

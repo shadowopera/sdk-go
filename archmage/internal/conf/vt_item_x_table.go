@@ -3,14 +3,6 @@
 
 package conf
 
-import (
-	"time"
-)
-
-var (
-	_ *time.Time
-)
-
 type VtItemXTable map[int]*VtItemXCfg
 
 type VtItemXCfg struct {

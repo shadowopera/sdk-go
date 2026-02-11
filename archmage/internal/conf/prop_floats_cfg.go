@@ -3,14 +3,6 @@
 
 package conf
 
-import (
-	"time"
-)
-
-var (
-	_ *time.Time
-)
-
 type PropFloatsCfg struct {
 	B float64 `json:"B"` // desc-B
 	C float32 `json:"C"` // desc-C

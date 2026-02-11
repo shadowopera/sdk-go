@@ -3,14 +3,6 @@
 
 package conf
 
-import (
-	"time"
-)
-
-var (
-	_ *time.Time
-)
-
 type VtSkillTable map[int]*VtSkillCfg
 
 type VtSkillCfg struct {
