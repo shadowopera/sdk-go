@@ -27,9 +27,9 @@
 		"fieldY": "foo"
 	},
 	"x-tuple": {
-		"item1": 1,
-		"item2": 2.5,
-		"item3": " bar "
+		"item0": 1,
+		"item1": 2.5,
+		"item2": " bar "
 	},
 	"x-vector": [
 		0,

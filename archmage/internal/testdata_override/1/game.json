@@ -20,7 +20,7 @@
 		"fieldY": "bar"
 	},
 	"x-tuple": {
-		"item1": 100
+		"item0": 100
 	},
 	"x-vector": [
 		1,
