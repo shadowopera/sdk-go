@@ -7,7 +7,7 @@ import (
 
 // Ref stores a raw value and a resolved reference.
 // It marshals only RawValue to JSON.
-type Ref[V int | string, T any] struct {
+type Ref[V int | int32 | int64 | string, T any] struct {
 	// RawValue is the original unresolved value.
 	RawValue V
 	// Ref is the resolved reference, not included in JSON.

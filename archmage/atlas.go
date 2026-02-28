@@ -143,7 +143,7 @@ func loadAtlasImpl(atlasFile string, cfgRoot string, atlas Atlas, opts *atlasOpt
 		}
 	}
 	err = opts.customLoader(filteredItemSeq, func(ctx context.Context, key string, item *AtlasItem) error {
-		return loadItem(ctx, key, item, atlasJSON, atlasFile, cfgRoot, opts)
+		return loadItem(ctx, key, item, &atlasJSON, atlasFile, cfgRoot, opts)
 	})
 	if err != nil {
 		return err
@@ -154,7 +154,7 @@ func loadAtlasImpl(atlasFile string, cfgRoot string, atlas Atlas, opts *atlasOpt
 }
 
 func loadItem(ctx context.Context, key string, item *AtlasItem,
-	atlasJSON AtlasJSON, atlasFile string, cfgRoot string, opts *atlasOptions,
+	atlasJSON *AtlasJSON, atlasFile string, cfgRoot string, opts *atlasOptions,
 ) error {
 	select {
 	case <-ctx.Done():
@@ -313,9 +313,9 @@ func newAtlasOptions() *atlasOptions {
 
 func (opts *atlasOptions) shouldSkip(key string) (string, bool) {
 	switch {
-	case opts.whitelist != nil:
+	case len(opts.whitelist) > 0:
 		return "whitelist", !slices.Contains(opts.whitelist, key)
-	case opts.blacklist != nil && slices.Contains(opts.blacklist, key):
+	case len(opts.blacklist) > 0 && slices.Contains(opts.blacklist, key):
 		return "blacklist", true
 	default:
 		return "", false
