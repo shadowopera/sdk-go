@@ -2,6 +2,7 @@ package internal
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"iter"
 	"runtime/debug"
@@ -448,5 +449,98 @@ func TestAtlas_NotFoundCallback(t *testing.T) {
 	}
 	if cnt != 0 {
 		t.Fatalf("expected 0 warning log, got %d", cnt)
+	}
+}
+
+func TestAtlas_AtlasFileNotFound(t *testing.T) {
+	atlas := conf.NewConfigAtlas()
+	err := archmage.LoadAtlas("testdata/nonexistent_atlas.json", "testdata", atlas)
+	if err == nil {
+		t.Fatal("expected error, got nil")
+	}
+}
+
+func TestAtlas_InvalidAtlasJSON(t *testing.T) {
+	atlas := conf.NewConfigAtlas()
+	err := archmage.LoadAtlas("testdata/atlas_invalid.json", "testdata", atlas)
+	if err == nil {
+		t.Fatal("expected error, got nil")
+	}
+	if !strings.HasPrefix(err.Error(), `<archmage> invalid "testdata/atlas_invalid.json"`) {
+		t.Fatalf("unexpected error: %v", err)
+	}
+}
+
+func TestAtlas_ConfigFileNotFound(t *testing.T) {
+	atlasModifier := func(atlasJSON *archmage.AtlasJSON) {
+		atlasJSON.Unique["Item"] = "nonexistent/item.json"
+	}
+	atlas := conf.NewConfigAtlas()
+	err := archmage.LoadAtlas("testdata/atlas.json", "testdata", atlas,
+		archmage.WithAtlasModifier(atlasModifier),
+	)
+	if err == nil {
+		t.Fatal("expected error, got nil")
+	}
+}
+
+func TestAtlas_NotFoundCallback_Error(t *testing.T) {
+	expectedErr := errors.New("not found error")
+	notFound := func(key string, atlasItem *archmage.AtlasItem) error {
+		if key == "prop_floats" {
+			return expectedErr
+		}
+		return nil
+	}
+	atlas := conf.NewConfigAtlas()
+	err := archmage.LoadAtlas("testdata/atlas.json", "testdata", atlas,
+		archmage.WithNotFoundCallback(notFound),
+	)
+	if err == nil {
+		t.Fatal("expected error, got nil")
+	}
+	if !errors.Is(err, expectedErr) {
+		t.Fatalf("expected %v, got %v", expectedErr, err)
+	}
+}
+
+func TestAtlas_ContextCancellation(t *testing.T) {
+	customLoader := func(all iter.Seq2[string, *archmage.AtlasItem], load archmage.AtlasItemLoadFunc) error {
+		ctx, cancel := context.WithCancel(context.Background())
+		cancel()
+		for k, item := range all {
+			if err := load(ctx, k, item); err != nil {
+				return err
+			}
+		}
+		return nil
+	}
+	atlas := conf.NewConfigAtlas()
+	err := archmage.LoadAtlas("testdata/atlas.json", "testdata", atlas,
+		archmage.WithCustomLoader(customLoader),
+	)
+	if err == nil {
+		t.Fatal("expected error, got nil")
+	}
+	if !errors.Is(err, context.Canceled) {
+		t.Fatalf("expected context.Canceled, got: %v", err)
+	}
+}
+
+func TestAtlas_InvalidOverrideJSON(t *testing.T) {
+	fsys := fstest.MapFS{}
+	fsys["clutter/item.json"] = &fstest.MapFile{
+		Data: []byte(`{invalid json}`),
+	}
+	atlas := conf.NewConfigAtlas()
+	err := archmage.LoadAtlas("testdata/atlas.json", "testdata", atlas,
+		archmage.WithWhitelist([]string{"Item"}),
+		archmage.WithOverrideFS(fsys),
+	)
+	if err == nil {
+		t.Fatal("expected error, got nil")
+	}
+	if !strings.HasPrefix(err.Error(), `<archmage> applying override clutter/item.json failed`) {
+		t.Fatalf("unexpected error: %v", err)
 	}
 }
