@@ -191,7 +191,6 @@ func loadItem(ctx context.Context, key string, item *AtlasItem,
 	}
 
 	item.Key = key
-	fd.paths = key
 	start := time.Now()
 
 	var files []string
@@ -361,6 +360,7 @@ func WithWhitelist(whitelist []string) Option {
 }
 
 // WithBlacklist prevents loading of the specified item keys.
+// If a whitelist is also specified, the blacklist will be ignored.
 //
 // Example:
 //
@@ -434,7 +434,7 @@ func WithCustomLoader(loader func(all iter.Seq2[string, *AtlasItem], load AtlasI
 //	archmage.LoadAtlas("atlas.json", "config", atlas,
 //	    archmage.WithNotFoundCallback(func(key string, item *archmage.AtlasItem) error {
 //	        if key == "special_gift" {
-//	            item.Cfg = &readyMadeSpecialGiftTable
+//	            atlas.SpecialGiftTable = readyMadeSpecialGiftTable
 //	            item.Ready = true
 //	        }
 //	        return nil
