@@ -30,6 +30,7 @@ type Atlas interface {
 	SetVersionInfo(map[string]any)
 	AtlasItems() map[string]*AtlasItem
 	BindRefs()
+	OnLoaded() error
 }
 
 // AtlasItem represents a single configuration item in the atlas.
@@ -84,7 +85,12 @@ func LoadAtlas(atlasFile string, cfgRoot string, atlas Atlas, opts ...Option) er
 		opt(atlasOpts)
 	}
 
-	return loadAtlasImpl(atlasFile, cfgRoot, atlas, atlasOpts)
+	err := loadAtlasImpl(atlasFile, cfgRoot, atlas, atlasOpts)
+	if err != nil {
+		return err
+	}
+
+	return atlas.OnLoaded()
 }
 
 func loadAtlasImpl(atlasFile string, cfgRoot string, atlas Atlas, opts *atlasOptions) error {

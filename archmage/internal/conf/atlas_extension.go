@@ -3,5 +3,10 @@
 package conf
 
 type AtlasExtension struct {
-	// Put your runtime config extensions here.
+	// Put your config extensions here.
+}
+
+func (extension *AtlasExtension) OnLoaded() error {
+	// Initialize your config extensions here.
+	return nil
 }
