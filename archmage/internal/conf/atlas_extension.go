@@ -6,7 +6,7 @@ type AtlasExtension struct {
 	// Put your config extensions here.
 }
 
-func (extension *AtlasExtension) OnLoaded() error {
+func (extension *AtlasExtension) OnLoaded(atlas *ConfigAtlas) error {
 	// Initialize your config extensions here.
 	return nil
 }

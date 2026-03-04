@@ -80,6 +80,10 @@ func (atlas *ConfigAtlas) AtlasItems() map[string]*AtlasItem {
 	return atlas.m
 }
 
+func (atlas *ConfigAtlas) OnLoaded() error {
+	return atlas.AtlasExtension.OnLoaded(atlas)
+}
+
 func genericLookup[V comparable, R any](cfgID V, tbl map[V]R, tblName string) (R, error) {
 	var zero R
 	if cfgID == *new(V) {
