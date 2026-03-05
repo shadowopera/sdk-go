@@ -14,7 +14,7 @@ import (
 	"golang.org/x/sync/errgroup"
 	"golang.org/x/text/language"
 	"shadop.dev/pkg/sdk-go/archmage"
-	"shadop.dev/pkg/sdk-go/archmage/internal/conf"
+	"shadop.dev/pkg/sdk-go/internal/conf"
 )
 
 func TestAtlas_Basic(t *testing.T) {

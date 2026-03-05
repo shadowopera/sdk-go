@@ -3,9 +3,11 @@
 package conf
 
 import (
+	"cmp"
 	"fmt"
 	"maps"
 	"slices"
+	"strings"
 
 	"shadop.dev/pkg/sdk-go/archmage"
 )
@@ -68,7 +70,10 @@ type refBinder interface {
 }
 
 func (atlas *ConfigAtlas) BindRefs() {
-	for _, k := range slices.Sorted(maps.Keys(atlas.m)) {
+	keys := slices.SortedFunc(maps.Keys(atlas.m), func(k1 string, k2 string) int {
+		return cmp.Compare(strings.ToLower(k1), strings.ToLower(k2))
+	})
+	for _, k := range keys {
 		cfg, ok := atlas.m[k].Cfg.(refBinder)
 		if ok && cfg != nil {
 			cfg.bindRefs(atlas)
@@ -93,10 +98,10 @@ func xTryLookup[V comparable, R any](cfgID V, tbl map[V]R, tblName string) (R, e
 	return *new(R), err
 }
 
-func xLookup[V comparable, R any](cfgID V, tbl map[V]R, tblName string) (_ R) {
+func xLookup[V comparable, R any](cfgID V, tbl map[V]R, tblName string) R {
 	var zero V
 	if cfgID == zero {
-		return
+		return *new(R)
 	}
 	e, err := xTryLookup(cfgID, tbl, tblName)
 	if err != nil {
