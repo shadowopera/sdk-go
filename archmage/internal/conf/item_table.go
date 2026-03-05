@@ -17,12 +17,12 @@ type item_Price struct {
 	Stack int `json:"stack"`
 }
 
-func (x ItemTable) Lookup(cfgID int) (*ItemCfg, error) {
-	return genericLookup[int, *ItemCfg](cfgID, x, "ItemTable")
+func (x ItemTable) TryLookup(cfgID int) (*ItemCfg, error) {
+	return xTryLookup[int, *ItemCfg](cfgID, x, "ItemTable")
 }
 
-func (x ItemTable) MustLookup(cfgID int) *ItemCfg {
-	return genericMustLookup[int, *ItemCfg](cfgID, x, "ItemTable")
+func (x ItemTable) Lookup(cfgID int) *ItemCfg {
+	return xLookup[int, *ItemCfg](cfgID, x, "ItemTable")
 }
 
 // region Trifles

@@ -30,12 +30,12 @@ type Rab struct {
 	Qux string `json:"qux"` // desc-B.bar.qux
 }
 
-func (x StringTable) Lookup(cfgID string) (*StringCfg, error) {
-	return genericLookup[string, *StringCfg](cfgID, x, "StringTable")
+func (x StringTable) TryLookup(cfgID string) (*StringCfg, error) {
+	return xTryLookup[string, *StringCfg](cfgID, x, "StringTable")
 }
 
-func (x StringTable) MustLookup(cfgID string) *StringCfg {
-	return genericMustLookup[string, *StringCfg](cfgID, x, "StringTable")
+func (x StringTable) Lookup(cfgID string) *StringCfg {
+	return xLookup[string, *StringCfg](cfgID, x, "StringTable")
 }
 
 // region Trifles
@@ -57,11 +57,11 @@ func (x StringTable) bindRefs(atlas *ConfigAtlas) {
 }
 
 func (x *StringCfg) bindRefs(atlas *ConfigAtlas) {
-	x.K.Ref = atlas.RaceTable.MustLookup(x.K.RawValue)
-	x.Referer1.Ref = atlas.RefTable.MustLookup(x.Referer1.RawValue)
-	x.Referer2.Ref = atlas.RefTable.MustLookup(x.Referer2.RawValue)
+	x.K.Ref = atlas.RaceTable.Lookup(x.K.RawValue)
+	x.Referer1.Ref = atlas.RefTable.Lookup(x.Referer1.RawValue)
+	x.Referer2.Ref = atlas.RefTable.Lookup(x.Referer2.RawValue)
 	for i, ref := range x.RefererN {
-		x.RefererN[i].Ref = atlas.RefTable.MustLookup(ref.RawValue)
+		x.RefererN[i].Ref = atlas.RefTable.Lookup(ref.RawValue)
 	}
 }
 

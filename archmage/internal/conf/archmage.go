@@ -19,13 +19,13 @@ func makeRef[V int | string, T any](v V, r *T) Ref[V, T] {
 }
 
 type (
-	Tuple1[T1 any]                         = archmage.Tuple1[T1]
-	Tuple2[T1, T2 any]                     = archmage.Tuple2[T1, T2]
-	Tuple3[T1, T2, T3 any]                 = archmage.Tuple3[T1, T2, T3]
-	Tuple4[T1, T2, T3, T4 any]             = archmage.Tuple4[T1, T2, T3, T4]
-	Tuple5[T1, T2, T3, T4, T5 any]         = archmage.Tuple5[T1, T2, T3, T4, T5]
-	Tuple6[T1, T2, T3, T4, T5, T6 any]     = archmage.Tuple6[T1, T2, T3, T4, T5, T6]
-	Tuple7[T1, T2, T3, T4, T5, T6, T7 any] = archmage.Tuple7[T1, T2, T3, T4, T5, T6, T7]
+	Tuple1[T0 any]                         = archmage.Tuple1[T0]
+	Tuple2[T0, T1 any]                     = archmage.Tuple2[T0, T1]
+	Tuple3[T0, T1, T2 any]                 = archmage.Tuple3[T0, T1, T2]
+	Tuple4[T0, T1, T2, T3 any]             = archmage.Tuple4[T0, T1, T2, T3]
+	Tuple5[T0, T1, T2, T3, T4 any]         = archmage.Tuple5[T0, T1, T2, T3, T4]
+	Tuple6[T0, T1, T2, T3, T4, T5 any]     = archmage.Tuple6[T0, T1, T2, T3, T4, T5]
+	Tuple7[T0, T1, T2, T3, T4, T5, T6 any] = archmage.Tuple7[T0, T1, T2, T3, T4, T5, T6]
 )
 
 type (

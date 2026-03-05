@@ -11,12 +11,12 @@ type WeaponRuneCfg struct {
 	Power    int    `json:"power"`
 }
 
-func (x WeaponRuneTable) Lookup(cfgID int) (*WeaponRuneCfg, error) {
-	return genericLookup[int, *WeaponRuneCfg](cfgID, x, "WeaponRuneTable")
+func (x WeaponRuneTable) TryLookup(cfgID int) (*WeaponRuneCfg, error) {
+	return xTryLookup[int, *WeaponRuneCfg](cfgID, x, "WeaponRuneTable")
 }
 
-func (x WeaponRuneTable) MustLookup(cfgID int) *WeaponRuneCfg {
-	return genericMustLookup[int, *WeaponRuneCfg](cfgID, x, "WeaponRuneTable")
+func (x WeaponRuneTable) Lookup(cfgID int) *WeaponRuneCfg {
+	return xLookup[int, *WeaponRuneCfg](cfgID, x, "WeaponRuneTable")
 }
 
 // region Trifles

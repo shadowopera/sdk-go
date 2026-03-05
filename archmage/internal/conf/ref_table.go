@@ -18,12 +18,12 @@ type RefCfg struct {
 	K  Ref[string, RaceCfg]     `json:"K"` // desc-K
 }
 
-func (x RefTable) Lookup(cfgID int) (*RefCfg, error) {
-	return genericLookup[int, *RefCfg](cfgID, x, "RefTable")
+func (x RefTable) TryLookup(cfgID int) (*RefCfg, error) {
+	return xTryLookup[int, *RefCfg](cfgID, x, "RefTable")
 }
 
-func (x RefTable) MustLookup(cfgID int) *RefCfg {
-	return genericMustLookup[int, *RefCfg](cfgID, x, "RefTable")
+func (x RefTable) Lookup(cfgID int) *RefCfg {
+	return xLookup[int, *RefCfg](cfgID, x, "RefTable")
 }
 
 // region Trifles
@@ -45,16 +45,16 @@ func (x RefTable) bindRefs(atlas *ConfigAtlas) {
 }
 
 func (x *RefCfg) bindRefs(atlas *ConfigAtlas) {
-	x.B.Ref = atlas.WeaponRuneTable.MustLookup(x.B.RawValue)
-	x.D.Ref = atlas.ItemTable.MustLookup(x.D.RawValue)
-	x.E.Ref = atlas.MagicTable.MustLookup(x.E.RawValue)
-	x.F.Ref = atlas.RaceTable.MustLookup(x.F.RawValue)
-	x.G.Ref = atlas.HeroTable.MustLookup(x.G.RawValue)
+	x.B.Ref = atlas.WeaponRuneTable.Lookup(x.B.RawValue)
+	x.D.Ref = atlas.ItemTable.Lookup(x.D.RawValue)
+	x.E.Ref = atlas.MagicTable.Lookup(x.E.RawValue)
+	x.F.Ref = atlas.RaceTable.Lookup(x.F.RawValue)
+	x.G.Ref = atlas.HeroTable.Lookup(x.G.RawValue)
 	for i, v1 := range x.H {
-		x.H[i].Ref = atlas.StringTable.MustLookup(v1.RawValue)
+		x.H[i].Ref = atlas.StringTable.Lookup(v1.RawValue)
 	}
-	x.J.Ref = atlas.ItemTable.MustLookup(x.J.RawValue)
-	x.K.Ref = atlas.RaceTable.MustLookup(x.K.RawValue)
+	x.J.Ref = atlas.ItemTable.Lookup(x.J.RawValue)
+	x.K.Ref = atlas.RaceTable.Lookup(x.K.RawValue)
 }
 
 // endregion

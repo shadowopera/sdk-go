@@ -24,12 +24,12 @@ type vtItemX_AttributeBonusEntry struct {
 	Bonus int    `json:"bonus"`
 }
 
-func (x VtItemXTable) Lookup(cfgID int) (*VtItemXCfg, error) {
-	return genericLookup[int, *VtItemXCfg](cfgID, x, "VtItemXTable")
+func (x VtItemXTable) TryLookup(cfgID int) (*VtItemXCfg, error) {
+	return xTryLookup[int, *VtItemXCfg](cfgID, x, "VtItemXTable")
 }
 
-func (x VtItemXTable) MustLookup(cfgID int) *VtItemXCfg {
-	return genericMustLookup[int, *VtItemXCfg](cfgID, x, "VtItemXTable")
+func (x VtItemXTable) Lookup(cfgID int) *VtItemXCfg {
+	return xLookup[int, *VtItemXCfg](cfgID, x, "VtItemXTable")
 }
 
 // region Trifles

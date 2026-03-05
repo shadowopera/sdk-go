@@ -10,12 +10,12 @@ type MagicCfg struct {
 	Name string `json:"name"`
 }
 
-func (x MagicTable) Lookup(cfgID int) (*MagicCfg, error) {
-	return genericLookup[int, *MagicCfg](cfgID, x, "MagicTable")
+func (x MagicTable) TryLookup(cfgID int) (*MagicCfg, error) {
+	return xTryLookup[int, *MagicCfg](cfgID, x, "MagicTable")
 }
 
-func (x MagicTable) MustLookup(cfgID int) *MagicCfg {
-	return genericMustLookup[int, *MagicCfg](cfgID, x, "MagicTable")
+func (x MagicTable) Lookup(cfgID int) *MagicCfg {
+	return xLookup[int, *MagicCfg](cfgID, x, "MagicTable")
 }
 
 // region Trifles

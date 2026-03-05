@@ -22,12 +22,12 @@ type hero_RaceComboEntry struct {
 	Race2 Ref[string, RaceCfg] `json:"race2"`
 }
 
-func (x HeroTable) Lookup(cfgID int) (*HeroCfg, error) {
-	return genericLookup[int, *HeroCfg](cfgID, x, "HeroTable")
+func (x HeroTable) TryLookup(cfgID int) (*HeroCfg, error) {
+	return xTryLookup[int, *HeroCfg](cfgID, x, "HeroTable")
 }
 
-func (x HeroTable) MustLookup(cfgID int) *HeroCfg {
-	return genericMustLookup[int, *HeroCfg](cfgID, x, "HeroTable")
+func (x HeroTable) Lookup(cfgID int) *HeroCfg {
+	return xLookup[int, *HeroCfg](cfgID, x, "HeroTable")
 }
 
 // region Trifles
@@ -50,7 +50,7 @@ func (x HeroTable) bindRefs(atlas *ConfigAtlas) {
 
 func (x *HeroCfg) bindRefs(atlas *ConfigAtlas) {
 	for i, ref := range x.Referrer {
-		x.Referrer[i].Ref = atlas.RefTable.MustLookup(ref.RawValue)
+		x.Referrer[i].Ref = atlas.RefTable.Lookup(ref.RawValue)
 	}
 	for _, v1 := range x.RaceCombo {
 		if v1 != nil {
@@ -58,19 +58,19 @@ func (x *HeroCfg) bindRefs(atlas *ConfigAtlas) {
 		}
 	}
 	for i, ref := range x.ReferrerSort {
-		x.ReferrerSort[i].Ref = atlas.RefTable.MustLookup(ref.RawValue)
+		x.ReferrerSort[i].Ref = atlas.RefTable.Lookup(ref.RawValue)
 	}
 	for i, ref := range x.ReferrerCompact {
-		x.ReferrerCompact[i].Ref = atlas.RefTable.MustLookup(ref.RawValue)
+		x.ReferrerCompact[i].Ref = atlas.RefTable.Lookup(ref.RawValue)
 	}
 	for i, ref := range x.ReferrerSortCompact {
-		x.ReferrerSortCompact[i].Ref = atlas.RefTable.MustLookup(ref.RawValue)
+		x.ReferrerSortCompact[i].Ref = atlas.RefTable.Lookup(ref.RawValue)
 	}
 }
 
 func (x *hero_RaceComboEntry) bindRefs(atlas *ConfigAtlas) {
-	x.Race1.Ref = atlas.RaceTable.MustLookup(x.Race1.RawValue)
-	x.Race2.Ref = atlas.RaceTable.MustLookup(x.Race2.RawValue)
+	x.Race1.Ref = atlas.RaceTable.Lookup(x.Race1.RawValue)
+	x.Race2.Ref = atlas.RaceTable.Lookup(x.Race2.RawValue)
 }
 
 // endregion

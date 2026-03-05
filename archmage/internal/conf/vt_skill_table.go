@@ -21,12 +21,12 @@ type vtSkill_FooEntry struct {
 	X5 int      `json:"X5"` // X5
 }
 
-func (x VtSkillTable) Lookup(cfgID int) (*VtSkillCfg, error) {
-	return genericLookup[int, *VtSkillCfg](cfgID, x, "VtSkillTable")
+func (x VtSkillTable) TryLookup(cfgID int) (*VtSkillCfg, error) {
+	return xTryLookup[int, *VtSkillCfg](cfgID, x, "VtSkillTable")
 }
 
-func (x VtSkillTable) MustLookup(cfgID int) *VtSkillCfg {
-	return genericMustLookup[int, *VtSkillCfg](cfgID, x, "VtSkillTable")
+func (x VtSkillTable) Lookup(cfgID int) *VtSkillCfg {
+	return xLookup[int, *VtSkillCfg](cfgID, x, "VtSkillTable")
 }
 
 // region Trifles

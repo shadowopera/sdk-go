@@ -59,8 +59,8 @@ func (atlas *ConfigAtlas) buildMap() {
 	}
 }
 
-func (atlas *ConfigAtlas) SetVersionInfo(verInfo map[string]any) {
-	atlas.VersionInfo = verInfo
+func (atlas *ConfigAtlas) SetVersionInfo(info map[string]any) {
+	atlas.VersionInfo = info
 }
 
 type refBinder interface {
@@ -84,21 +84,23 @@ func (atlas *ConfigAtlas) OnLoaded() error {
 	return atlas.AtlasExtension.OnLoaded(atlas)
 }
 
-func genericLookup[V comparable, R any](cfgID V, tbl map[V]R, tblName string) (R, error) {
-	var zero R
-	if cfgID == *new(V) {
-		return zero, nil
+func xTryLookup[V comparable, R any](cfgID V, tbl map[V]R, tblName string) (R, error) {
+	var zero V
+	if cfgID == zero {
+		var result R
+		return result, nil
 	}
 	if e, ok := tbl[cfgID]; ok {
 		return e, nil
 	}
 
+	var result R
 	err := fmt.Errorf("%s: config entry not found for ID %v", tblName, cfgID)
-	return zero, err
+	return result, err
 }
 
-func genericMustLookup[V comparable, R any](cfgID V, tbl map[V]R, tblName string) R {
-	e, err := genericLookup(cfgID, tbl, tblName)
+func xLookup[V comparable, R any](cfgID V, tbl map[V]R, tblName string) R {
+	e, err := xTryLookup(cfgID, tbl, tblName)
 	if err != nil {
 		panic(err)
 	}
