@@ -85,21 +85,19 @@ func (atlas *ConfigAtlas) OnLoaded() error {
 }
 
 func xTryLookup[V comparable, R any](cfgID V, tbl map[V]R, tblName string) (R, error) {
-	var zero V
-	if cfgID == zero {
-		var result R
-		return result, nil
-	}
 	if e, ok := tbl[cfgID]; ok {
 		return e, nil
 	}
 
-	var result R
 	err := fmt.Errorf("%s: config entry not found for ID %v", tblName, cfgID)
-	return result, err
+	return *new(R), err
 }
 
-func xLookup[V comparable, R any](cfgID V, tbl map[V]R, tblName string) R {
+func xLookup[V comparable, R any](cfgID V, tbl map[V]R, tblName string) (_ R) {
+	var zero V
+	if cfgID == zero {
+		return
+	}
 	e, err := xTryLookup(cfgID, tbl, tblName)
 	if err != nil {
 		panic(err)
