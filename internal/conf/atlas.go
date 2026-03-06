@@ -4,8 +4,6 @@ package conf
 
 import (
 	"cmp"
-	_ "embed"
-	"encoding/json/v2"
 	"fmt"
 	"maps"
 	"slices"
@@ -118,18 +116,4 @@ func init() {
 	if len(m) != 1 {
 		panic("conflicting pubtype detected")
 	}
-}
-
-var (
-	//go:embed version.json
-	_codeVersion []byte
-)
-
-func CodeVersion() *archmage.VersionInfo {
-	var info archmage.VersionInfo
-	err := json.Unmarshal(_codeVersion, &info)
-	if err != nil {
-		panic(err)
-	}
-	return &info
 }
