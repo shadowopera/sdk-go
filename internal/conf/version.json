@@ -1,0 +1,12 @@
+{
+	"tags": [],
+	"branch": "main",
+	"id": "7f3a2b9c8e1d4f6a5b2c9e8d7f3a2b9c8e1d4f6a",
+	"shortId": "7f3a2b9",
+	"timestamp": "2025-02-09T10:23:45Z",
+	"message": "feat: add i18n support with language fallback",
+	"author": "Alice Wang <alice@example.com>",
+	"status": [
+		"1 AM N... 000000 100644 100644 0000000000000000000000000000000000000000 338bd9e0596e5f03c6f80cf27c7907c1454d6a39 godoc.md"
+	]
+}

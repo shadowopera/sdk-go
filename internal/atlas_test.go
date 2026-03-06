@@ -78,12 +78,18 @@ func TestAtlas_Basic(t *testing.T) {
 	if len(atlas.VtItemXTable) != 16 {
 		t.Fatalf("expected len(vtItemXTable) = 16, got %d", len(atlas.VtItemXTable))
 	}
-	if atlas.VersionInfo != nil {
-		t.Fatalf("expected VersionInfo to be nil, got %v", atlas.VersionInfo)
+	if atlas.DataVersion != nil {
+		t.Fatalf("expected DataVersion to be nil, got %v", atlas.DataVersion)
+	}
+	if conf.CodeVersion() == nil {
+		t.Fatalf("expected CodeVersion to be non-nil")
+	}
+	if conf.CodeVersion().ShortID != "7f3a2b9" {
+		t.Fatalf("expected CodeVersion.ShortID to be 7f3a2b9, got %v", conf.CodeVersion().ShortID)
 	}
 }
 
-func TestAtlas_VersionInfo(t *testing.T) {
+func TestAtlas_DataVersion(t *testing.T) {
 	logger := newScavenger()
 	opts := []archmage.Option{
 		archmage.WithLogger(logger),
@@ -91,16 +97,16 @@ func TestAtlas_VersionInfo(t *testing.T) {
 
 	var err error
 	atlas := conf.NewConfigAtlas()
-	err = archmage.LoadAtlas("testdata/atlas_with_vcs.json", "testdata", atlas, opts...)
+	err = archmage.LoadAtlas("testdata/atlas_with_version.json", "testdata", atlas, opts...)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	if atlas.VersionInfo == nil {
-		t.Fatalf("expected VersionInfo to be not nil")
+	if atlas.DataVersion == nil {
+		t.Fatalf("expected DataVersion to be not nil")
 	}
-	if atlas.VersionInfo["branch"] != "main" {
-		t.Fatalf(`expected atlas.VersionInfo["branch"] to be "main", got "%s"`, atlas.VersionInfo["branch"])
+	if atlas.DataVersion.Branch != "main" {
+		t.Fatalf(`expected atlas.DataVersion.Branch to be "main", got "%s"`, atlas.DataVersion.Branch)
 	}
 }
 

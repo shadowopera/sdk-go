@@ -27,7 +27,7 @@ const (
 // Atlas represents a collection of configuration items that can be loaded
 // from JSON files and bound to references after loading.
 type Atlas interface {
-	SetVersionInfo(map[string]any)
+	SetDataVersion(v *VersionInfo)
 	AtlasItems() map[string]*AtlasItem
 	BindRefs()
 	OnLoaded() error
@@ -47,7 +47,7 @@ type AtlasItem struct {
 // It maps configuration keys to their corresponding file paths using three
 // different mapping strategies: unique, single, and multiple.
 type AtlasJSON struct {
-	VCS      map[string]any               `json:"vcs"`
+	Version  *VersionInfo                 `json:"version"`
 	Unique   map[string]string            `json:"unique"`
 	Single   map[string]map[string]string `json:"single"`
 	Multiple map[string][]string          `json:"multiple"`
@@ -119,7 +119,7 @@ func loadAtlasImpl(atlasFile string, cfgRoot string, atlas Atlas, opts *atlasOpt
 	}
 
 	opts.cbAtlasModifier(&atlasJSON)
-	atlas.SetVersionInfo(atlasJSON.VCS)
+	atlas.SetDataVersion(atlasJSON.Version)
 
 	items := atlas.AtlasItems()
 	for _, v := range opts.whitelist {

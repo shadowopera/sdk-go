@@ -4,6 +4,8 @@ package conf
 
 import (
 	"cmp"
+	_ "embed"
+	"encoding/json/v2"
 	"fmt"
 	"maps"
 	"slices"
@@ -20,7 +22,7 @@ type ConfigAtlas struct {
 	m map[string]*AtlasItem
 	AtlasExtension
 
-	VersionInfo map[string]any
+	DataVersion *archmage.VersionInfo
 
 	CharacterArray  CharacterArray
 	GameCfg         GameCfg
@@ -61,8 +63,8 @@ func (atlas *ConfigAtlas) buildMap() {
 	}
 }
 
-func (atlas *ConfigAtlas) SetVersionInfo(info map[string]any) {
-	atlas.VersionInfo = info
+func (atlas *ConfigAtlas) SetDataVersion(v *archmage.VersionInfo) {
+	atlas.DataVersion = v
 }
 
 type refBinder interface {
@@ -116,4 +118,18 @@ func init() {
 	if len(m) != 1 {
 		panic("conflicting pubtype detected")
 	}
+}
+
+var (
+	//go:embed version.json
+	_codeVersion []byte
+)
+
+func CodeVersion() *archmage.VersionInfo {
+	var info archmage.VersionInfo
+	err := json.Unmarshal(_codeVersion, &info)
+	if err != nil {
+		panic(err)
+	}
+	return &info
 }
