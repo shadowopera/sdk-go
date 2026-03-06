@@ -255,8 +255,8 @@ func TestAtlas_WithOverrideRoot(t *testing.T) {
 	logger := newScavenger()
 	opts := []archmage.Option{
 		archmage.WithLogger(logger),
-		archmage.WithOverrideRoot("testdata_override/1"),
-		archmage.WithOverrideRoot("testdata_override/2"),
+		archmage.WithOverrideRoot("override/1"),
+		archmage.WithOverrideRoot("override/2"),
 	}
 
 	atlas := conf.NewConfigAtlas()
@@ -274,7 +274,7 @@ func TestAtlas_WithOverrideRoot_Error1(t *testing.T) {
 	logger := newScavenger()
 	opts := []archmage.Option{
 		archmage.WithLogger(logger),
-		archmage.WithOverrideRoot("testdata_override/9"),
+		archmage.WithOverrideRoot("override/9"),
 	}
 
 	atlas := conf.NewConfigAtlas()
@@ -282,7 +282,7 @@ func TestAtlas_WithOverrideRoot_Error1(t *testing.T) {
 	if err == nil {
 		t.Fatal("expected error, got nil")
 	}
-	if !strings.HasPrefix(err.Error(), `<archmage> invalid override root directory "testdata_override/9"`) {
+	if !strings.HasPrefix(err.Error(), `<archmage> invalid override root directory "override/9"`) {
 		t.Fatalf("unexpected error: %v", err)
 	}
 }
@@ -291,7 +291,7 @@ func TestAtlas_WithOverrideRoot_Error2(t *testing.T) {
 	logger := newScavenger()
 	opts := []archmage.Option{
 		archmage.WithLogger(logger),
-		archmage.WithOverrideRoot("testdata_override/1/game.json"),
+		archmage.WithOverrideRoot("override/1/game.json"),
 	}
 
 	atlas := conf.NewConfigAtlas()
@@ -299,7 +299,7 @@ func TestAtlas_WithOverrideRoot_Error2(t *testing.T) {
 	if err == nil {
 		t.Fatal("expected error, got nil")
 	}
-	if !strings.HasPrefix(err.Error(), `<archmage> override root "testdata_override/1/game.json" is not a directory`) {
+	if !strings.HasPrefix(err.Error(), `<archmage> override root "override/1/game.json" is not a directory`) {
 		t.Fatalf("unexpected error: %v", err)
 	}
 }
@@ -317,7 +317,7 @@ func TestAtlas_WithOverrideFS(t *testing.T) {
 	opts := []archmage.Option{
 		archmage.WithLogger(logger),
 		archmage.WithWhitelist([]string{"game", "Magic", "weapon-rune"}),
-		archmage.WithOverrideRoot("testdata_override/2"),
+		archmage.WithOverrideRoot("override/2"),
 		archmage.WithOverrideFS(fsys),
 	}
 
@@ -344,8 +344,8 @@ func TestAtlas_WithOverrideRootAndFS(t *testing.T) {
 	logger := newScavenger()
 	opts := []archmage.Option{
 		archmage.WithLogger(logger),
-		archmage.WithOverrideRoot("testdata_override/1"),
-		archmage.WithOverrideRoot("testdata_override/2"),
+		archmage.WithOverrideRoot("override/1"),
+		archmage.WithOverrideRoot("override/2"),
 		archmage.WithOverrideFS(fsys),
 	}
 
