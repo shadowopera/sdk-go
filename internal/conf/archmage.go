@@ -17,10 +17,6 @@ type (
 	Ref[V int | string, T any] = archmage.Ref[V, T]
 )
 
-func makeRef[V int | string, T any](v V, r *T) Ref[V, T] {
-	return Ref[V, T]{RawValue: v, Ref: r}
-}
-
 type (
 	Tuple1[T0 any]                         = archmage.Tuple1[T0]
 	Tuple2[T0, T1 any]                     = archmage.Tuple2[T0, T1]
