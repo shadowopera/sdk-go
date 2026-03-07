@@ -37,10 +37,7 @@ func TestAtlas_Basic(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	err = archmage.DumpAtlas(atlas, "golden/basic")
-	if err != nil {
-		t.Fatal(err)
-	}
+	checkSaveAtlas(t, atlas, "golden/basic")
 
 	if atlas.GameCfg.XL10n.Text(en) != "it is a good day" {
 		t.Fatalf("unexpected l10n en value: %s", atlas.GameCfg.XL10n.Text(en))
@@ -140,10 +137,7 @@ func TestAtlas_WithAtlasModifier(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	err = archmage.DumpAtlas(atlas, "golden/atlas_modifier")
-	if err != nil {
-		t.Fatal(err)
-	}
+	checkSaveAtlas(t, atlas, "golden/atlas_modifier")
 
 	if !slices.ContainsFunc(logger.Lines, func(line string) bool {
 		return line == "WRN <archmage> cannot find $.unique['character'] in testdata/atlas.json"
@@ -179,10 +173,7 @@ func TestAtlas_WithWhitelist(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	err = archmage.DumpAtlas(atlas, "golden/whitelist")
-	if err != nil {
-		t.Fatal(err)
-	}
+	checkSaveAtlas(t, atlas, "golden/whitelist")
 
 	var cnt int
 	for _, line := range logger.Lines {
@@ -224,10 +215,7 @@ func TestAtlas_WithBlacklist(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	err = archmage.DumpAtlas(atlas, "golden/blacklist")
-	if err != nil {
-		t.Fatal(err)
-	}
+	checkSaveAtlas(t, atlas, "golden/blacklist")
 
 	var cnt int
 	for _, line := range logger.Lines {
@@ -270,10 +258,7 @@ func TestAtlas_WithOverrideRoot(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	err = archmage.DumpAtlas(atlas, "golden/override_root")
-	if err != nil {
-		t.Fatal(err)
-	}
+	checkSaveAtlas(t, atlas, "golden/override_root")
 }
 
 func TestAtlas_WithOverrideRoot_Error1(t *testing.T) {
@@ -332,10 +317,7 @@ func TestAtlas_WithOverrideFS(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	err = archmage.DumpAtlas(atlas, "golden/override_fs")
-	if err != nil {
-		t.Fatal(err)
-	}
+	checkSaveAtlas(t, atlas, "golden/override_fs")
 }
 
 func TestAtlas_WithOverrideRootAndFS(t *testing.T) {
@@ -360,10 +342,7 @@ func TestAtlas_WithOverrideRootAndFS(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	err = archmage.DumpAtlas(atlas, "golden/override_root_and_fs")
-	if err != nil {
-		t.Fatal(err)
-	}
+	checkSaveAtlas(t, atlas, "golden/override_root_and_fs")
 }
 
 func TestAtlas_WithCustomLoader(t *testing.T) {
@@ -397,10 +376,7 @@ func TestAtlas_WithCustomLoader(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	err = archmage.DumpAtlas(atlas, "golden/custom_loader")
-	if err != nil {
-		t.Fatal(err)
-	}
+	checkSaveAtlas(t, atlas, "golden/custom_loader")
 
 	if !slices.ContainsFunc(logger.Lines, func(line string) bool {
 		return line == "WRN <archmage> cannot find $.single['prop_floats']['/'] in testdata/atlas.json"
@@ -442,10 +418,7 @@ func TestAtlas_NotFoundCallback(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	err = archmage.DumpAtlas(atlas, "golden/not_found")
-	if err != nil {
-		t.Fatal(err)
-	}
+	checkSaveAtlas(t, atlas, "golden/not_found")
 
 	var cnt int
 	for _, line := range logger.Lines {
@@ -483,6 +456,7 @@ func TestAtlas_ConfigFileNotFound(t *testing.T) {
 	}
 	atlas := conf.NewConfigAtlas()
 	err := archmage.LoadAtlas("testdata/atlas.json", "testdata", atlas,
+		archmage.WithLogger(newScavenger()),
 		archmage.WithAtlasModifier(atlasModifier),
 	)
 	if err == nil {
@@ -500,6 +474,7 @@ func TestAtlas_NotFoundCallback_Error(t *testing.T) {
 	}
 	atlas := conf.NewConfigAtlas()
 	err := archmage.LoadAtlas("testdata/atlas.json", "testdata", atlas,
+		archmage.WithLogger(newScavenger()),
 		archmage.WithNotFoundCallback(notFound),
 	)
 	if err == nil {
@@ -540,6 +515,7 @@ func TestAtlas_InvalidOverrideJSON(t *testing.T) {
 	}
 	atlas := conf.NewConfigAtlas()
 	err := archmage.LoadAtlas("testdata/atlas.json", "testdata", atlas,
+		archmage.WithLogger(newScavenger()),
 		archmage.WithWhitelist([]string{"Item"}),
 		archmage.WithOverrideFS(fsys),
 	)
