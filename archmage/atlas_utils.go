@@ -11,7 +11,29 @@ import (
 // DumpAtlas writes all loaded atlas items to JSON files in outputDir.
 // Each item is written to a separate file named <key>.json.
 func DumpAtlas(atlas Atlas, outputDir string, opts ...json.Options) error {
-	opts = append([]json.Options{
+	opts = BuildMarshalOptions(opts...)
+	for k, item := range atlas.AtlasItems() {
+		if item.Ready {
+			data, err := json.Marshal(item.Cfg, opts...)
+			if err != nil {
+				return err
+			}
+			p := filepath.Join(outputDir, k+".json")
+			if err := os.MkdirAll(filepath.Dir(p), 0755); err != nil {
+				return err
+			}
+			data = append(data, '\n')
+			if err := os.WriteFile(p, data, 0644); err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
+func BuildMarshalOptions(opts ...json.Options) []json.Options {
+	return append([]json.Options{
 		jsontext.WithIndent("\t"),
 		json.Deterministic(true),
 		json.FormatNilMapAsNull(true),
@@ -61,26 +83,6 @@ func DumpAtlas(atlas Atlas, outputDir string, opts ...json.Options) error {
 			json.MarshalToFunc[*Vec4[float64]](zeroVecNullMarshalTo4),
 		)),
 	}, opts...)
-
-	for k, item := range atlas.AtlasItems() {
-		if !item.Ready {
-			continue
-		}
-		data, err := json.Marshal(item.Cfg, opts...)
-		if err != nil {
-			return err
-		}
-		p := filepath.Join(outputDir, k+".json")
-		if err = os.MkdirAll(filepath.Dir(p), 0755); err != nil {
-			return err
-		}
-		data = append(data, '\n')
-		if err = os.WriteFile(p, data, 0644); err != nil {
-			return err
-		}
-	}
-
-	return nil
 }
 
 func zeroVecNullMarshalTo2[T comparable](enc *jsontext.Encoder, v *Vec2[T]) error {

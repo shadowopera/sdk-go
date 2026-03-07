@@ -9,7 +9,7 @@
 		3600
 	],
 	"x-path": "x/y/z.bin",
-	"x-datetime": "0100-01-01T15:30:00+08:00",
+	"x-datetime": "0001-01-02T15:30:00+08:00",
 	"x-ref": 3,
 	"x-l10n": "game.x-l10n",
 	"x-array1": [
