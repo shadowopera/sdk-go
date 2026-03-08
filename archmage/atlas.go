@@ -68,7 +68,7 @@ func (atlas *AtlasJSON) pickSingle(key string) (string, bool) {
 	if ok {
 		f, ok := m["/"]
 		if ok {
-			return f, ok
+			return f, true
 		}
 	}
 	return "", false
@@ -210,33 +210,31 @@ func loadItem(ctx context.Context, key string, item *AtlasItem,
 	start := time.Now()
 
 	var files []string
-	var notFoundHint string
+	var keyPath string
 	switch item.Mapping {
 	case MappingUnique:
 		if f, ok := atlasJSON.Unique[key]; ok {
 			files = []string{f}
+		} else {
+			keyPath = fmt.Sprintf("$.unique['%s']", key)
 		}
-		notFoundHint = fmt.Sprintf("$.unique['%s']", key)
 	case MappingSingle:
 		if f, ok := atlasJSON.pickSingle(key); ok {
 			files = []string{f}
+		} else {
+			keyPath = fmt.Sprintf("$.single['%s']['/']", key)
 		}
-		notFoundHint = fmt.Sprintf("$.single['%s']['/']", key)
 	case MappingMultiple:
 		files = atlasJSON.Multiple[key]
-		notFoundHint = fmt.Sprintf("$.multiple['%s']", key)
+		if len(files) == 0 {
+			keyPath = fmt.Sprintf("$.multiple['%s']", key)
+		}
 	default:
 		return fmt.Errorf("<archmage> unsupported mapping: %s", item.Mapping)
 	}
 
 	if len(files) == 0 {
-		if err := opts.cbNotFound(key, item); err != nil {
-			return err
-		}
-		if !item.Ready {
-			opts.Warnf("<archmage> cannot find %s in %s", notFoundHint, atlasFile)
-		}
-		return nil
+		return fmt.Errorf("<archmage> cannot find %s in %s", keyPath, atlasFile)
 	}
 
 	for i, f := range files {
@@ -311,7 +309,6 @@ type atlasOptions struct {
 
 	customLoader    func(iter.Seq2[string, *AtlasItem], AtlasItemLoadFunc) error
 	cbAtlasModifier func(atlasJSON *AtlasJSON)
-	cbNotFound      func(key string, atlasItem *AtlasItem) error
 
 	whitelist []string
 	blacklist []string
@@ -323,7 +320,6 @@ func newAtlasOptions() *atlasOptions {
 	return &atlasOptions{
 		Logger:          &defaultLogger{},
 		cbAtlasModifier: func(atlasJSON *AtlasJSON) {},
-		cbNotFound:      func(string, *AtlasItem) error { return nil },
 	}
 }
 
@@ -438,25 +434,5 @@ type AtlasItemLoadFunc func(ctx context.Context, key string, item *AtlasItem) er
 func WithCustomLoader(loader func(all iter.Seq2[string, *AtlasItem], load AtlasItemLoadFunc) error) Option {
 	return func(opts *atlasOptions) {
 		opts.customLoader = loader
-	}
-}
-
-// WithNotFoundCallback registers a callback invoked when a configuration
-// file is not found for an item key.
-// The callback can set item.Ready to suppress the not-found warning.
-//
-// Example:
-//
-//	archmage.LoadAtlas("atlas.json", "config", atlas,
-//	    archmage.WithNotFoundCallback(func(key string, item *archmage.AtlasItem) error {
-//	        if key == "special_gift" {
-//	            atlas.SpecialGiftTable = readyMadeSpecialGiftTable
-//	            item.Ready = true
-//	        }
-//	        return nil
-//	    }))
-func WithNotFoundCallback(cb func(key string, atlasItem *AtlasItem) error) Option {
-	return func(opts *atlasOptions) {
-		opts.cbNotFound = cb
 	}
 }

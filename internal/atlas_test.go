@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"iter"
 	"runtime/debug"
-	"slices"
 	"strings"
 	"testing"
 	"testing/fstest"
@@ -33,7 +32,9 @@ func TestAtlas_Basic(t *testing.T) {
 
 	var err error
 	atlas := conf.NewConfigAtlas()
-	err = archmage.LoadAtlas("testdata/atlas.json", "testdata", atlas)
+	err = archmage.LoadAtlas("testdata/atlas.json", "testdata", atlas,
+		archmage.WithBlacklist([]string{"prop_floats"}),
+	)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -87,9 +88,9 @@ func TestAtlas_Basic(t *testing.T) {
 }
 
 func TestAtlas_DataVersion(t *testing.T) {
-	logger := newScavenger()
 	opts := []archmage.Option{
-		archmage.WithLogger(logger),
+		archmage.WithLogger(newScavenger()),
+		archmage.WithBlacklist([]string{"prop_floats"}),
 	}
 
 	var err error
@@ -114,22 +115,11 @@ func TestAtlas_WithAtlasModifier(t *testing.T) {
 		delete(atlasJSON.Unique, "matrix2")
 		delete(atlasJSON.Single, "game")
 	}
-	notFound := func(key string, atlasItem *archmage.AtlasItem) error {
-		switch key {
-		case "character":
-		case "matrix2":
-		case "game":
-		default:
-			panic("unreachable")
-		}
-		return nil
-	}
 
-	logger := newScavenger()
 	opts := []archmage.Option{
-		archmage.WithLogger(logger),
+		archmage.WithLogger(newScavenger()),
 		archmage.WithAtlasModifier(atlasModifier),
-		archmage.WithNotFoundCallback(notFound),
+		archmage.WithBlacklist([]string{"character", "matrix2", "game"}),
 	}
 
 	atlas := conf.NewConfigAtlas()
@@ -138,34 +128,12 @@ func TestAtlas_WithAtlasModifier(t *testing.T) {
 		t.Fatal(err)
 	}
 	checkSaveAtlas(t, atlas, "golden/atlas_modifier")
-
-	if !slices.ContainsFunc(logger.Lines, func(line string) bool {
-		return line == "WRN <archmage> cannot find $.unique['character'] in testdata/atlas.json"
-	}) {
-		t.Fatalf("expected warning log not found")
-	}
-	if !slices.ContainsFunc(logger.Lines, func(line string) bool {
-		return line == "WRN <archmage> cannot find $.single['game']['/'] in testdata/atlas.json"
-	}) {
-		t.Fatalf("expected warning log not found")
-	}
-
-	var cnt int
-	for _, line := range logger.Lines {
-		if strings.HasPrefix(line, "WRN") {
-			cnt++
-		}
-	}
-	if cnt != 3 {
-		t.Fatalf("expected 3 warning log, got %d", cnt)
-	}
 }
 
 func TestAtlas_WithWhitelist(t *testing.T) {
-	logger := newScavenger()
 	opts := []archmage.Option{
-		archmage.WithLogger(logger),
-		archmage.WithWhitelist([]string{"Item", "game", "prop_floats", "weapon-rune"}),
+		archmage.WithLogger(newScavenger()),
+		archmage.WithWhitelist([]string{"Item", "game", "weapon-rune"}),
 	}
 
 	atlas := conf.NewConfigAtlas()
@@ -174,22 +142,11 @@ func TestAtlas_WithWhitelist(t *testing.T) {
 		t.Fatal(err)
 	}
 	checkSaveAtlas(t, atlas, "golden/whitelist")
-
-	var cnt int
-	for _, line := range logger.Lines {
-		if strings.HasPrefix(line, "WRN") {
-			cnt++
-		}
-	}
-	if cnt != 1 {
-		t.Fatalf("expected 1 warning log, got %d", cnt)
-	}
 }
 
 func TestAtlas_WithWhitelist_Error(t *testing.T) {
-	logger := newScavenger()
 	opts := []archmage.Option{
-		archmage.WithLogger(logger),
+		archmage.WithLogger(newScavenger()),
 		archmage.WithWhitelist([]string{"Item", "prop_float"}),
 	}
 
@@ -204,9 +161,8 @@ func TestAtlas_WithWhitelist_Error(t *testing.T) {
 }
 
 func TestAtlas_WithBlacklist(t *testing.T) {
-	logger := newScavenger()
 	opts := []archmage.Option{
-		archmage.WithLogger(logger),
+		archmage.WithLogger(newScavenger()),
 		archmage.WithBlacklist([]string{"game", "prop_floats", "character"}),
 	}
 
@@ -216,22 +172,11 @@ func TestAtlas_WithBlacklist(t *testing.T) {
 		t.Fatal(err)
 	}
 	checkSaveAtlas(t, atlas, "golden/blacklist")
-
-	var cnt int
-	for _, line := range logger.Lines {
-		if strings.HasPrefix(line, "WRN") {
-			cnt++
-		}
-	}
-	if cnt != 0 {
-		t.Fatalf("expected 1 warning log, got %d", cnt)
-	}
 }
 
 func TestAtlas_WithBlacklist_Error(t *testing.T) {
-	logger := newScavenger()
 	opts := []archmage.Option{
-		archmage.WithLogger(logger),
+		archmage.WithLogger(newScavenger()),
 		archmage.WithBlacklist([]string{"gm"}),
 	}
 
@@ -246,9 +191,9 @@ func TestAtlas_WithBlacklist_Error(t *testing.T) {
 }
 
 func TestAtlas_WithOverrideRoot(t *testing.T) {
-	logger := newScavenger()
 	opts := []archmage.Option{
-		archmage.WithLogger(logger),
+		archmage.WithLogger(newScavenger()),
+		archmage.WithBlacklist([]string{"prop_floats"}),
 		archmage.WithOverrideRoot("override/1"),
 		archmage.WithOverrideRoot("override/2"),
 	}
@@ -262,9 +207,8 @@ func TestAtlas_WithOverrideRoot(t *testing.T) {
 }
 
 func TestAtlas_WithOverrideRoot_Error1(t *testing.T) {
-	logger := newScavenger()
 	opts := []archmage.Option{
-		archmage.WithLogger(logger),
+		archmage.WithLogger(newScavenger()),
 		archmage.WithOverrideRoot("override/9"),
 	}
 
@@ -279,9 +223,8 @@ func TestAtlas_WithOverrideRoot_Error1(t *testing.T) {
 }
 
 func TestAtlas_WithOverrideRoot_Error2(t *testing.T) {
-	logger := newScavenger()
 	opts := []archmage.Option{
-		archmage.WithLogger(logger),
+		archmage.WithLogger(newScavenger()),
 		archmage.WithOverrideRoot("override/1/game.json"),
 	}
 
@@ -304,9 +247,8 @@ func TestAtlas_WithOverrideFS(t *testing.T) {
 		Data: []byte(`{"200":{"name":"Power Word: Shield"}}`),
 	}
 
-	logger := newScavenger()
 	opts := []archmage.Option{
-		archmage.WithLogger(logger),
+		archmage.WithLogger(newScavenger()),
 		archmage.WithWhitelist([]string{"game", "Magic", "weapon-rune"}),
 		archmage.WithOverrideRoot("override/2"),
 		archmage.WithOverrideFS(fsys),
@@ -329,9 +271,9 @@ func TestAtlas_WithOverrideRootAndFS(t *testing.T) {
 		Data: []byte(`{"1201":{"price":2050,"dps":2}}`),
 	}
 
-	logger := newScavenger()
 	opts := []archmage.Option{
-		archmage.WithLogger(logger),
+		archmage.WithLogger(newScavenger()),
+		archmage.WithBlacklist([]string{"prop_floats"}),
 		archmage.WithOverrideRoot("override/1"),
 		archmage.WithOverrideRoot("override/2"),
 		archmage.WithOverrideFS(fsys),
@@ -365,9 +307,9 @@ func TestAtlas_WithCustomLoader(t *testing.T) {
 		}
 		return eg.Wait()
 	}
-	logger := newScavenger()
 	opts := []archmage.Option{
-		archmage.WithLogger(logger),
+		archmage.WithLogger(newScavenger()),
+		archmage.WithBlacklist([]string{"prop_floats"}),
 		archmage.WithCustomLoader(customLoader),
 	}
 
@@ -377,57 +319,20 @@ func TestAtlas_WithCustomLoader(t *testing.T) {
 		t.Fatal(err)
 	}
 	checkSaveAtlas(t, atlas, "golden/custom_loader")
-
-	if !slices.ContainsFunc(logger.Lines, func(line string) bool {
-		return line == "WRN <archmage> cannot find $.single['prop_floats']['/'] in testdata/atlas.json"
-	}) {
-		t.Fatalf("expected warning log not found")
-	}
-
-	var cnt int
-	for _, line := range logger.Lines {
-		if strings.HasPrefix(line, "WRN") {
-			cnt++
-		}
-	}
-	if cnt != 1 {
-		t.Fatalf("expected 1 warning log, got %d", cnt)
-	}
 }
 
 func TestAtlas_NotFoundCallback(t *testing.T) {
 	atlas := conf.NewConfigAtlas()
-	notFound := func(key string, atlasItem *archmage.AtlasItem) error {
-		switch key {
-		case "prop_floats":
-			atlas.PropFloatsCfg.C = 100
-			atlasItem.Ready = true
-		default:
-			panic("unreachable")
-		}
-		return nil
-	}
-
-	logger := newScavenger()
 	opts := []archmage.Option{
-		archmage.WithLogger(logger),
-		archmage.WithNotFoundCallback(notFound),
+		archmage.WithLogger(newScavenger()),
 	}
 
 	err := archmage.LoadAtlas("testdata/atlas.json", "testdata", atlas, opts...)
-	if err != nil {
-		t.Fatal(err)
+	if err == nil {
+		t.Fatal("expected error, got nil")
 	}
-	checkSaveAtlas(t, atlas, "golden/not_found")
-
-	var cnt int
-	for _, line := range logger.Lines {
-		if strings.HasPrefix(line, "WRN") {
-			cnt++
-		}
-	}
-	if cnt != 0 {
-		t.Fatalf("expected 0 warning log, got %d", cnt)
+	if err.Error() != `<archmage> cannot find $.single['prop_floats']['/'] in testdata/atlas.json` {
+		t.Fatalf("unexpected error, got %s", err)
 	}
 }
 
@@ -461,27 +366,6 @@ func TestAtlas_ConfigFileNotFound(t *testing.T) {
 	)
 	if err == nil {
 		t.Fatal("expected error, got nil")
-	}
-}
-
-func TestAtlas_NotFoundCallback_Error(t *testing.T) {
-	expectedErr := errors.New("not found error")
-	notFound := func(key string, atlasItem *archmage.AtlasItem) error {
-		if key == "prop_floats" {
-			return expectedErr
-		}
-		return nil
-	}
-	atlas := conf.NewConfigAtlas()
-	err := archmage.LoadAtlas("testdata/atlas.json", "testdata", atlas,
-		archmage.WithLogger(newScavenger()),
-		archmage.WithNotFoundCallback(notFound),
-	)
-	if err == nil {
-		t.Fatal("expected error, got nil")
-	}
-	if !errors.Is(err, expectedErr) {
-		t.Fatalf("expected %v, got %v", expectedErr, err)
 	}
 }
 

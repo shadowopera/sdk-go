@@ -20,10 +20,3 @@ func (scv *scavenger) Infof(format string, args ...any) {
 	defer scv.mu.Unlock()
 	scv.Lines = append(scv.Lines, fmt.Sprintf(format, args...))
 }
-
-func (scv *scavenger) Warnf(format string, args ...any) {
-	format = "WRN " + format
-	scv.mu.Lock()
-	defer scv.mu.Unlock()
-	scv.Lines = append(scv.Lines, fmt.Sprintf(format, args...))
-}
