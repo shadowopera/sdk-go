@@ -32,6 +32,11 @@ func DumpAtlas(atlas Atlas, outputDir string, opts ...json.Options) error {
 	return nil
 }
 
+// BuildMarshalOptions returns the default JSON marshal options used by
+// DumpAtlas, with tab indentation, deterministic key order, nil maps/slices
+// rendered as null, zero-value Vec pointers rendered as null, and zero
+// time.Time values rendered as null. Callers may append extra options, which
+// take precedence over the defaults.
 func BuildMarshalOptions(opts ...json.Options) []json.Options {
 	return append([]json.Options{
 		jsontext.WithIndent("\t"),

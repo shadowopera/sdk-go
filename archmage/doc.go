@@ -1,20 +1,19 @@
-// Package archmage provides a system for loading and managing configurations
-// from JSON files with support for internationalization, references, durations,
-// and layered overrides.
+// Package archmage provides a system for loading and managing game
+// configurations from JSON files with support for internationalization,
+// cross-table references, and layered overrides.
 //
-// The core component is the Atlas system, which loads configuration items from
-// an index file and populates them from JSON files. It supports three mapping
-// strategies: unique (one-to-one), single (variant-based), and multiple
-// (multi-file merging). Configuration overrides can be applied from additional
-// directories or file systems.
+// The core component is Atlas, a registry of configuration tables.
+// Each table key maps to its JSON files in an index file, atlas.json.
+// It supports three mapping strategies: unique (one-to-one), single (one from
+// a set), and multiple (multi-file merging).
 //
 // Key features include:
-//   - Atlas-based configuration loading with flexible mapping strategies
 //   - I18n for multi-language text management with automatic fallbacks
-//   - Ref type for deferred reference resolution between config items
+//   - Ref type for cross-table reference resolution via Atlas.BindRefs
 //   - Duration type with compact JSON array format and unit optimization
-//   - Vector types (Vec2, Vec3, Vec4) with JSON array serialization
-//   - Tuple types (Tuple1-7) for grouping mixed-type elements
+//   - Whitelist / blacklist to load only a subset of configurations
+//   - Layered overrides: additional directories or filesystems supply JSON that
+//     is merged into the base data at load time, field by field
 //
 // Example usage:
 //

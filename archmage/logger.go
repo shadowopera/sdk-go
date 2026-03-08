@@ -6,7 +6,9 @@ import (
 
 // Logger provides formatted logging methods with info and warning levels.
 type Logger interface {
+	// Infof logs an info-level message using a printf-style format string.
 	Infof(format string, args ...any)
+	// Warnf logs a warning-level message using a printf-style format string.
 	Warnf(format string, args ...any)
 }
 

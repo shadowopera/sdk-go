@@ -5,12 +5,13 @@ import (
 	"encoding/json/v2"
 )
 
-// Ref stores a raw value and a resolved reference.
-// It marshals only RawValue to JSON.
+// Ref pairs a table entry ID with a typed pointer to the referenced table entry.
+// Only RawValue is marshaled to JSON; Ref is populated by Atlas.BindRefs
+// after all atlas items are loaded.
 type Ref[V int | int32 | int64 | string, T any] struct {
-	// RawValue is the original unresolved value.
+	// RawValue is the ID of the referenced table entry.
 	RawValue V
-	// Ref is the resolved reference, not included in JSON.
+	// Ref is the resolved pointer, populated by Atlas.BindRefs.
 	Ref *T `json:"-"`
 }
 

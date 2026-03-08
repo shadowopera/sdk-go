@@ -18,39 +18,49 @@ import (
 const (
 	// MappingUnique indicates one-to-one mapping between key and file.
 	MappingUnique = "unique"
-	// MappingSingle indicates a key maps to a single variant file.
+	// MappingSingle indicates that a key maps to a single file from a set of files.
 	MappingSingle = "single"
-	// MappingMultiple indicates a key maps to multiple files.
+	// MappingMultiple indicates that a key maps to multiple files loaded and merged as one.
 	MappingMultiple = "multiple"
 )
 
-// Atlas represents a collection of configuration items that can be loaded
-// from JSON files and bound to references after loading.
+// Atlas is the interface a configuration collection must implement to be
+// loaded by LoadAtlas.
 type Atlas interface {
+	// SetDataVersion stores the version metadata from atlas.json.
 	SetDataVersion(v *VersionInfo)
+	// AtlasItems returns all registered items.
 	AtlasItems() map[string]*AtlasItem
+	// BindRefs resolves cross-table references after all items are loaded.
 	BindRefs()
+	// OnLoaded is called once after all items are loaded and refs are bound.
+	// Returning an error aborts the load.
 	OnLoaded() error
 }
 
-// AtlasItem represents a single configuration item in the atlas.
-// The Cfg field holds the unmarshaled configuration data, and Ready
-// indicates whether the item has been successfully loaded.
+// AtlasItem represents a single configuration item within an Atlas.
 type AtlasItem struct {
-	Cfg     any
+	// Cfg is a pointer to the configuration struct that receives unmarshaled data.
+	Cfg any
+	// Mapping specifies how this item maps to files (MappingUnique,
+	// MappingSingle, or MappingMultiple).
 	Mapping string
-	Key     string
-	Ready   bool
+	// Key is the item's key in atlas.json.
+	Key string
+	// Ready reports whether the item was successfully loaded.
+	Ready bool
 }
 
-// AtlasJSON defines the structure of the atlas index file.
-// It maps configuration keys to their corresponding file paths using three
-// different mapping strategies: unique, single, and multiple.
+// AtlasJSON defines the structure of atlas.json.
 type AtlasJSON struct {
-	Version  *VersionInfo                 `json:"version"`
-	Unique   map[string]string            `json:"unique"`
-	Single   map[string]map[string]string `json:"single"`
-	Multiple map[string][]string          `json:"multiple"`
+	// Version holds the VCS version metadata.
+	Version *VersionInfo `json:"version"`
+	// Unique maps each key to a single file path (one-to-one).
+	Unique map[string]string `json:"unique"`
+	// Single maps each key to a variant map, where "/" denotes the default.
+	Single map[string]map[string]string `json:"single"`
+	// Multiple maps each key to an ordered list of files to merge.
+	Multiple map[string][]string `json:"multiple"`
 }
 
 func (atlas *AtlasJSON) pickSingle(key string) (string, bool) {
@@ -64,9 +74,9 @@ func (atlas *AtlasJSON) pickSingle(key string) (string, bool) {
 	return "", false
 }
 
-// LoadAtlas loads configuration items from an atlas index file and populates
-// the provided Atlas with data from JSON files in cfgRoot. It applies any
-// override configurations before calling BindRefs on the atlas.
+// LoadAtlas reads atlasFile, loads each configuration item from cfgRoot,
+// applies any overrides, calls BindRefs to resolve cross-table references,
+// and finally calls OnLoaded on the atlas.
 func LoadAtlas(atlasFile string, cfgRoot string, atlas Atlas, opts ...Option) error {
 	atlasOpts := newAtlasOptions()
 	atlasOpts.readFile = func(name string) ([]byte, error) {
@@ -339,7 +349,7 @@ func WithLogger(logger Logger) Option {
 }
 
 // WithAtlasModifier registers a callback to modify the atlas JSON data
-// after it's loaded but before processing items.
+// after it's loaded but before item processing takes place.
 //
 // Example:
 //
@@ -353,7 +363,7 @@ func WithAtlasModifier(cb func(atlasJSON *AtlasJSON)) Option {
 	}
 }
 
-// WithWhitelist restricts loading to only the specified item keys.
+// WithWhitelist restricts loading to only the specified items by their keys.
 //
 // Example:
 //
@@ -365,8 +375,8 @@ func WithWhitelist(whitelist []string) Option {
 	}
 }
 
-// WithBlacklist prevents loading of the specified item keys.
-// If a whitelist is also specified, the blacklist will be ignored.
+// WithBlacklist prevents loading of the specified items by their keys.
+// If a whitelist is also specified, the blacklist is ignored.
 //
 // Example:
 //
@@ -412,7 +422,7 @@ func WithOverrideFS(fsys fs.FS) Option {
 type AtlasItemLoadFunc func(ctx context.Context, key string, item *AtlasItem) error
 
 // WithCustomLoader replaces the default sequential loader with a custom
-// implementation, allowing for parallel or specialized loading strategies.
+// implementation, allowing for parallel loading or other custom strategies.
 //
 // Example:
 //
@@ -432,7 +442,7 @@ func WithCustomLoader(loader func(all iter.Seq2[string, *AtlasItem], load AtlasI
 }
 
 // WithNotFoundCallback registers a callback invoked when a configuration
-// file isn't found for an item key.
+// file is not found for an item key.
 // The callback can set item.Ready to suppress the not-found warning.
 //
 // Example:

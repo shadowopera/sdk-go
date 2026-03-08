@@ -25,7 +25,8 @@ type Duration struct {
 	time.Duration
 }
 
-// MarshalJSONTo encodes Duration as a JSON array of integers.
+// MarshalJSONTo encodes Duration as a compact JSON integer array,
+// or null if the duration is zero.
 func (d *Duration) MarshalJSONTo(enc *jsontext.Encoder) error {
 	var a []int64
 	r := ShardDuration(d.Duration)

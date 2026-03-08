@@ -65,7 +65,8 @@ func (i18n *I18n) MergeL10nFile(path string, lang language.Tag) error {
 }
 
 // GetText returns the translation for key in the specified language.
-// It falls back to the default language if the key isn't found.
+// It falls back to the fallback language if the key isn't found there.
+// It returns an error if the key is missing in both languages.
 func (i18n *I18n) GetText(key string, lang language.Tag) (string, error) {
 	if m, ok := i18n.texts[lang]; ok {
 		if v, ok := m[key]; ok {
@@ -81,7 +82,8 @@ func (i18n *I18n) GetText(key string, lang language.Tag) (string, error) {
 	return "", fmt.Errorf("i18n: text not found. key: %q, lang: %s", key, lang.String())
 }
 
-// Text returns the translation for key or panics if not found.
+// Text returns the translation for key in the specified language, with the
+// same fallback behavior as GetText, or panics if not found.
 func (i18n *I18n) Text(key string, lang language.Tag) string {
 	x, err := i18n.GetText(key, lang)
 	if err != nil {
