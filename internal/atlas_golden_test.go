@@ -11,7 +11,7 @@ import (
 )
 
 var (
-	update = flag.Bool("update", false, "update golden files")
+	_update = flag.Bool("update", false, "update golden files")
 )
 
 // checkUpdateGoldenFiles serializes all ready atlas items and either writes them to
@@ -26,7 +26,7 @@ func checkUpdateGoldenFiles(t *testing.T, atlas archmage.Atlas, goldenDir string
 				t.Fatalf("marshal %s: %v", k, err)
 			}
 			p := filepath.Join(goldenDir, k+".json")
-			if *update {
+			if *_update {
 				if err := os.MkdirAll(filepath.Dir(p), 0755); err != nil {
 					t.Fatalf("mkdir %s: %v", filepath.Dir(p), err)
 				}

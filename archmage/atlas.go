@@ -79,9 +79,6 @@ func (atlas *AtlasJSON) pickSingle(key string) (string, bool) {
 // and finally calls OnLoaded on the atlas.
 func LoadAtlas(atlasFile string, cfgRoot string, atlas Atlas, opts ...Option) error {
 	atlasOpts := newAtlasOptions()
-	atlasOpts.readFile = func(name string) ([]byte, error) {
-		return os.ReadFile(name)
-	}
 	atlasOpts.customLoader = func(seq iter.Seq2[string, *AtlasItem], itemLoadFunc AtlasItemLoadFunc) error {
 		for key, item := range seq {
 			err := itemLoadFunc(context.Background(), key, item)
@@ -117,7 +114,7 @@ func loadAtlasImpl(atlasFile string, cfgRoot string, atlas Atlas, opts *atlasOpt
 		}
 	}
 
-	atlasData, err := opts.readFile(atlasFile)
+	atlasData, err := os.ReadFile(atlasFile)
 	if err != nil {
 		return err
 	}
@@ -147,7 +144,7 @@ func loadAtlasImpl(atlasFile string, cfgRoot string, atlas Atlas, opts *atlasOpt
 	filtered := slices.DeleteFunc(keys, func(k string) bool {
 		cause, yes := opts.shouldSkip(k)
 		if yes {
-			opts.Infof("<archmage> skipping atlas item: %s. cause: %s", k, cause)
+			opts.Info(fmt.Sprintf("<archmage> skipping atlas item: %s. cause: %s", k, cause))
 		}
 		return yes
 	})
@@ -239,11 +236,11 @@ func loadItem(ctx context.Context, key string, item *AtlasItem,
 
 	for i, f := range files {
 		filePath := filepath.Join(cfgRoot, f)
-		fileData, err := opts.readFile(filePath)
+		data, err := os.ReadFile(filePath)
 		if err != nil {
 			return err
 		}
-		err = json.Unmarshal(fileData, item.Cfg)
+		err = json.Unmarshal(data, item.Cfg)
 		if err != nil {
 			return fmt.Errorf("<archmage> invalid %q | %w", f, err)
 		}
@@ -277,7 +274,7 @@ func loadItem(ctx context.Context, key string, item *AtlasItem,
 		supplement = fmt.Sprintf(" with %d overrides", len(fd.overrides))
 	}
 	elapsed := time.Since(start).Milliseconds()
-	opts.Infof("<archmage> loaded (%s) %s%s (%dms)", item.Mapping, fd.paths, supplement, elapsed)
+	opts.Info(fmt.Sprintf("<archmage> loaded (%s) %s%s (%dms)", item.Mapping, fd.paths, supplement, elapsed))
 	item.Ready = true
 	return nil
 }
@@ -312,8 +309,6 @@ type atlasOptions struct {
 
 	whitelist []string
 	blacklist []string
-
-	readFile func(name string) ([]byte, error)
 }
 
 func newAtlasOptions() *atlasOptions {

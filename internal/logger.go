@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"fmt"
 	"sync"
 )
 
@@ -14,9 +13,9 @@ func newScavenger() *scavenger {
 	return &scavenger{}
 }
 
-func (scv *scavenger) Infof(format string, args ...any) {
-	format = "INF " + format
+func (scv *scavenger) Info(msg string) {
+	msg = "INF " + msg
 	scv.mu.Lock()
 	defer scv.mu.Unlock()
-	scv.Lines = append(scv.Lines, fmt.Sprintf(format, args...))
+	scv.Lines = append(scv.Lines, msg)
 }
