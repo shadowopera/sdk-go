@@ -12,13 +12,13 @@ import (
 )
 
 var (
-	save = flag.Bool("save", false, "update golden files")
+	update = flag.Bool("update", false, "update golden files")
 )
 
-// checkSaveAtlas serializes all ready atlas items and either writes them to
-// disk (when -save is set) or compares them byte-for-byte with existing
+// checkUpdateGoldenFiles serializes all ready atlas items and either writes them to
+// disk (when -update is set) or compares them byte-for-byte with existing
 // golden files.
-func checkSaveAtlas(t *testing.T, atlas archmage.Atlas, goldenDir string) {
+func checkUpdateGoldenFiles(t *testing.T, atlas archmage.Atlas, goldenDir string) {
 	t.Helper()
 	for k, item := range atlas.AtlasItems() {
 		if item.Ready {
@@ -28,7 +28,7 @@ func checkSaveAtlas(t *testing.T, atlas archmage.Atlas, goldenDir string) {
 			}
 			data = append(data, '\n')
 			p := filepath.Join(goldenDir, k+".json")
-			if *save {
+			if *update {
 				if err := os.MkdirAll(filepath.Dir(p), 0755); err != nil {
 					t.Fatalf("mkdir %s: %v", filepath.Dir(p), err)
 				}
@@ -39,7 +39,7 @@ func checkSaveAtlas(t *testing.T, atlas archmage.Atlas, goldenDir string) {
 			} else {
 				want, err := os.ReadFile(p)
 				if err != nil {
-					t.Fatalf("read golden %s: %v (run with -save to create it)", p, err)
+					t.Fatalf("read golden %s: %v (run with -update to create it)", p, err)
 				}
 				if !bytes.Equal(data, want) {
 					t.Errorf("golden mismatch for %s\ngot:\n%s\nwant:\n%s", k, data, want)

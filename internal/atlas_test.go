@@ -38,7 +38,7 @@ func TestAtlas_Basic(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	checkSaveAtlas(t, atlas, "golden/basic")
+	checkUpdateGoldenFiles(t, atlas, "golden/basic")
 
 	if atlas.GameCfg.XL10n.Text(en) != "it is a good day" {
 		t.Fatalf("unexpected l10n en value: %s", atlas.GameCfg.XL10n.Text(en))
@@ -127,7 +127,7 @@ func TestAtlas_WithAtlasModifier(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	checkSaveAtlas(t, atlas, "golden/atlas_modifier")
+	checkUpdateGoldenFiles(t, atlas, "golden/atlas_modifier")
 }
 
 func TestAtlas_WithWhitelist(t *testing.T) {
@@ -141,7 +141,7 @@ func TestAtlas_WithWhitelist(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	checkSaveAtlas(t, atlas, "golden/whitelist")
+	checkUpdateGoldenFiles(t, atlas, "golden/whitelist")
 }
 
 func TestAtlas_WithWhitelist_Error(t *testing.T) {
@@ -171,7 +171,7 @@ func TestAtlas_WithBlacklist(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	checkSaveAtlas(t, atlas, "golden/blacklist")
+	checkUpdateGoldenFiles(t, atlas, "golden/blacklist")
 }
 
 func TestAtlas_WithBlacklist_Error(t *testing.T) {
@@ -203,7 +203,7 @@ func TestAtlas_WithOverrideRoot(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	checkSaveAtlas(t, atlas, "golden/override_root")
+	checkUpdateGoldenFiles(t, atlas, "golden/override_root")
 }
 
 func TestAtlas_WithOverrideRoot_Error1(t *testing.T) {
@@ -259,7 +259,7 @@ func TestAtlas_WithOverrideFS(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	checkSaveAtlas(t, atlas, "golden/override_fs")
+	checkUpdateGoldenFiles(t, atlas, "golden/override_fs")
 }
 
 func TestAtlas_WithOverrideRootAndFS(t *testing.T) {
@@ -284,7 +284,7 @@ func TestAtlas_WithOverrideRootAndFS(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	checkSaveAtlas(t, atlas, "golden/override_root_and_fs")
+	checkUpdateGoldenFiles(t, atlas, "golden/override_root_and_fs")
 }
 
 func TestAtlas_WithCustomLoader(t *testing.T) {
@@ -318,7 +318,7 @@ func TestAtlas_WithCustomLoader(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	checkSaveAtlas(t, atlas, "golden/custom_loader")
+	checkUpdateGoldenFiles(t, atlas, "golden/custom_loader")
 }
 
 func TestAtlas_NotFoundCallback(t *testing.T) {
