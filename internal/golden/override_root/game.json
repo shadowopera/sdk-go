@@ -1,22 +1,19 @@
 {
-	"x-int": 1000,
-	"x-int32": 1320,
-	"x-float64": 13.14,
-	"x-string": "hello world",
-	"x-bool": false,
-	"x-duration": [
-		1,
-		3600
-	],
-	"x-path": "x/y/z.bin",
-	"x-datetime": "0900-01-01T15:30:00+08:00",
-	"x-ref": 1,
-	"x-l10n": "l10n.xlsx[menu.start]",
 	"x-array1": null,
 	"x-array2": [
 		2,
 		3
 	],
+	"x-bool": false,
+	"x-datetime": "0900-01-01T15:30:00+08:00",
+	"x-duration": [
+		1,
+		3600
+	],
+	"x-float64": 13.14,
+	"x-int": 1000,
+	"x-int32": 1320,
+	"x-l10n": "l10n.xlsx[menu.start]",
 	"x-map": {
 		"8": "foo",
 		"9": "bar"
@@ -25,6 +22,9 @@
 		"fieldX": 100,
 		"fieldY": "bar"
 	},
+	"x-path": "x/y/z.bin",
+	"x-ref": 1,
+	"x-string": "hello world",
 	"x-tuple": {
 		"item0": 100,
 		"item1": 12.5,

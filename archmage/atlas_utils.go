@@ -11,10 +11,9 @@ import (
 // DumpAtlas writes all loaded atlas items to JSON files in outputDir.
 // Each item is written to a separate file named <key>.json.
 func DumpAtlas(atlas Atlas, outputDir string, opts ...json.Options) error {
-	opts = BuildMarshalOptions(opts...)
 	for k, item := range atlas.AtlasItems() {
 		if item.Ready {
-			data, err := json.Marshal(item.Cfg, opts...)
+			data, err := Canonicalize(item.Cfg, opts...)
 			if err != nil {
 				return err
 			}
@@ -22,7 +21,6 @@ func DumpAtlas(atlas Atlas, outputDir string, opts ...json.Options) error {
 			if err := os.MkdirAll(filepath.Dir(p), 0755); err != nil {
 				return err
 			}
-			data = append(data, '\n')
 			if err := os.WriteFile(p, data, 0644); err != nil {
 				return err
 			}
@@ -32,15 +30,29 @@ func DumpAtlas(atlas Atlas, outputDir string, opts ...json.Options) error {
 	return nil
 }
 
-// BuildMarshalOptions returns the default JSON marshal options used by
-// DumpAtlas, with tab indentation, deterministic key order, nil maps/slices
-// rendered as null, zero-value Vec pointers rendered as null, and zero
-// time.Time values rendered as null. Callers may append extra options, which
-// take precedence over the defaults.
-func BuildMarshalOptions(opts ...json.Options) []json.Options {
+// Canonicalize marshals obj to indented, canonical JSON.
+// It applies archmage's standard marshal options (nil maps/slices as null,
+// zero time.Time and zero Vec pointers as null), then sorts object keys and
+// indents the output. Additional opts are appended after the defaults.
+// Returns the formatted JSON bytes or an error.
+func Canonicalize(obj any, opts ...json.Options) ([]byte, error) {
+	data, err := json.Marshal(obj, getMarshalOptions(opts)...)
+	if err != nil {
+		return nil, err
+	}
+	jsonValue := jsontext.Value(data)
+	if err := jsonValue.Canonicalize(jsontext.CanonicalizeRawInts(false)); err != nil {
+		return nil, err
+	}
+	if err := jsonValue.Indent(); err != nil {
+		return nil, err
+	}
+	data = append(jsonValue, '\n')
+	return data, nil
+}
+
+func getMarshalOptions(opts []json.Options) []json.Options {
 	return append([]json.Options{
-		jsontext.WithIndent("\t"),
-		json.Deterministic(true),
 		json.FormatNilMapAsNull(true),
 		json.FormatNilSliceAsNull(true),
 		json.WithMarshalers(json.JoinMarshalers(

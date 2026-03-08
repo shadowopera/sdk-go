@@ -1,18 +1,18 @@
 [
 	{
+		"attack": 28.5,
+		"health": 100,
 		"id": "char_003",
+		"isPlayable": true,
 		"name": "characters[2].name",
 		"race": "",
-		"health": 100,
-		"attack": 28.5,
-		"isPlayable": true,
+		"ref-crude": null,
+		"runes": null,
 		"skills": [
 			"arrow_shot",
 			"multi_shot",
 			"stealth"
 		],
-		"runes": null,
-		"ultimateSkill": 0,
-		"ref-crude": null
+		"ultimateSkill": 0
 	}
 ]

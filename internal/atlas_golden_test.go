@@ -2,7 +2,6 @@ package internal
 
 import (
 	"bytes"
-	"encoding/json/v2"
 	"flag"
 	"os"
 	"path/filepath"
@@ -22,11 +21,10 @@ func checkUpdateGoldenFiles(t *testing.T, atlas archmage.Atlas, goldenDir string
 	t.Helper()
 	for k, item := range atlas.AtlasItems() {
 		if item.Ready {
-			data, err := json.Marshal(item.Cfg, archmage.BuildMarshalOptions()...)
+			data, err := archmage.Canonicalize(item.Cfg)
 			if err != nil {
 				t.Fatalf("marshal %s: %v", k, err)
 			}
-			data = append(data, '\n')
 			p := filepath.Join(goldenDir, k+".json")
 			if *update {
 				if err := os.MkdirAll(filepath.Dir(p), 0755); err != nil {

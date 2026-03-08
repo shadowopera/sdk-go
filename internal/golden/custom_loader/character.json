@@ -1,72 +1,72 @@
 [
 	{
+		"attack": 25.5,
+		"health": 120,
 		"id": "char_001",
+		"isPlayable": true,
 		"name": "character[0].name",
 		"race": "Human",
-		"health": 120,
-		"attack": 25.5,
-		"isPlayable": true,
+		"ref-crude": null,
+		"runes": null,
 		"skills": [
 			"slash",
 			"block",
 			"charge"
 		],
-		"runes": null,
-		"ultimateSkill": 1,
-		"ref-crude": null
+		"ultimateSkill": 1
 	},
 	{
+		"attack": 35,
+		"health": 80,
 		"id": "char_002",
+		"isPlayable": true,
 		"name": "character[1].name",
 		"race": "",
-		"health": 80,
-		"attack": 35,
-		"isPlayable": true,
+		"ref-crude": null,
+		"runes": [
+			1,
+			3
+		],
 		"skills": [
 			"fireball",
 			"heal",
 			"teleport"
 		],
-		"runes": [
-			1,
-			3
-		],
-		"ultimateSkill": 2,
-		"ref-crude": null
+		"ultimateSkill": 2
 	},
 	{
+		"attack": 28.5,
+		"health": 100,
 		"id": "char_003",
+		"isPlayable": true,
 		"name": "character[2].name",
 		"race": "",
-		"health": 100,
-		"attack": 28.5,
-		"isPlayable": true,
+		"ref-crude": null,
+		"runes": null,
 		"skills": [
 			"arrow_shot",
 			"multi_shot",
 			"stealth"
 		],
-		"runes": null,
-		"ultimateSkill": 3,
-		"ref-crude": null
+		"ultimateSkill": 3
 	},
 	{
+		"attack": 45,
+		"health": 500,
 		"id": "char_004",
+		"isPlayable": false,
 		"name": "character[3].name",
 		"race": "",
-		"health": 500,
-		"attack": 45,
-		"isPlayable": false,
+		"ref-crude": {
+			"r1": 1,
+			"r2": "Human"
+		},
+		"runes": null,
 		"skills": [
 			"flame_breath",
 			"fly",
 			"roar"
 		],
-		"runes": null,
-		"ultimateSkill": 102,
-		"ref-crude": {
-			"r1": 1,
-			"r2": "Human"
-		}
+		"ultimateSkill": 102
 	}
 ]

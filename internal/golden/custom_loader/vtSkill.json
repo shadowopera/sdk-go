@@ -1,7 +1,5 @@
 {
 	"1": {
-		"name": "Fireball",
-		"class": "Mage",
 		"Foo": {
 			"10": {
 				"X1": "X1-1",
@@ -12,12 +10,12 @@
 				"X5": 0
 			}
 		},
+		"class": "Mage",
+		"name": "Fireball",
 		"reagent": 1,
 		"weapons": null
 	},
 	"101": {
-		"name": "Arcane Mastery",
-		"class": "Mage",
 		"Foo": {
 			"10": {
 				"X1": "X1-1",
@@ -25,12 +23,12 @@
 				"X5": 100
 			}
 		},
+		"class": "Mage",
+		"name": "Arcane Mastery",
 		"reagent": 0,
 		"weapons": null
 	},
 	"102": {
-		"name": "Toughness",
-		"class": "Warrior",
 		"Foo": {
 			"20": {
 				"X1": "X1-2-1",
@@ -43,6 +41,8 @@
 				"X5": 201
 			}
 		},
+		"class": "Warrior",
+		"name": "Toughness",
 		"reagent": 0,
 		"weapons": [
 			1,
@@ -51,8 +51,6 @@
 		]
 	},
 	"103": {
-		"name": "Spiritual Guidance",
-		"class": "Priest",
 		"Foo": {
 			"30": {
 				"X1": "X1-3",
@@ -60,6 +58,8 @@
 				"X5": 300
 			}
 		},
+		"class": "Priest",
+		"name": "Spiritual Guidance",
 		"reagent": 0,
 		"weapons": [
 			1101,
@@ -67,8 +67,6 @@
 		]
 	},
 	"2": {
-		"name": "Cleave",
-		"class": "Warrior",
 		"Foo": {
 			"20": {
 				"X1": "X1-2-1",
@@ -84,12 +82,12 @@
 				"X5": 0
 			}
 		},
+		"class": "Warrior",
+		"name": "Cleave",
 		"reagent": 11,
 		"weapons": null
 	},
 	"3": {
-		"name": "Power Word",
-		"class": "Priest",
 		"Foo": {
 			"30": {
 				"X1": "X1-3",
@@ -100,6 +98,8 @@
 				"X5": 0
 			}
 		},
+		"class": "Priest",
+		"name": "Power Word",
 		"reagent": 1101,
 		"weapons": null
 	}

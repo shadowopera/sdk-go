@@ -8,15 +8,15 @@
 			"car": "x\ty"
 		},
 		"E": "a\\tb",
-		"def-validate": "x",
-		"def-postprocess": "end",
 		"I": "b",
 		"K": "",
-		"referer1": 2,
-		"referer2": 2,
+		"def-postprocess": "end",
+		"def-validate": "x",
 		"referer-n": [
 			2
-		]
+		],
+		"referer1": 2,
+		"referer2": 2
 	},
 	"foo": {
 		"B": {
@@ -27,15 +27,15 @@
 			"car": "hello2"
 		},
 		"E": "a\\tb",
-		"def-validate": "x",
-		"def-postprocess": "end",
 		"I": "a",
 		"K": "Halfling",
-		"referer1": 1,
-		"referer2": 1,
+		"def-postprocess": "end",
+		"def-validate": "x",
 		"referer-n": [
 			1
-		]
+		],
+		"referer1": 1,
+		"referer2": 1
 	},
 	"qux": {
 		"B": {
@@ -46,14 +46,14 @@
 			"car": ""
 		},
 		"E": "hello5",
-		"def-validate": "x",
-		"def-postprocess": "end",
 		"I": "c",
 		"K": "Dwarf",
-		"referer1": 2,
-		"referer2": 2,
+		"def-postprocess": "end",
+		"def-validate": "x",
 		"referer-n": [
 			2
-		]
+		],
+		"referer1": 2,
+		"referer2": 2
 	}
 }

@@ -1,23 +1,20 @@
 {
-	"x-int": 1000,
-	"x-int32": 1320,
-	"x-float64": 3.14,
-	"x-string": "foo bar",
-	"x-bool": false,
-	"x-duration": [
-		0,
-		3600
-	],
-	"x-path": "x/y/z.bin",
-	"x-datetime": "0001-01-02T15:30:00+08:00",
-	"x-ref": 3,
-	"x-l10n": "game.x-l10n",
 	"x-array1": [
 		1,
 		2,
 		3
 	],
 	"x-array2": null,
+	"x-bool": false,
+	"x-datetime": "0001-01-02T15:30:00+08:00",
+	"x-duration": [
+		0,
+		3600
+	],
+	"x-float64": 3.14,
+	"x-int": 1000,
+	"x-int32": 1320,
+	"x-l10n": "game.x-l10n",
 	"x-map": {
 		"7": "xxx",
 		"8": "foo",
@@ -27,6 +24,9 @@
 		"fieldX": 100,
 		"fieldY": "foo"
 	},
+	"x-path": "x/y/z.bin",
+	"x-ref": 3,
+	"x-string": "foo bar",
 	"x-tuple": {
 		"item0": 1,
 		"item1": 12.5,

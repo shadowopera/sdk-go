@@ -1,14 +1,14 @@
 {
 	"1": {
-		"runeName": "Shadowfang",
-		"power": 100
+		"power": 100,
+		"runeName": "Shadowfang"
 	},
 	"2": {
-		"runeName": "Frostbite",
-		"power": 200
+		"power": 200,
+		"runeName": "Frostbite"
 	},
 	"3": {
-		"runeName": "Emberstrike",
-		"power": 300
+		"power": 300,
+		"runeName": "Emberstrike"
 	}
 }
