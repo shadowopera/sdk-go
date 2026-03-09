@@ -38,7 +38,7 @@ type Atlas interface {
 	OnLoaded() error
 }
 
-// AtlasItem represents a single configuration item within an Atlas.
+// AtlasItem represents a configuration item within atlas.json.
 type AtlasItem struct {
 	// Cfg is a pointer to the configuration struct that receives unmarshaled data.
 	Cfg any
@@ -55,15 +55,15 @@ type AtlasItem struct {
 type AtlasJSON struct {
 	// Version holds the VCS version metadata.
 	Version *VersionInfo `json:"version"`
-	// Unique maps each key to a single file path (one-to-one).
+	// Unique maps each key to a unique file path (one-to-one).
 	Unique map[string]string `json:"unique"`
-	// Single maps each key to a variant map, where "/" denotes the default.
+	// Single maps each key to a set of candidate files, where "/" denotes the default.
 	Single map[string]map[string]string `json:"single"`
 	// Multiple maps each key to an ordered list of files to merge.
 	Multiple map[string][]string `json:"multiple"`
 }
 
-func (atlas *AtlasJSON) pickSingle(key string) (string, bool) {
+func (atlas *AtlasJSON) pickFromSingle(key string) (string, bool) {
 	m, ok := atlas.Single[key]
 	if ok {
 		f, ok := m["/"]
@@ -216,7 +216,7 @@ func loadItem(ctx context.Context, key string, item *AtlasItem,
 			keyPath = fmt.Sprintf("$.unique['%s']", key)
 		}
 	case MappingSingle:
-		if f, ok := atlasJSON.pickSingle(key); ok {
+		if f, ok := atlasJSON.pickFromSingle(key); ok {
 			files = []string{f}
 		} else {
 			keyPath = fmt.Sprintf("$.single['%s']['/']", key)
