@@ -2,6 +2,7 @@ package archmage
 
 import (
 	"fmt"
+	"os"
 )
 
 var (
@@ -16,5 +17,5 @@ type Logger interface {
 type defaultLogger struct{}
 
 func (l *defaultLogger) Info(msg string) {
-	fmt.Println("INF " + msg)
+	_, _ = fmt.Fprintf(os.Stderr, "INF %s\n", msg)
 }

@@ -30,6 +30,7 @@ cd archmage && bash coverage.sh
 ## Architecture
 
 **`archmage/`** — Public SDK package:
+
 - `atlas.go` — Core `Atlas` interface and `LoadAtlas` function. Three mapping strategies: Unique (1:1), Single (pick one from array), Multiple (merge arrays)
 - `ref.go` — Generic `Ref[V, T]` for cross-table lazy reference resolution
 - `duration.go` — Custom `Duration` type with compact JSON array format `[unitType, value]`

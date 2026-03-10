@@ -166,6 +166,11 @@ func loadAtlasImpl(atlasFile string, cfgRoot string, atlas Atlas, opts *atlasOpt
 	return nil
 }
 
+// loadItem loads a single atlas item from mapped files and applies any overrides.
+// Merge rules:
+//   - null → resets the target field to its default value or raises an error.
+//   - JSON object → recursively merges: only fields present in the input are updated, others remain unchanged.
+//   - Any other value → replaces the current value of the target field.
 func loadItem(ctx context.Context, key string, item *AtlasItem,
 	atlasJSON *AtlasJSON, atlasFile string, cfgRoot string, opts *atlasOptions,
 ) error {
