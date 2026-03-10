@@ -3,7 +3,7 @@
 
 package conf
 
-type Matrix2Table map[string]map[string][][]Ref[int, HeroCfg]
+type Matrix2Table map[string]map[string][][]XRef[int, HeroCfg]
 
 // region Trifles
 

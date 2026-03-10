@@ -6,16 +6,16 @@ package conf
 type CharacterArray []*CharacterCfg
 
 type CharacterCfg struct {
-	ID            string                    `json:"id"`
-	Name          L10n                      `json:"name"`   // name config
-	Race          Ref[string, RaceCfg]      `json:"race"`   // race config
-	Health        int                       `json:"health"` // health config
-	Attack        float64                   `json:"attack"`
-	IsPlayable    bool                      `json:"isPlayable"`
-	Skills        []string                  `json:"skills"`
-	Runes         []Ref[int, WeaponRuneCfg] `json:"runes"` // my runes
-	UltimateSkill int                       `json:"ultimateSkill"`
-	RefCrude      *character_RefCrude       `json:"ref-crude"`
+	ID            string                     `json:"id"`
+	Name          L10n                       `json:"name"`   // name config
+	Race          XRef[string, RaceCfg]      `json:"race"`   // race config
+	Health        int                        `json:"health"` // health config
+	Attack        float64                    `json:"attack"`
+	IsPlayable    bool                       `json:"isPlayable"`
+	Skills        []string                   `json:"skills"`
+	Runes         []XRef[int, WeaponRuneCfg] `json:"runes"` // my runes
+	UltimateSkill int                        `json:"ultimateSkill"`
+	RefCrude      *character_RefCrude        `json:"ref-crude"`
 }
 
 // character_RefCrude represents $.*['ref-crude']

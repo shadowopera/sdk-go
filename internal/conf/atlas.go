@@ -89,8 +89,8 @@ func (atlas *ConfigAtlas) OnLoaded() error {
 	return atlas.AtlasExtension.OnLoaded(atlas)
 }
 
-func makeRef[V int | string, T any](v V, r *T) Ref[V, T] {
-	return Ref[V, T]{RawValue: v, Ref: r}
+func makeXRef[V int | string, T any](v V, r *T) XRef[V, T] {
+	return XRef[V, T]{RawValue: v, Ref: r}
 }
 
 func xTryLookup[V comparable, R any](cfgID V, tbl map[V]R, tblName string) (R, error) {

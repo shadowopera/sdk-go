@@ -14,7 +14,7 @@ type (
 )
 
 type (
-	Ref[V int | string, T any] = archmage.Ref[V, T]
+	XRef[V int | string, T any] = archmage.XRef[V, T]
 )
 
 type (

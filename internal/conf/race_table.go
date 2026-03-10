@@ -6,12 +6,12 @@ package conf
 type RaceTable map[string]*RaceCfg
 
 type RaceCfg struct {
-	ID         string                 `json:"-"`
-	Birthplace L10n                   `json:"birthplace"`
-	Referrer1  Ref[int, RefCfg]       `json:"referrer1"`
-	Referrer2  Ref[string, StringCfg] `json:"referrer2"`
-	Heroes1    []Ref[int, HeroCfg]    `json:"heroes1"`
-	Heroes2    []Ref[int, HeroCfg]    `json:"heroes2"`
+	ID         string                  `json:"-"`
+	Birthplace L10n                    `json:"birthplace"`
+	Referrer1  XRef[int, RefCfg]       `json:"referrer1"`
+	Referrer2  XRef[string, StringCfg] `json:"referrer2"`
+	Heroes1    []XRef[int, HeroCfg]    `json:"heroes1"`
+	Heroes2    []XRef[int, HeroCfg]    `json:"heroes2"`
 }
 
 func (x RaceTable) TryLookup(cfgID string) (*RaceCfg, error) {
