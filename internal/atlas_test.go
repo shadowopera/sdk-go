@@ -331,7 +331,8 @@ func TestAtlas_NotFoundCallback(t *testing.T) {
 	if err == nil {
 		t.Fatal("expected error, got nil")
 	}
-	if err.Error() != `<archmage> cannot find $.single['prop_floats']['/'] in testdata/atlas.json` {
+	if err.Error() != `<archmage> failed to load atlas item "prop_floats". atlasFile: testdata/atlas.json, cfgRoot: testdata | `+
+		`cannot find $.single['prop_floats']['/'] in testdata/atlas.json` {
 		t.Fatalf("unexpected error, got %s", err)
 	}
 }
@@ -406,7 +407,8 @@ func TestAtlas_InvalidOverrideJSON(t *testing.T) {
 	if err == nil {
 		t.Fatal("expected error, got nil")
 	}
-	if !strings.HasPrefix(err.Error(), `<archmage> applying override clutter/item.json failed`) {
+	if !strings.HasPrefix(err.Error(), `<archmage> failed to load atlas item "Item". atlasFile: testdata/atlas.json, cfgRoot: testdata | `+
+		`failed to apply override "clutter/item.json" | jsontext: invalid character`) {
 		t.Fatalf("unexpected error: %v", err)
 	}
 }

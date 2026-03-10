@@ -61,7 +61,11 @@ func (i18n *I18n) MergeL10nFile(path string, lang language.Tag) error {
 	if err != nil {
 		return err
 	}
-	return i18n.MergeL10nData(data, lang)
+	if err := i18n.MergeL10nData(data, lang); err != nil {
+		return fmt.Errorf("<archmage> failed to merge l10n file %q | %w", path, err)
+	}
+
+	return nil
 }
 
 // GetText returns the translation for key in the specified language.
@@ -79,7 +83,7 @@ func (i18n *I18n) GetText(key string, lang language.Tag) (string, error) {
 		}
 	}
 
-	return "", fmt.Errorf("i18n: text not found. key: %q, lang: %s", key, lang.String())
+	return "", fmt.Errorf("<archmage> i18n: text not found. key: %q, lang: %s", key, lang.String())
 }
 
 // Text returns the translation for key in the specified language, with the

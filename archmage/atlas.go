@@ -156,7 +156,11 @@ func loadAtlasImpl(atlasFile string, cfgRoot string, atlas Atlas, opts *atlasOpt
 		}
 	}
 	err = opts.customLoader(filteredItemSeq, func(ctx context.Context, key string, item *AtlasItem) error {
-		return loadItem(ctx, key, item, &atlasJSON, atlasFile, cfgRoot, opts)
+		if err := loadItem(ctx, key, item, &atlasJSON, atlasFile, cfgRoot, opts); err != nil {
+			return fmt.Errorf("<archmage> failed to load atlas item %q. atlasFile: %s, cfgRoot: %s | %w",
+				key, atlasFile, cfgRoot, err)
+		}
+		return nil
 	})
 	if err != nil {
 		return err
@@ -200,7 +204,7 @@ func loadItem(ctx context.Context, key string, item *AtlasItem,
 			}
 			ovrFile, ovrData, err := readOverrideFile(cfg, file)
 			if err != nil {
-				return err
+				return fmt.Errorf("failed to read override file: %s | %w", file, err)
 			}
 			fd.overrideFiles = append(fd.overrideFiles, ovrFile)
 			fd.overrides = append(fd.overrides, ovrData)
@@ -232,22 +236,22 @@ func loadItem(ctx context.Context, key string, item *AtlasItem,
 			keyPath = fmt.Sprintf("$.multiple['%s']", key)
 		}
 	default:
-		return fmt.Errorf("<archmage> unsupported mapping: %s", item.Mapping)
+		return fmt.Errorf("unsupported mapping: %s", item.Mapping)
 	}
 
 	if len(files) == 0 {
-		return fmt.Errorf("<archmage> cannot find %s in %s", keyPath, atlasFile)
+		return fmt.Errorf("cannot find %s in %s", keyPath, atlasFile)
 	}
 
 	for i, f := range files {
-		filePath := filepath.Join(cfgRoot, f)
-		data, err := os.ReadFile(filePath)
+		fp := filepath.Join(cfgRoot, f)
+		data, err := os.ReadFile(fp)
 		if err != nil {
 			return err
 		}
 		err = json.Unmarshal(data, item.Cfg)
 		if err != nil {
-			return fmt.Errorf("<archmage> invalid %q | %w", f, err)
+			return fmt.Errorf("failed to unmarshal %q | %w", fp, err)
 		}
 		if err = readOverrides(f); err != nil {
 			return err
@@ -255,13 +259,13 @@ func loadItem(ctx context.Context, key string, item *AtlasItem,
 		if i > 0 {
 			fd.paths += ", "
 		}
-		fd.paths += filePath
+		fd.paths += fp
 	}
 
 	for i, data := range fd.overrides {
 		err := json.Unmarshal(data, item.Cfg)
 		if err != nil {
-			return fmt.Errorf("<archmage> applying override %s failed | %w", fd.overrideFiles[i], err)
+			return fmt.Errorf("failed to apply override %q | %w", fd.overrideFiles[i], err)
 		}
 	}
 

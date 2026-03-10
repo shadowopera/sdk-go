@@ -269,7 +269,7 @@ func TestI18n_GetText(t *testing.T) {
 			fallback: language.English,
 			key:      "goodbye",
 			lang:     language.English,
-			expErr:   "i18n: text not found",
+			expErr:   "<archmage> i18n: text not found",
 			expected: "",
 		},
 		{
@@ -280,7 +280,7 @@ func TestI18n_GetText(t *testing.T) {
 			fallback: language.English,
 			key:      "hello",
 			lang:     language.Chinese,
-			expErr:   "i18n: text not found",
+			expErr:   "<archmage> i18n: text not found",
 			expected: "",
 		},
 		{
@@ -289,7 +289,7 @@ func TestI18n_GetText(t *testing.T) {
 			fallback:   language.English,
 			key:        "hello",
 			lang:       language.English,
-			expErr:     "i18n: text not found",
+			expErr:     "<archmage> i18n: text not found",
 			expected:   "",
 		},
 		{
@@ -298,7 +298,7 @@ func TestI18n_GetText(t *testing.T) {
 			fallback:   language.English,
 			key:        "",
 			lang:       language.Chinese,
-			expErr:     `i18n: text not found. key: "", lang: zh`,
+			expErr:     `<archmage> i18n: text not found. key: "", lang: zh`,
 			expected:   "",
 		},
 		{

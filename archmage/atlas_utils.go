@@ -3,6 +3,7 @@ package archmage
 import (
 	"encoding/json/jsontext"
 	"encoding/json/v2"
+	"fmt"
 	"os"
 	"path/filepath"
 	"time"
@@ -13,20 +14,28 @@ import (
 func DumpAtlas(atlas Atlas, outputDir string, opts ...json.Options) error {
 	for k, item := range atlas.AtlasItems() {
 		if item.Ready {
-			data, err := Canonicalize(item.Cfg, opts...)
+			err := dumpAtlasItem(item, k, outputDir, opts)
 			if err != nil {
-				return err
-			}
-			p := filepath.Join(outputDir, k+".json")
-			if err := os.MkdirAll(filepath.Dir(p), 0755); err != nil {
-				return err
-			}
-			if err := os.WriteFile(p, data, 0644); err != nil {
-				return err
+				return fmt.Errorf("<archmage> failed to dump atlas item %q | %w", k, err)
 			}
 		}
 	}
 
+	return nil
+}
+
+func dumpAtlasItem(item *AtlasItem, k string, outputDir string, opts []json.Options) error {
+	data, err := Canonicalize(item.Cfg, opts...)
+	if err != nil {
+		return err
+	}
+	p := filepath.Join(outputDir, k+".json")
+	if err := os.MkdirAll(filepath.Dir(p), 0755); err != nil {
+		return err
+	}
+	if err := os.WriteFile(p, data, 0644); err != nil {
+		return err
+	}
 	return nil
 }
 
