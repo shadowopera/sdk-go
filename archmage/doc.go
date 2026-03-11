@@ -3,7 +3,7 @@
 // cross-table references, and layered overrides.
 //
 // The core component is Atlas, a registry of configuration tables.
-// Each table key maps to its JSON files in an index file, atlas.json.
+// Each config key maps to its JSON files in an index file, atlas.json.
 // It supports three mapping strategies: unique (one-to-one), single (one from
 // a set), and multiple (multi-file merging).
 //

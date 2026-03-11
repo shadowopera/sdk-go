@@ -174,7 +174,7 @@ func loadAtlasImpl(atlasFile string, cfgRoot string, atlas Atlas, opts *atlasOpt
 // Merge rules:
 //   - null → resets the target field to its default value or raises an error.
 //   - JSON object → recursively merges: only fields present in the input are updated, others remain unchanged.
-//   - Any other value → replaces the current value of the target field.
+//   - Any other value → overwrites the field.
 func loadItem(ctx context.Context, key string, item *AtlasItem,
 	atlasJSON *AtlasJSON, atlasFile string, cfgRoot string, opts *atlasOptions,
 ) error {
