@@ -287,8 +287,8 @@ func TestAtlas_WithOverrideRootAndFS(t *testing.T) {
 	checkUpdateGoldenFiles(t, atlas, "golden/override_root_and_fs")
 }
 
-func TestAtlas_WithCustomLoader(t *testing.T) {
-	customLoader := func(all iter.Seq2[string, *archmage.AtlasItem], load archmage.AtlasItemLoadFunc) error {
+func TestAtlas_WithLoadStrategy(t *testing.T) {
+	loadStrategy := func(all iter.Seq2[string, *archmage.AtlasItem], load archmage.AtlasItemLoadFunc) error {
 		eg, ctx := errgroup.WithContext(context.Background())
 		eg.SetLimit(10)
 		for k, item := range all {
@@ -310,7 +310,7 @@ func TestAtlas_WithCustomLoader(t *testing.T) {
 	opts := []archmage.Option{
 		archmage.WithLogger(newScavenger()),
 		archmage.WithBlacklist([]string{"prop_floats"}),
-		archmage.WithCustomLoader(customLoader),
+		archmage.WithLoadStrategy(loadStrategy),
 	}
 
 	atlas := conf.NewConfigAtlas()
@@ -371,7 +371,7 @@ func TestAtlas_ConfigFileNotFound(t *testing.T) {
 }
 
 func TestAtlas_ContextCancellation(t *testing.T) {
-	customLoader := func(all iter.Seq2[string, *archmage.AtlasItem], load archmage.AtlasItemLoadFunc) error {
+	loadStrategy := func(all iter.Seq2[string, *archmage.AtlasItem], load archmage.AtlasItemLoadFunc) error {
 		ctx, cancel := context.WithCancel(context.Background())
 		cancel()
 		for k, item := range all {
@@ -383,7 +383,7 @@ func TestAtlas_ContextCancellation(t *testing.T) {
 	}
 	atlas := conf.NewConfigAtlas()
 	err := archmage.LoadAtlas("testdata/atlas.json", "testdata", atlas,
-		archmage.WithCustomLoader(customLoader),
+		archmage.WithLoadStrategy(loadStrategy),
 	)
 	if err == nil {
 		t.Fatal("expected error, got nil")

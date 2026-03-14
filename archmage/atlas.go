@@ -79,7 +79,7 @@ func (atlas *AtlasJSON) pickFromSingle(key string) (string, bool) {
 // and finally calls OnLoaded on the atlas.
 func LoadAtlas(atlasFile string, cfgRoot string, atlas Atlas, opts ...Option) error {
 	atlasOpts := newAtlasOptions()
-	atlasOpts.customLoader = func(seq iter.Seq2[string, *AtlasItem], itemLoadFunc AtlasItemLoadFunc) error {
+	atlasOpts.loadStrategy = func(seq iter.Seq2[string, *AtlasItem], itemLoadFunc AtlasItemLoadFunc) error {
 		for key, item := range seq {
 			err := itemLoadFunc(context.Background(), key, item)
 			if err != nil {
@@ -155,7 +155,7 @@ func loadAtlasImpl(atlasFile string, cfgRoot string, atlas Atlas, opts *atlasOpt
 			}
 		}
 	}
-	err = opts.customLoader(filteredItemSeq, func(ctx context.Context, key string, item *AtlasItem) error {
+	err = opts.loadStrategy(filteredItemSeq, func(ctx context.Context, key string, item *AtlasItem) error {
 		if err := loadItem(ctx, key, item, &atlasJSON, atlasFile, cfgRoot, opts); err != nil {
 			return fmt.Errorf("<archmage> failed to load atlas item %q. atlasFile: %s, cfgRoot: %s | %w",
 				key, atlasFile, cfgRoot, err)
@@ -313,7 +313,7 @@ type atlasOptions struct {
 
 	overrideConfigs []overrideConfig
 
-	customLoader    func(iter.Seq2[string, *AtlasItem], AtlasItemLoadFunc) error
+	loadStrategy    func(iter.Seq2[string, *AtlasItem], AtlasItemLoadFunc) error
 	cbAtlasModifier func(atlasJSON *AtlasJSON)
 
 	whitelist []string
@@ -421,13 +421,13 @@ func WithOverrideFS(fsys fs.FS) Option {
 // AtlasItemLoadFunc is called to load each atlas item.
 type AtlasItemLoadFunc func(ctx context.Context, key string, item *AtlasItem) error
 
-// WithCustomLoader replaces the default sequential loader with a custom
-// implementation, allowing for parallel loading or other custom strategies.
+// WithLoadStrategy replaces the default sequential execution with a custom
+// implementation, allowing for parallel loading or other strategies.
 //
 // Example:
 //
 //	archmage.LoadAtlas("atlas.json", "config", atlas,
-//	    archmage.WithCustomLoader(func(all iter.Seq2[string, *archmage.AtlasItem], load archmage.AtlasItemLoadFunc) error {
+//	    archmage.WithLoadStrategy(func(all iter.Seq2[string, *archmage.AtlasItem], load archmage.AtlasItemLoadFunc) error {
 //	        eg, ctx := errgroup.WithContext(context.Background())
 //	        eg.SetLimit(10)
 //	        for k, item := range all {
@@ -435,8 +435,8 @@ type AtlasItemLoadFunc func(ctx context.Context, key string, item *AtlasItem) er
 //	        }
 //	        return eg.Wait()
 //	    }))
-func WithCustomLoader(loader func(all iter.Seq2[string, *AtlasItem], load AtlasItemLoadFunc) error) Option {
+func WithLoadStrategy(strategy func(all iter.Seq2[string, *AtlasItem], load AtlasItemLoadFunc) error) Option {
 	return func(opts *atlasOptions) {
-		opts.customLoader = loader
+		opts.loadStrategy = strategy
 	}
 }
