@@ -38,8 +38,6 @@ func TestPortingGoldenFiles(t *testing.T) {
 }
 
 func comparePortingGoldenRoot(t *testing.T, goRoot, langRoot string, langName string) {
-	t.Helper()
-
 	goSubs, err := readDirNames(goRoot, true)
 	if err != nil {
 		t.Fatalf("read go golden root %s: %v", goRoot, err)
@@ -56,11 +54,16 @@ func comparePortingGoldenRoot(t *testing.T, goRoot, langRoot string, langName st
 		langPath := filepath.Join(langRoot, name)
 		comparePortingGoldenSubdir(t, goPath, langPath, langName)
 	}
+
+	switch langName {
+	case "cs":
+		goPath := filepath.Join(goRoot, "custom_loader")
+		langPath := filepath.Join(langRoot, "custom_async_loader")
+		comparePortingGoldenSubdir(t, goPath, langPath, langName)
+	}
 }
 
 func comparePortingGoldenSubdir(t *testing.T, goSubdir, langSubdir string, langName string) {
-	t.Helper()
-
 	goFiles, err := readDirNames(goSubdir, false)
 	if err != nil {
 		t.Fatalf("read go golden subdir %s: %v", goSubdir, err)
@@ -89,8 +92,6 @@ func comparePortingGoldenSubdir(t *testing.T, goSubdir, langSubdir string, langN
 // where JSON null is considered equal to an empty string "". Only when that
 // also fails is an error reported.
 func comparePortingGoldenFile(t *testing.T, goFile, langFile string, langName string) {
-	t.Helper()
-
 	goData, err := os.ReadFile(goFile)
 	if err != nil {
 		t.Fatalf("read go golden %s: %v", goFile, err)
@@ -245,7 +246,6 @@ func readDirNames(dir string, dirsOnly bool) ([]string, error) {
 }
 
 func checkNameSets(t *testing.T, kind string, goNames, langNames []string) {
-	t.Helper()
 	goSet := buildSet(goNames)
 	langSet := buildSet(langNames)
 	for name := range goSet {
@@ -254,7 +254,7 @@ func checkNameSets(t *testing.T, kind string, goNames, langNames []string) {
 		}
 	}
 	for name := range langSet {
-		if !goSet[name] {
+		if !goSet[name] && name != "custom_async_loader" {
 			t.Errorf("%s %q exists in lang golden but not in go golden", kind, name)
 		}
 	}
