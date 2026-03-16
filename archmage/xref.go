@@ -8,7 +8,7 @@ import (
 // XRef pairs a table entry ID with a typed pointer to the referenced table entry.
 // Only RawValue is marshaled to JSON; Ref is populated by Atlas.BindRefs
 // after all atlas items are loaded.
-type XRef[V int | int32 | int64 | string, T any] struct {
+type XRef[V ~int | ~int32 | ~int64 | ~string, T any] struct {
 	// RawValue is the ID of the referenced table entry.
 	RawValue V
 	// Ref is the resolved pointer, populated by Atlas.BindRefs.
