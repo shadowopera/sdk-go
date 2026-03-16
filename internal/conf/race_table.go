@@ -3,26 +3,28 @@
 
 package conf
 
-type RaceTable map[string]*RaceCfg
+type RaceTable map[RaceCfgID]*RaceCfg
 
 type RaceCfg struct {
-	ID         string                  `json:"-"`
-	Birthplace L10n                    `json:"birthplace"`
-	Referrer1  XRef[int, RefCfg]       `json:"referrer1"`
-	Referrer2  XRef[string, StringCfg] `json:"referrer2"`
-	Heroes1    []XRef[int, HeroCfg]    `json:"heroes1"`
-	Heroes2    []XRef[int, HeroCfg]    `json:"heroes2"`
+	ID         RaceCfgID                    `json:"-"`
+	Birthplace L10n                         `json:"birthplace"`
+	Referrer1  XRef[RefCfgID, RefCfg]       `json:"referrer1"`
+	Referrer2  XRef[StringCfgID, StringCfg] `json:"referrer2"`
+	Heroes1    []XRef[HeroCfgID, HeroCfg]   `json:"heroes1"`
+	Heroes2    []XRef[HeroCfgID, HeroCfg]   `json:"heroes2"`
 }
 
-func (x RaceTable) TryLookup(cfgID string) (*RaceCfg, error) {
-	return xTryLookup[string, *RaceCfg](cfgID, x, "RaceTable")
+func (x RaceTable) TryLookup(cfgID RaceCfgID) (*RaceCfg, error) {
+	return xTryLookup[RaceCfgID, *RaceCfg](cfgID, x, "RaceTable")
 }
 
-func (x RaceTable) Lookup(cfgID string) *RaceCfg {
-	return xLookup[string, *RaceCfg](cfgID, x, "RaceTable")
+func (x RaceTable) Lookup(cfgID RaceCfgID) *RaceCfg {
+	return xLookup[RaceCfgID, *RaceCfg](cfgID, x, "RaceTable")
 }
 
 // region Trifles
+
+type RaceCfgID string
 
 func (x RaceTable) ApplyKeys() {
 	for k, v := range x {

@@ -3,30 +3,41 @@
 
 package conf
 
-type RefTable map[int]*RefCfg
+type RefTable map[RefCfgID]*RefCfg
 
 type RefCfg struct {
-	ID int                       `json:"-"`
-	B  XRef[int, WeaponRuneCfg]  `json:"B"` // desc-B
-	C  int                       `json:"C"` // desc-C
-	D  XRef[int, ItemCfg]        `json:"D"` // desc-D
-	E  XRef[int, MagicCfg]       `json:"E"` // desc-E
-	F  XRef[string, RaceCfg]     `json:"F"` // desc-F
-	G  XRef[int, HeroCfg]        `json:"G"` // desc-G
-	H  []XRef[string, StringCfg] `json:"H"` // desc-H
-	J  XRef[int, ItemCfg]        `json:"J"` // desc-J
-	K  XRef[string, RaceCfg]     `json:"K"` // desc-K
+	ID RefCfgID `json:"-"`
+	// desc-B
+	B XRef[WeaponRuneCfgID, WeaponRuneCfg] `json:"B"`
+	// desc-C
+	C int `json:"C"`
+	// desc-D
+	D XRef[ItemCfgID, ItemCfg] `json:"D"`
+	// desc-E
+	E XRef[MagicCfgID, MagicCfg] `json:"E"`
+	// desc-F
+	F XRef[RaceCfgID, RaceCfg] `json:"F"`
+	// desc-G
+	G XRef[HeroCfgID, HeroCfg] `json:"G"`
+	// desc-H
+	H []XRef[StringCfgID, StringCfg] `json:"H"`
+	// desc-J
+	J XRef[ItemCfgID, ItemCfg] `json:"J"`
+	// desc-K
+	K XRef[RaceCfgID, RaceCfg] `json:"K"`
 }
 
-func (x RefTable) TryLookup(cfgID int) (*RefCfg, error) {
-	return xTryLookup[int, *RefCfg](cfgID, x, "RefTable")
+func (x RefTable) TryLookup(cfgID RefCfgID) (*RefCfg, error) {
+	return xTryLookup[RefCfgID, *RefCfg](cfgID, x, "RefTable")
 }
 
-func (x RefTable) Lookup(cfgID int) *RefCfg {
-	return xLookup[int, *RefCfg](cfgID, x, "RefTable")
+func (x RefTable) Lookup(cfgID RefCfgID) *RefCfg {
+	return xLookup[RefCfgID, *RefCfg](cfgID, x, "RefTable")
 }
 
 // region Trifles
+
+type RefCfgID int
 
 func (x RefTable) ApplyKeys() {
 	for k, v := range x {

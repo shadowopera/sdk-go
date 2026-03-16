@@ -3,22 +3,24 @@
 
 package conf
 
-type MagicTable map[int]*MagicCfg
+type MagicTable map[MagicCfgID]*MagicCfg
 
 type MagicCfg struct {
-	ID   int    `json:"-"`
-	Name string `json:"name"`
+	ID   MagicCfgID `json:"-"`
+	Name string     `json:"name"`
 }
 
-func (x MagicTable) TryLookup(cfgID int) (*MagicCfg, error) {
-	return xTryLookup[int, *MagicCfg](cfgID, x, "MagicTable")
+func (x MagicTable) TryLookup(cfgID MagicCfgID) (*MagicCfg, error) {
+	return xTryLookup[MagicCfgID, *MagicCfg](cfgID, x, "MagicTable")
 }
 
-func (x MagicTable) Lookup(cfgID int) *MagicCfg {
-	return xLookup[int, *MagicCfg](cfgID, x, "MagicTable")
+func (x MagicTable) Lookup(cfgID MagicCfgID) *MagicCfg {
+	return xLookup[MagicCfgID, *MagicCfg](cfgID, x, "MagicTable")
 }
 
 // region Trifles
+
+type MagicCfgID int
 
 func (x MagicTable) ApplyKeys() {
 	for k, v := range x {

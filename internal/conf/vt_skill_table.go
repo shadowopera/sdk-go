@@ -3,33 +3,38 @@
 
 package conf
 
-type VtSkillTable map[int]*VtSkillCfg
+type VtSkillTable map[VtSkillCfgID]*VtSkillCfg
 
 type VtSkillCfg struct {
-	ID      int                       `json:"-"`
-	Name    string                    `json:"name"`
-	Class   string                    `json:"class"`
-	Foo     map[int]*vtSkill_FooEntry `json:"Foo"`
-	Reagent int                       `json:"reagent"` // reagent
-	Weapons []int                     `json:"weapons"`
+	ID    VtSkillCfgID              `json:"-"`
+	Name  string                    `json:"name"`
+	Class string                    `json:"class"`
+	Foo   map[int]*vtSkill_FooEntry `json:"Foo"`
+	// reagent
+	Reagent int   `json:"reagent"`
+	Weapons []int `json:"weapons"`
 }
 
 // vtSkill_FooEntry represents $.*.Foo.*
 type vtSkill_FooEntry struct {
-	X1 string   `json:"X1"` // X1a
+	// X1a
+	X1 string   `json:"X1"`
 	X2 Duration `json:"X2"`
-	X5 int      `json:"X5"` // X5
+	// X5
+	X5 int `json:"X5"`
 }
 
-func (x VtSkillTable) TryLookup(cfgID int) (*VtSkillCfg, error) {
-	return xTryLookup[int, *VtSkillCfg](cfgID, x, "VtSkillTable")
+func (x VtSkillTable) TryLookup(cfgID VtSkillCfgID) (*VtSkillCfg, error) {
+	return xTryLookup[VtSkillCfgID, *VtSkillCfg](cfgID, x, "VtSkillTable")
 }
 
-func (x VtSkillTable) Lookup(cfgID int) *VtSkillCfg {
-	return xLookup[int, *VtSkillCfg](cfgID, x, "VtSkillTable")
+func (x VtSkillTable) Lookup(cfgID VtSkillCfgID) *VtSkillCfg {
+	return xLookup[VtSkillCfgID, *VtSkillCfg](cfgID, x, "VtSkillTable")
 }
 
 // region Trifles
+
+type VtSkillCfgID int
 
 func (x VtSkillTable) ApplyKeys() {
 	for k, v := range x {

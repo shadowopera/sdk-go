@@ -3,23 +3,25 @@
 
 package conf
 
-type WeaponRuneTable map[int]*WeaponRuneCfg
+type WeaponRuneTable map[WeaponRuneCfgID]*WeaponRuneCfg
 
 type WeaponRuneCfg struct {
-	ID       int    `json:"-"`
-	RuneName string `json:"runeName"`
-	Power    int    `json:"power"`
+	ID       WeaponRuneCfgID `json:"-"`
+	RuneName string          `json:"runeName"`
+	Power    int             `json:"power"`
 }
 
-func (x WeaponRuneTable) TryLookup(cfgID int) (*WeaponRuneCfg, error) {
-	return xTryLookup[int, *WeaponRuneCfg](cfgID, x, "WeaponRuneTable")
+func (x WeaponRuneTable) TryLookup(cfgID WeaponRuneCfgID) (*WeaponRuneCfg, error) {
+	return xTryLookup[WeaponRuneCfgID, *WeaponRuneCfg](cfgID, x, "WeaponRuneTable")
 }
 
-func (x WeaponRuneTable) Lookup(cfgID int) *WeaponRuneCfg {
-	return xLookup[int, *WeaponRuneCfg](cfgID, x, "WeaponRuneTable")
+func (x WeaponRuneTable) Lookup(cfgID WeaponRuneCfgID) *WeaponRuneCfg {
+	return xLookup[WeaponRuneCfgID, *WeaponRuneCfg](cfgID, x, "WeaponRuneTable")
 }
 
 // region Trifles
+
+type WeaponRuneCfgID int
 
 func (x WeaponRuneTable) ApplyKeys() {
 	for k, v := range x {

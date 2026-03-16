@@ -4,12 +4,18 @@
 package conf
 
 type PropFloatsCfg struct {
-	B float64 `json:"B"` // desc-B
-	C float32 `json:"C"` // desc-C
-	D float64 `json:"D"` // desc-D
-	E float32 `json:"E"` // desc-E
-	F float64 `json:"F"` // desc-F
-	G float64 `json:"G"` // desc-G
+	// desc-B
+	B float64 `json:"B"`
+	// desc-C
+	C float32 `json:"C"`
+	// desc-D
+	D float64 `json:"D"`
+	// desc-E
+	E float32 `json:"E"`
+	// desc-F
+	F float64 `json:"F"`
+	// desc-G
+	G float64 `json:"G"`
 }
 
 // region Trifles

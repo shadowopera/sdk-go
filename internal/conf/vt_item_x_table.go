@@ -3,10 +3,10 @@
 
 package conf
 
-type VtItemXTable map[int]*VtItemXCfg
+type VtItemXTable map[VtItemXCfgID]*VtItemXCfg
 
 type VtItemXCfg struct {
-	ID             int                            `json:"-"`
+	ID             VtItemXCfgID                   `json:"-"`
 	Name           string                         `json:"name"`
 	Price          int                            `json:"price"`
 	Desc           string                         `json:"desc"`
@@ -24,15 +24,17 @@ type vtItemX_AttributeBonusEntry struct {
 	Bonus int    `json:"bonus"`
 }
 
-func (x VtItemXTable) TryLookup(cfgID int) (*VtItemXCfg, error) {
-	return xTryLookup[int, *VtItemXCfg](cfgID, x, "VtItemXTable")
+func (x VtItemXTable) TryLookup(cfgID VtItemXCfgID) (*VtItemXCfg, error) {
+	return xTryLookup[VtItemXCfgID, *VtItemXCfg](cfgID, x, "VtItemXTable")
 }
 
-func (x VtItemXTable) Lookup(cfgID int) *VtItemXCfg {
-	return xLookup[int, *VtItemXCfg](cfgID, x, "VtItemXTable")
+func (x VtItemXTable) Lookup(cfgID VtItemXCfgID) *VtItemXCfg {
+	return xLookup[VtItemXCfgID, *VtItemXCfg](cfgID, x, "VtItemXTable")
 }
 
 // region Trifles
+
+type VtItemXCfgID int
 
 func (x VtItemXTable) ApplyKeys() {
 	for k, v := range x {

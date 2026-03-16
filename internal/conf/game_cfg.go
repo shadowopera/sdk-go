@@ -6,22 +6,38 @@ package conf
 import "time"
 
 type GameCfg struct {
-	XInt      int                           `json:"x-int"`      // desc-x-int
-	XInt32    int32                         `json:"x-int32"`    // desc-x-int32
-	XFloat64  float64                       `json:"x-float64"`  // desc-x-float64
-	XString   string                        `json:"x-string"`   // desc-x-string
-	XBool     bool                          `json:"x-bool"`     // desc-x-bool
-	XDuration Duration                      `json:"x-duration"` // desc-x-duration
-	XPath     string                        `json:"x-path"`     // desc-x-path
-	XDatetime time.Time                     `json:"x-datetime"` // desc-x-datetime
-	XRef      XRef[int, WeaponRuneCfg]      `json:"x-ref"`      // desc-x-ref
-	XL10n     L10n                          `json:"x-l10n"`     // desc-x-l10n
-	XArray1   []int                         `json:"x-array1"`   // desc-x-array1
-	XArray2   []int8                        `json:"x-array2"`   // desc-x-array2
-	XMap      map[int]string                `json:"x-map"`      // desc-x-map
-	XObject   *game_XObject                 `json:"x-object"`   // desc-x-object
-	XTuple    *Tuple3[int, float32, string] `json:"x-tuple"`    // desc-x-tuple
-	XVector   Vec3[int32]                   `json:"x-vector"`   // desc-x-vector
+	// desc-x-int
+	XInt int `json:"x-int"`
+	// desc-x-int32
+	XInt32 int32 `json:"x-int32"`
+	// desc-x-float64
+	XFloat64 float64 `json:"x-float64"`
+	// desc-x-string
+	XString string `json:"x-string"`
+	// desc-x-bool
+	XBool bool `json:"x-bool"`
+	// desc-x-duration
+	XDuration Duration `json:"x-duration"`
+	// desc-x-path
+	XPath string `json:"x-path"`
+	// desc-x-datetime
+	XDatetime time.Time `json:"x-datetime"`
+	// desc-x-ref
+	XRef XRef[WeaponRuneCfgID, WeaponRuneCfg] `json:"x-ref"`
+	// desc-x-l10n
+	XL10n L10n `json:"x-l10n"`
+	// desc-x-array1
+	XArray1 []int `json:"x-array1"`
+	// desc-x-array2
+	XArray2 []int8 `json:"x-array2"`
+	// desc-x-map
+	XMap map[int]string `json:"x-map"`
+	// desc-x-object
+	XObject *game_XObject `json:"x-object"`
+	// desc-x-tuple
+	XTuple *Tuple3[int, float32, string] `json:"x-tuple"`
+	// desc-x-vector
+	XVector Vec3[int32] `json:"x-vector"`
 }
 
 // game_XObject represents $['x-object']

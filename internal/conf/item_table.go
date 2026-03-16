@@ -3,10 +3,10 @@
 
 package conf
 
-type ItemTable map[int]*ItemCfg
+type ItemTable map[ItemCfgID]*ItemCfg
 
 type ItemCfg struct {
-	ID    int         `json:"-"`
+	ID    ItemCfgID   `json:"-"`
 	Name  string      `json:"name"`
 	Price *item_Price `json:"price"`
 }
@@ -17,15 +17,17 @@ type item_Price struct {
 	Stack int `json:"stack"`
 }
 
-func (x ItemTable) TryLookup(cfgID int) (*ItemCfg, error) {
-	return xTryLookup[int, *ItemCfg](cfgID, x, "ItemTable")
+func (x ItemTable) TryLookup(cfgID ItemCfgID) (*ItemCfg, error) {
+	return xTryLookup[ItemCfgID, *ItemCfg](cfgID, x, "ItemTable")
 }
 
-func (x ItemTable) Lookup(cfgID int) *ItemCfg {
-	return xLookup[int, *ItemCfg](cfgID, x, "ItemTable")
+func (x ItemTable) Lookup(cfgID ItemCfgID) *ItemCfg {
+	return xLookup[ItemCfgID, *ItemCfg](cfgID, x, "ItemTable")
 }
 
 // region Trifles
+
+type ItemCfgID int
 
 func (x ItemTable) ApplyKeys() {
 	for k, v := range x {

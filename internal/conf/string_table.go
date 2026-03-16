@@ -3,42 +3,55 @@
 
 package conf
 
-type StringTable map[string]*StringCfg
+type StringTable map[StringCfgID]*StringCfg
 
 type StringCfg struct {
-	ID             string                `json:"-"`
-	B              *string_B             `json:"B"`
-	E              string                `json:"E"`               // desc-E
-	DefValidate    string                `json:"def-validate"`    // def-validate
-	DefPostprocess string                `json:"def-postprocess"` // def-postprocess
-	I              string                `json:"I"`               // desc-I
-	K              XRef[string, RaceCfg] `json:"K"`               // desc-K
-	Referer1       XRef[int, RefCfg]     `json:"referer1"`        // desc-referer1
-	Referer2       XRef[int, RefCfg]     `json:"referer2"`        // desc-referer2
-	RefererN       []XRef[int, RefCfg]   `json:"referer-n"`       // desc-referer-n
+	ID StringCfgID `json:"-"`
+	B  *string_B   `json:"B"`
+	// desc-E
+	E string `json:"E"`
+	// def-validate
+	DefValidate string `json:"def-validate"`
+	// def-postprocess
+	DefPostprocess string `json:"def-postprocess"`
+	// desc-I
+	I string `json:"I"`
+	// desc-K
+	K XRef[RaceCfgID, RaceCfg] `json:"K"`
+	// desc-referer1
+	Referer1 XRef[RefCfgID, RefCfg] `json:"referer1"`
+	// desc-referer2
+	Referer2 XRef[RefCfgID, RefCfg] `json:"referer2"`
+	// desc-referer-n
+	RefererN []XRef[RefCfgID, RefCfg] `json:"referer-n"`
 }
 
 // string_B represents $.*.B
 type string_B struct {
-	Bar *Rab   `json:"bar"`
-	Car string `json:"car"` // desc-B.car
+	Bar *Rab `json:"bar"`
+	// desc-B.car
+	Car string `json:"car"`
 }
 
 // Rab represents $.*.B.bar
 type Rab struct {
-	Foo string `json:"foo"` // desc-B.bar.foo
-	Qux string `json:"qux"` // desc-B.bar.qux
+	// desc-B.bar.foo
+	Foo string `json:"foo"`
+	// desc-B.bar.qux
+	Qux string `json:"qux"`
 }
 
-func (x StringTable) TryLookup(cfgID string) (*StringCfg, error) {
-	return xTryLookup[string, *StringCfg](cfgID, x, "StringTable")
+func (x StringTable) TryLookup(cfgID StringCfgID) (*StringCfg, error) {
+	return xTryLookup[StringCfgID, *StringCfg](cfgID, x, "StringTable")
 }
 
-func (x StringTable) Lookup(cfgID string) *StringCfg {
-	return xLookup[string, *StringCfg](cfgID, x, "StringTable")
+func (x StringTable) Lookup(cfgID StringCfgID) *StringCfg {
+	return xLookup[StringCfgID, *StringCfg](cfgID, x, "StringTable")
 }
 
 // region Trifles
+
+type StringCfgID string
 
 func (x StringTable) ApplyKeys() {
 	for k, v := range x {
