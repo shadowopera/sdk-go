@@ -29,6 +29,9 @@ func TestAtlas_Basic(t *testing.T) {
 	conf.GetI18n = func() *archmage.I18n {
 		return i10n
 	}
+	conf.GetPreferredLanguge = func() language.Tag {
+		return language.Chinese
+	}
 
 	var err error
 	atlas := conf.NewConfigAtlas()
@@ -40,11 +43,11 @@ func TestAtlas_Basic(t *testing.T) {
 	}
 	checkUpdateGoldenFiles(t, atlas, "golden/basic")
 
-	if atlas.GameCfg.XL10n.Text(en) != "it is a good day" {
-		t.Fatalf("unexpected l10n en value: %s", atlas.GameCfg.XL10n.Text(en))
+	if text, err := atlas.GameCfg.XL10n.GetText(en); err != nil || text != "it is a good day" {
+		t.Fatalf("unexpected l10n en value: %s", text)
 	}
-	if atlas.GameCfg.XL10n.Text(cn) != "今儿天气真好" {
-		t.Fatalf("unexpected l10n cn value: %s", atlas.GameCfg.XL10n.Text(cn))
+	if text := atlas.GameCfg.XL10n.Text(); text != "今儿天气真好" {
+		t.Fatalf("unexpected l10n cn value: %s", text)
 	}
 
 	itemEntry, ok := atlas.ItemTable[20]
