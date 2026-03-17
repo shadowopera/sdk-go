@@ -10,8 +10,8 @@ import (
 var (
 	// GetI18n must be set before calling L10n.GetText() and L10n.Text().
 	GetI18n func() *archmage.I18n
-	// GetPreferredLanguge must be set before calling L10n.Text().
-	GetPreferredLanguge func() language.Tag
+	// GetPreferredLanguage must be set before calling L10n.Text().
+	GetPreferredLanguage func() language.Tag
 )
 
 type L10n string
@@ -21,5 +21,5 @@ func (l L10n) GetText(lang language.Tag) (string, error) {
 }
 
 func (l L10n) Text() string {
-	return GetI18n().Text(string(l), GetPreferredLanguge())
+	return GetI18n().Text(string(l), GetPreferredLanguage())
 }

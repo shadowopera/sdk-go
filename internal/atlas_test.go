@@ -29,7 +29,7 @@ func TestAtlas_Basic(t *testing.T) {
 	conf.GetI18n = func() *archmage.I18n {
 		return i10n
 	}
-	conf.GetPreferredLanguge = func() language.Tag {
+	conf.GetPreferredLanguage = func() language.Tag {
 		return language.Chinese
 	}
 
