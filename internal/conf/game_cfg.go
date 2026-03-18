@@ -36,8 +36,14 @@ type GameCfg struct {
 	XObject *game_XObject `json:"x-object"`
 	// desc-x-tuple
 	XTuple *Tuple3[int, float32, string] `json:"x-tuple"`
-	// desc-x-vector
-	XVector Vec3[int32] `json:"x-vector"`
+	// desc-x-vector2
+	XVector2 Vec2[int32] `json:"x-vector2"`
+	// desc-x-vector3
+	XVector3 Vec3[float32] `json:"x-vector3"`
+	// desc-x-vector4
+	XVector4 Vec4[float32] `json:"x-vector4"`
+	// desc-x-vector4x
+	XVector4x Vec4[int32] `json:"x-vector4x"`
 }
 
 // game_XObject represents $['x-object']
