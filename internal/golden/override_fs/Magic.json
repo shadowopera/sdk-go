@@ -1,12 +1,15 @@
 {
 	"100": null,
 	"200": {
+		"id": 200,
 		"name": "Power Word: Shield"
 	},
 	"300": {
+		"id": 300,
 		"name": "Flamestrike"
 	},
 	"900": {
+		"id": 900,
 		"name": "Ice Lance"
 	}
 }

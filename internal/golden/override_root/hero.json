@@ -1,6 +1,7 @@
 {
 	"2": {
 		"heroName": "hero[2].heroName",
+		"id": 2,
 		"race-combo": [
 			{
 				"race1": "Dark Elf",
@@ -31,6 +32,7 @@
 	},
 	"3": {
 		"heroName": "hero[3].heroName",
+		"id": 3,
 		"race-combo": [
 			{
 				"race1": "Halfling",
@@ -45,6 +47,7 @@
 	},
 	"5": {
 		"heroName": "hero[5].heroName",
+		"id": 5,
 		"race-combo": [
 			{
 				"race1": "",

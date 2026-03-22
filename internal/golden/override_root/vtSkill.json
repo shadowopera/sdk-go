@@ -11,6 +11,7 @@
 			}
 		},
 		"class": "Mage",
+		"id": 1,
 		"name": "Fireball",
 		"reagent": 1,
 		"weapons": null
@@ -24,6 +25,7 @@
 			}
 		},
 		"class": "Mage",
+		"id": 101,
 		"name": "Arcane Mastery",
 		"reagent": 0,
 		"weapons": null
@@ -42,6 +44,7 @@
 			}
 		},
 		"class": "Warrior",
+		"id": 102,
 		"name": "Toughness",
 		"reagent": 0,
 		"weapons": [
@@ -59,6 +62,7 @@
 			}
 		},
 		"class": "Priest",
+		"id": 103,
 		"name": "Spiritual Guidance",
 		"reagent": 0,
 		"weapons": [
@@ -83,6 +87,7 @@
 			}
 		},
 		"class": "Warrior",
+		"id": 2,
 		"name": "Cleave",
 		"reagent": 11,
 		"weapons": null
@@ -99,6 +104,7 @@
 			}
 		},
 		"class": "Priest",
+		"id": 3,
 		"name": "Power Word",
 		"reagent": 1101,
 		"weapons": null

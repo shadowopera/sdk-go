@@ -6,7 +6,7 @@ package conf
 type RefTable map[RefCfgID]*RefCfg
 
 type RefCfg struct {
-	ID RefCfgID `json:"-"`
+	ID RefCfgID `json:"id"`
 	// desc-B
 	B XRef[WeaponRuneCfgID, WeaponRuneCfg] `json:"B"`
 	// desc-C

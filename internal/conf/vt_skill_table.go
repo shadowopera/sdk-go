@@ -6,7 +6,7 @@ package conf
 type VtSkillTable map[VtSkillCfgID]*VtSkillCfg
 
 type VtSkillCfg struct {
-	ID    VtSkillCfgID              `json:"-"`
+	ID    VtSkillCfgID              `json:"id"`
 	Name  string                    `json:"name"`
 	Class string                    `json:"class"`
 	Foo   map[int]*vtSkill_FooEntry `json:"Foo"`

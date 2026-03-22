@@ -6,7 +6,7 @@ package conf
 type ItemTable map[ItemCfgID]*ItemCfg
 
 type ItemCfg struct {
-	ID    ItemCfgID   `json:"-"`
+	ID    ItemCfgID   `json:"id"`
 	Name  string      `json:"name"`
 	Price *item_Price `json:"price"`
 }

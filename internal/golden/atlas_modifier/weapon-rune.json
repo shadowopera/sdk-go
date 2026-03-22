@@ -1,13 +1,16 @@
 {
 	"1": {
+		"id": 1,
 		"power": 100,
 		"runeName": "Shadowfang"
 	},
 	"2": {
+		"id": 2,
 		"power": 200,
 		"runeName": "Frostbite"
 	},
 	"3": {
+		"id": 3,
 		"power": 300,
 		"runeName": "Emberstrike"
 	}

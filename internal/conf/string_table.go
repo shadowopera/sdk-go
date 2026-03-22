@@ -6,7 +6,7 @@ package conf
 type StringTable map[StringCfgID]*StringCfg
 
 type StringCfg struct {
-	ID StringCfgID `json:"-"`
+	ID StringCfgID `json:"id"`
 	B  *string_B   `json:"B"`
 	// desc-E
 	E string `json:"E"`

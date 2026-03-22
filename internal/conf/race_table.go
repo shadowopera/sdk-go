@@ -6,7 +6,7 @@ package conf
 type RaceTable map[RaceCfgID]*RaceCfg
 
 type RaceCfg struct {
-	ID         RaceCfgID                    `json:"-"`
+	ID         RaceCfgID                    `json:"id"`
 	Birthplace L10n                         `json:"birthplace"`
 	Referrer1  XRef[RefCfgID, RefCfg]       `json:"referrer1"`
 	Referrer2  XRef[StringCfgID, StringCfg] `json:"referrer2"`

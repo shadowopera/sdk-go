@@ -7,6 +7,7 @@
 		"heroes2": [
 			2
 		],
+		"id": "Dark Elf",
 		"referrer1": 2,
 		"referrer2": ""
 	},
@@ -19,6 +20,7 @@
 		"heroes2": [
 			5
 		],
+		"id": "Dwarf",
 		"referrer1": 0,
 		"referrer2": "qux"
 	},
@@ -33,6 +35,7 @@
 			2,
 			3
 		],
+		"id": "Halfling",
 		"referrer1": 1,
 		"referrer2": "foo"
 	},
@@ -40,6 +43,7 @@
 		"birthplace": "Race[Human].birthplace",
 		"heroes1": null,
 		"heroes2": null,
+		"id": "Human",
 		"referrer1": 3,
 		"referrer2": ""
 	},
@@ -47,6 +51,7 @@
 		"birthplace": "Race[Undead].birthplace",
 		"heroes1": null,
 		"heroes2": null,
+		"id": "Undead",
 		"referrer1": 0,
 		"referrer2": ""
 	}

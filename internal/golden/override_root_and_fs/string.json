@@ -12,6 +12,7 @@
 		"K": "",
 		"def-postprocess": "end",
 		"def-validate": "x",
+		"id": "bar",
 		"referer-n": [
 			2
 		],
@@ -31,6 +32,7 @@
 		"K": "Halfling",
 		"def-postprocess": "end",
 		"def-validate": "x",
+		"id": "foo",
 		"referer-n": [
 			1
 		],
@@ -50,6 +52,7 @@
 		"K": "Dwarf",
 		"def-postprocess": "end",
 		"def-validate": "x",
+		"id": "qux",
 		"referer-n": [
 			2
 		],

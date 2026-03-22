@@ -6,7 +6,7 @@ package conf
 type HeroTable map[HeroCfgID]*HeroCfg
 
 type HeroCfg struct {
-	ID                  HeroCfgID                `json:"-"`
+	ID                  HeroCfgID                `json:"id"`
 	HeroName            L10n                     `json:"heroName"`
 	StartLevel          int                      `json:"startLevel"`
 	Referrer            []XRef[RefCfgID, RefCfg] `json:"referrer"`

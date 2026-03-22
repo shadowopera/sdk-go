@@ -10,7 +10,8 @@
 			"foo"
 		],
 		"J": 10,
-		"K": "Halfling"
+		"K": "Halfling",
+		"id": 1
 	},
 	"2": {
 		"B": 3,
@@ -23,7 +24,8 @@
 			"qux"
 		],
 		"J": 20,
-		"K": "Dark Elf"
+		"K": "Dark Elf",
+		"id": 2
 	},
 	"3": {
 		"B": 1,
@@ -34,6 +36,7 @@
 		"G": 2,
 		"H": null,
 		"J": 30,
-		"K": "Human"
+		"K": "Human",
+		"id": 3
 	}
 }

@@ -1,5 +1,6 @@
 {
 	"10": {
+		"id": 10,
 		"name": "Potion",
 		"price": {
 			"one": 10,
@@ -7,6 +8,7 @@
 		}
 	},
 	"20": {
+		"id": 20,
 		"name": "Panacea",
 		"price": {
 			"one": 100,
@@ -14,6 +16,7 @@
 		}
 	},
 	"30": {
+		"id": 30,
 		"name": "Elixir",
 		"price": {
 			"one": 1000,

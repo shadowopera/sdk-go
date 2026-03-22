@@ -1,11 +1,14 @@
 {
 	"100": {
+		"id": 100,
 		"name": "Fireball"
 	},
 	"200": {
+		"id": 200,
 		"name": "Fire Blast"
 	},
 	"300": {
+		"id": 300,
 		"name": "Flamestrike"
 	}
 }

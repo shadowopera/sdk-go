@@ -6,7 +6,7 @@ package conf
 type MagicTable map[MagicCfgID]*MagicCfg
 
 type MagicCfg struct {
-	ID   MagicCfgID `json:"-"`
+	ID   MagicCfgID `json:"id"`
 	Name string     `json:"name"`
 }
 

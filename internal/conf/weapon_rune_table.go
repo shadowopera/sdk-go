@@ -6,7 +6,7 @@ package conf
 type WeaponRuneTable map[WeaponRuneCfgID]*WeaponRuneCfg
 
 type WeaponRuneCfg struct {
-	ID       WeaponRuneCfgID `json:"-"`
+	ID       WeaponRuneCfgID `json:"id"`
 	RuneName string          `json:"runeName"`
 	Power    int             `json:"power"`
 }

@@ -6,7 +6,7 @@ package conf
 type VtItemXTable map[VtItemXCfgID]*VtItemXCfg
 
 type VtItemXCfg struct {
-	ID             VtItemXCfgID                   `json:"-"`
+	ID             VtItemXCfgID                   `json:"id"`
 	Name           string                         `json:"name"`
 	Price          int                            `json:"price"`
 	Desc           string                         `json:"desc"`
