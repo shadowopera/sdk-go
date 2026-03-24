@@ -11,8 +11,8 @@ type VtSkillCfg struct {
 	Class string                    `json:"class"`
 	Foo   map[int]*vtSkill_FooEntry `json:"Foo"`
 	// reagent
-	Reagent int   `json:"reagent"`
-	Weapons []int `json:"weapons"`
+	Reagent int64   `json:"reagent"`
+	Weapons []int64 `json:"weapons"`
 }
 
 // vtSkill_FooEntry represents $.*.Foo.*
@@ -34,7 +34,7 @@ func (x VtSkillTable) Lookup(cfgID VtSkillCfgID) *VtSkillCfg {
 
 // region Trifles
 
-type VtSkillCfgID int
+type VtSkillCfgID int64
 
 func (x VtSkillTable) ApplyKeys() {
 	for k, v := range x {

@@ -10,10 +10,10 @@ type VtItemXCfg struct {
 	Name           string                         `json:"name"`
 	Price          int                            `json:"price"`
 	Desc           string                         `json:"desc"`
-	SpecialSkill   int                            `json:"special-skill"`
+	SpecialSkill   int64                          `json:"special-skill"`
 	Armor          float32                        `json:"armor"`
 	Dps            float32                        `json:"dps"`
-	ShieldSkills   []int                          `json:"shield-skills"`
+	ShieldSkills   []int64                        `json:"shield-skills"`
 	Power          float32                        `json:"power"`
 	AttributeBonus []*vtItemX_AttributeBonusEntry `json:"attributeBonus"`
 }
@@ -34,7 +34,7 @@ func (x VtItemXTable) Lookup(cfgID VtItemXCfgID) *VtItemXCfg {
 
 // region Trifles
 
-type VtItemXCfgID int
+type VtItemXCfgID int64
 
 func (x VtItemXTable) ApplyKeys() {
 	for k, v := range x {

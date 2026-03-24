@@ -21,7 +21,7 @@ func (x WeaponRuneTable) Lookup(cfgID WeaponRuneCfgID) *WeaponRuneCfg {
 
 // region Trifles
 
-type WeaponRuneCfgID int
+type WeaponRuneCfgID int64
 
 func (x WeaponRuneTable) ApplyKeys() {
 	for k, v := range x {

@@ -27,7 +27,7 @@ func (x ItemTable) Lookup(cfgID ItemCfgID) *ItemCfg {
 
 // region Trifles
 
-type ItemCfgID int
+type ItemCfgID int64
 
 func (x ItemTable) ApplyKeys() {
 	for k, v := range x {

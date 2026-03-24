@@ -20,7 +20,7 @@ func (x MagicTable) Lookup(cfgID MagicCfgID) *MagicCfg {
 
 // region Trifles
 
-type MagicCfgID int
+type MagicCfgID int64
 
 func (x MagicTable) ApplyKeys() {
 	for k, v := range x {

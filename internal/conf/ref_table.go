@@ -10,7 +10,7 @@ type RefCfg struct {
 	// desc-B
 	B XRef[WeaponRuneCfgID, WeaponRuneCfg] `json:"B"`
 	// desc-C
-	C int `json:"C"`
+	C int64 `json:"C"`
 	// desc-D
 	D XRef[ItemCfgID, ItemCfg] `json:"D"`
 	// desc-E
@@ -37,7 +37,7 @@ func (x RefTable) Lookup(cfgID RefCfgID) *RefCfg {
 
 // region Trifles
 
-type RefCfgID int
+type RefCfgID int64
 
 func (x RefTable) ApplyKeys() {
 	for k, v := range x {
