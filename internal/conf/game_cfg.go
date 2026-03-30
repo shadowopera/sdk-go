@@ -43,7 +43,7 @@ type GameCfg struct {
 	// desc-x-vector4
 	XVector4 Vec4[float32] `json:"x-vector4"`
 	// desc-x-vector4x
-	XVector4x Vec4[int32] `json:"x-vector4x"`
+	XVector4x Vec4[uint16] `json:"x-vector4x"`
 }
 
 // game_XObject represents $['x-object']

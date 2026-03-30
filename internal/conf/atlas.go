@@ -89,7 +89,7 @@ func (atlas *ConfigAtlas) OnLoaded() error {
 	return atlas.AtlasExtension.OnLoaded(atlas)
 }
 
-func makeXRef[V ~int | ~int32 | ~int64 | ~string, T any](v V, r *T) XRef[V, T] {
+func makeXRef[V comparable, T any](v V, r *T) XRef[V, T] {
 	return XRef[V, T]{RawValue: v, Ref: r}
 }
 

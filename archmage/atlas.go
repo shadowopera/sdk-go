@@ -240,7 +240,7 @@ func loadItem(ctx context.Context, key string, item *AtlasItem,
 	}
 
 	if len(files) == 0 {
-		return fmt.Errorf("cannot find %s in %s", keyPath, atlasFile)
+		return fmt.Errorf("could not find %s in %s", keyPath, atlasFile)
 	}
 
 	for i, f := range files {
