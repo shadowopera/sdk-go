@@ -70,11 +70,11 @@ func (x StringTable) bindRefs(atlas *ConfigAtlas) {
 }
 
 func (x *StringCfg) bindRefs(atlas *ConfigAtlas) {
-	x.K.Ref = atlas.RaceTable.Lookup(x.K.RawValue)
-	x.Referer1.Ref = atlas.RefTable.Lookup(x.Referer1.RawValue)
-	x.Referer2.Ref = atlas.RefTable.Lookup(x.Referer2.RawValue)
+	x.K.Ref = atlas.RaceTable.Lookup(x.K.CfgID)
+	x.Referer1.Ref = atlas.RefTable.Lookup(x.Referer1.CfgID)
+	x.Referer2.Ref = atlas.RefTable.Lookup(x.Referer2.CfgID)
 	for i, ref := range x.RefererN {
-		x.RefererN[i].Ref = atlas.RefTable.Lookup(ref.RawValue)
+		x.RefererN[i].Ref = atlas.RefTable.Lookup(ref.CfgID)
 	}
 }
 

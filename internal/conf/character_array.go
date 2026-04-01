@@ -39,9 +39,9 @@ func (x CharacterArray) bindRefs(atlas *ConfigAtlas) {
 }
 
 func (x *CharacterCfg) bindRefs(atlas *ConfigAtlas) {
-	x.Race.Ref = atlas.RaceTable.Lookup(x.Race.RawValue)
+	x.Race.Ref = atlas.RaceTable.Lookup(x.Race.CfgID)
 	for i, v1 := range x.Runes {
-		x.Runes[i].Ref = atlas.WeaponRuneTable.Lookup(v1.RawValue)
+		x.Runes[i].Ref = atlas.WeaponRuneTable.Lookup(v1.CfgID)
 	}
 }
 

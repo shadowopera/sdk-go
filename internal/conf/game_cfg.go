@@ -55,7 +55,7 @@ type game_XObject struct {
 // region Trifles
 
 func (x *GameCfg) bindRefs(atlas *ConfigAtlas) {
-	x.XRef.Ref = atlas.WeaponRuneTable.Lookup(x.XRef.RawValue)
+	x.XRef.Ref = atlas.WeaponRuneTable.Lookup(x.XRef.CfgID)
 }
 
 // endregion

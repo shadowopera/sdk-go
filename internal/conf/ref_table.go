@@ -56,16 +56,16 @@ func (x RefTable) bindRefs(atlas *ConfigAtlas) {
 }
 
 func (x *RefCfg) bindRefs(atlas *ConfigAtlas) {
-	x.B.Ref = atlas.WeaponRuneTable.Lookup(x.B.RawValue)
-	x.D.Ref = atlas.ItemTable.Lookup(x.D.RawValue)
-	x.E.Ref = atlas.MagicTable.Lookup(x.E.RawValue)
-	x.F.Ref = atlas.RaceTable.Lookup(x.F.RawValue)
-	x.G.Ref = atlas.HeroTable.Lookup(x.G.RawValue)
+	x.B.Ref = atlas.WeaponRuneTable.Lookup(x.B.CfgID)
+	x.D.Ref = atlas.ItemTable.Lookup(x.D.CfgID)
+	x.E.Ref = atlas.MagicTable.Lookup(x.E.CfgID)
+	x.F.Ref = atlas.RaceTable.Lookup(x.F.CfgID)
+	x.G.Ref = atlas.HeroTable.Lookup(x.G.CfgID)
 	for i, v1 := range x.H {
-		x.H[i].Ref = atlas.StringTable.Lookup(v1.RawValue)
+		x.H[i].Ref = atlas.StringTable.Lookup(v1.CfgID)
 	}
-	x.J.Ref = atlas.ItemTable.Lookup(x.J.RawValue)
-	x.K.Ref = atlas.RaceTable.Lookup(x.K.RawValue)
+	x.J.Ref = atlas.ItemTable.Lookup(x.J.CfgID)
+	x.K.Ref = atlas.RaceTable.Lookup(x.K.CfgID)
 }
 
 // endregion

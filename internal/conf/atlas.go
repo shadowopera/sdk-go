@@ -90,7 +90,7 @@ func (atlas *ConfigAtlas) OnLoaded() error {
 }
 
 func makeXRef[V comparable, T any](v V, r *T) XRef[V, T] {
-	return XRef[V, T]{RawValue: v, Ref: r}
+	return XRef[V, T]{CfgID: v, Ref: r}
 }
 
 func xTryLookup[V comparable, R any](cfgID V, tbl map[V]R, tblName string) (R, error) {

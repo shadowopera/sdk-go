@@ -43,13 +43,13 @@ func (x RaceTable) bindRefs(atlas *ConfigAtlas) {
 }
 
 func (x *RaceCfg) bindRefs(atlas *ConfigAtlas) {
-	x.Referrer1.Ref = atlas.RefTable.Lookup(x.Referrer1.RawValue)
-	x.Referrer2.Ref = atlas.StringTable.Lookup(x.Referrer2.RawValue)
+	x.Referrer1.Ref = atlas.RefTable.Lookup(x.Referrer1.CfgID)
+	x.Referrer2.Ref = atlas.StringTable.Lookup(x.Referrer2.CfgID)
 	for i, ref := range x.Heroes1 {
-		x.Heroes1[i].Ref = atlas.HeroTable.Lookup(ref.RawValue)
+		x.Heroes1[i].Ref = atlas.HeroTable.Lookup(ref.CfgID)
 	}
 	for i, ref := range x.Heroes2 {
-		x.Heroes2[i].Ref = atlas.HeroTable.Lookup(ref.RawValue)
+		x.Heroes2[i].Ref = atlas.HeroTable.Lookup(ref.CfgID)
 	}
 }
 

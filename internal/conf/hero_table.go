@@ -52,7 +52,7 @@ func (x HeroTable) bindRefs(atlas *ConfigAtlas) {
 
 func (x *HeroCfg) bindRefs(atlas *ConfigAtlas) {
 	for i, ref := range x.Referrer {
-		x.Referrer[i].Ref = atlas.RefTable.Lookup(ref.RawValue)
+		x.Referrer[i].Ref = atlas.RefTable.Lookup(ref.CfgID)
 	}
 	for _, v1 := range x.RaceCombo {
 		if v1 != nil {
@@ -60,19 +60,19 @@ func (x *HeroCfg) bindRefs(atlas *ConfigAtlas) {
 		}
 	}
 	for i, ref := range x.ReferrerSort {
-		x.ReferrerSort[i].Ref = atlas.RefTable.Lookup(ref.RawValue)
+		x.ReferrerSort[i].Ref = atlas.RefTable.Lookup(ref.CfgID)
 	}
 	for i, ref := range x.ReferrerCompact {
-		x.ReferrerCompact[i].Ref = atlas.RefTable.Lookup(ref.RawValue)
+		x.ReferrerCompact[i].Ref = atlas.RefTable.Lookup(ref.CfgID)
 	}
 	for i, ref := range x.ReferrerSortCompact {
-		x.ReferrerSortCompact[i].Ref = atlas.RefTable.Lookup(ref.RawValue)
+		x.ReferrerSortCompact[i].Ref = atlas.RefTable.Lookup(ref.CfgID)
 	}
 }
 
 func (x *hero_RaceComboEntry) bindRefs(atlas *ConfigAtlas) {
-	x.Race1.Ref = atlas.RaceTable.Lookup(x.Race1.RawValue)
-	x.Race2.Ref = atlas.RaceTable.Lookup(x.Race2.RawValue)
+	x.Race1.Ref = atlas.RaceTable.Lookup(x.Race1.CfgID)
+	x.Race2.Ref = atlas.RaceTable.Lookup(x.Race2.CfgID)
 }
 
 // endregion
