@@ -80,16 +80,28 @@ func unhexByte(hi, lo byte) (uint8, bool) {
 	return h<<4 | l, ok1 && ok2
 }
 
-// String returns the color as "#RRGGBBAA".
+// String returns the color as "#RRGGBB" when fully opaque, or "#RRGGBBAA" otherwise.
 func (c *RGBA) String() string {
-	buf := [9]byte{
-		'#',
-		_hexUpper[c.R>>4], _hexUpper[c.R&0xF],
-		_hexUpper[c.G>>4], _hexUpper[c.G&0xF],
-		_hexUpper[c.B>>4], _hexUpper[c.B&0xF],
-		_hexUpper[c.A>>4], _hexUpper[c.A&0xF],
+	switch c.A {
+	case 0xFF:
+		buf := [7]byte{
+			'#',
+			_hexUpper[c.R>>4], _hexUpper[c.R&0xF],
+			_hexUpper[c.G>>4], _hexUpper[c.G&0xF],
+			_hexUpper[c.B>>4], _hexUpper[c.B&0xF],
+		}
+		return string(buf[:])
+
+	default:
+		buf := [9]byte{
+			'#',
+			_hexUpper[c.R>>4], _hexUpper[c.R&0xF],
+			_hexUpper[c.G>>4], _hexUpper[c.G&0xF],
+			_hexUpper[c.B>>4], _hexUpper[c.B&0xF],
+			_hexUpper[c.A>>4], _hexUpper[c.A&0xF],
+		}
+		return string(buf[:])
 	}
-	return string(buf[:])
 }
 
 var (
@@ -98,19 +110,34 @@ var (
 
 // MarshalJSONTo encodes RGBA as a JSON string in "#RRGGBBAA" format or an empty string if zero.
 func (c *RGBA) MarshalJSONTo(enc *jsontext.Encoder) error {
-	if c.R == 0 && c.G == 0 && c.B == 0 && c.A == 0 {
-		return enc.WriteValue(_quotedEmptyString)
-	}
+	switch c.A {
+	case 0xFF:
+		buf := [9]byte{
+			'"', '#',
+			_hexUpper[c.R>>4], _hexUpper[c.R&0xF],
+			_hexUpper[c.G>>4], _hexUpper[c.G&0xF],
+			_hexUpper[c.B>>4], _hexUpper[c.B&0xF],
+			'"',
+		}
+		return enc.WriteValue(buf[:])
 
-	buf := [11]byte{
-		'"', '#',
-		_hexUpper[c.R>>4], _hexUpper[c.R&0xF],
-		_hexUpper[c.G>>4], _hexUpper[c.G&0xF],
-		_hexUpper[c.B>>4], _hexUpper[c.B&0xF],
-		_hexUpper[c.A>>4], _hexUpper[c.A&0xF],
-		'"',
+	case 0x00:
+		if c.R == 0 && c.G == 0 && c.B == 0 {
+			return enc.WriteValue(_quotedEmptyString)
+		}
+		fallthrough
+
+	default:
+		buf := [11]byte{
+			'"', '#',
+			_hexUpper[c.R>>4], _hexUpper[c.R&0xF],
+			_hexUpper[c.G>>4], _hexUpper[c.G&0xF],
+			_hexUpper[c.B>>4], _hexUpper[c.B&0xF],
+			_hexUpper[c.A>>4], _hexUpper[c.A&0xF],
+			'"',
+		}
+		return enc.WriteValue(buf[:])
 	}
-	return enc.WriteValue(buf[:])
 }
 
 // UnmarshalJSONFrom decodes a JSON string or null into RGBA.

@@ -24,7 +24,7 @@
 	},
 	"x-path": "x/y/z.bin",
 	"x-ref": 1,
-	"x-rgba": "#ABC123FF",
+	"x-rgba": "#ABC123",
 	"x-string": "hello world",
 	"x-tuple": {
 		"item0": 100,

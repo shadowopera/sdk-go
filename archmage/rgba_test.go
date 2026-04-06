@@ -28,7 +28,7 @@ func TestRGBA(t *testing.T) {
 			subject:  "#RRGGBB parsed as fully opaque",
 			input:    "#FF6600",
 			expected: archmage.RGBA{R: 0xFF, G: 0x66, B: 0x00, A: 0xFF},
-			expStr:   "#FF6600FF",
+			expStr:   "#FF6600",
 		},
 		{
 			subject:  "#RRGGBBAA parsed",
