@@ -94,6 +94,10 @@ func TestRGBA(t *testing.T) {
 				t.Fatalf("marshal error: %v", err)
 			}
 			want := `"` + tt.expStr + `"`
+			switch tt.subject {
+			case "empty string resets to zero", "zero color":
+				want = `""`
+			}
 			if string(data) != want {
 				t.Fatalf("expected JSON %s, got %s", want, data)
 			}

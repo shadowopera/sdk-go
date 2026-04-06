@@ -92,8 +92,16 @@ func (c *RGBA) String() string {
 	return string(buf[:])
 }
 
-// MarshalJSONTo encodes RGBA as a JSON string in "#RRGGBBAA" format.
+var (
+	_quotedEmptyString = []byte(`""`)
+)
+
+// MarshalJSONTo encodes RGBA as a JSON string in "#RRGGBBAA" format or an empty string if zero.
 func (c *RGBA) MarshalJSONTo(enc *jsontext.Encoder) error {
+	if c.R == 0 && c.G == 0 && c.B == 0 && c.A == 0 {
+		return enc.WriteValue(_quotedEmptyString)
+	}
+
 	buf := [11]byte{
 		'"', '#',
 		_hexUpper[c.R>>4], _hexUpper[c.R&0xF],
