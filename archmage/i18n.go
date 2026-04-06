@@ -2,6 +2,7 @@ package archmage
 
 import (
 	"encoding/json/v2"
+	"errors"
 	"fmt"
 	"os"
 
@@ -49,7 +50,7 @@ func (i18n *I18n) MergeTexts(texts map[string]string, lang language.Tag) {
 func (i18n *I18n) MergeL10nData(data []byte, lang language.Tag) error {
 	var tmp map[string]string
 	if err := json.Unmarshal(data, &tmp); err != nil {
-		return err
+		return fmt.Errorf("<archmage> failed to merge l10n data: %w", err)
 	}
 	i18n.MergeTexts(tmp, lang)
 	return nil
@@ -62,7 +63,7 @@ func (i18n *I18n) MergeL10nFile(path string, lang language.Tag) error {
 		return err
 	}
 	if err := i18n.MergeL10nData(data, lang); err != nil {
-		return fmt.Errorf("<archmage> failed to merge l10n file %q | %w", path, err)
+		return fmt.Errorf("<archmage> failed to merge l10n file %q | %w", path, errors.Unwrap(err))
 	}
 
 	return nil

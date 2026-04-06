@@ -163,14 +163,14 @@ func TestI18n_MergeL10nData(t *testing.T) {
 			subject:  "invalid JSON",
 			data:     []byte(`{invalid json`),
 			lang:     language.English,
-			expErr:   "jsontext: invalid character",
+			expErr:   "<archmage> failed to merge l10n data: jsontext: invalid character",
 			expected: nil,
 		},
 		{
 			subject:  "malformed JSON",
 			data:     []byte(`{"hello":}`),
 			lang:     language.English,
-			expErr:   "jsontext: invalid character",
+			expErr:   "<archmage> failed to merge l10n data: jsontext: invalid character",
 			expected: nil,
 		},
 		{
@@ -212,6 +212,21 @@ func TestI18n_MergeL10nFile(t *testing.T) {
 		if !os.IsNotExist(err) {
 			t.Fatalf("expected file not found error for lang %v, got %v", lang, err)
 		}
+	}
+
+	err := archmage.NewI18n(language.English).MergeL10nFile("testdata/bad.json", language.English)
+	if err == nil {
+		t.Fatalf("expected error, got nil")
+	}
+	if !strings.HasPrefix(err.Error(), `<archmage> failed to merge l10n file "`) {
+		t.Fatalf("expected file merge error, got %v", err)
+	}
+}
+
+func TestI18n_MergeEmptyL10nFile(t *testing.T) {
+	err := archmage.NewI18n(language.English).MergeL10nFile("testdata/empty.json", language.English)
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
 	}
 }
 
