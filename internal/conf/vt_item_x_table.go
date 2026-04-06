@@ -3,6 +3,8 @@
 
 package conf
 
+type VtItemXCfgID int64
+
 type VtItemXTable map[VtItemXCfgID]*VtItemXCfg
 
 type VtItemXCfg struct {
@@ -33,8 +35,6 @@ func (x VtItemXTable) Lookup(cfgID VtItemXCfgID) *VtItemXCfg {
 }
 
 // region Trifles
-
-type VtItemXCfgID int64
 
 func (x VtItemXTable) ApplyKeys() {
 	for k, v := range x {

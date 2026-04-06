@@ -3,6 +3,8 @@
 
 package conf
 
+type ItemCfgID int64
+
 type ItemTable map[ItemCfgID]*ItemCfg
 
 type ItemCfg struct {
@@ -26,8 +28,6 @@ func (x ItemTable) Lookup(cfgID ItemCfgID) *ItemCfg {
 }
 
 // region Trifles
-
-type ItemCfgID int64
 
 func (x ItemTable) ApplyKeys() {
 	for k, v := range x {

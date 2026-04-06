@@ -3,6 +3,8 @@
 
 package conf
 
+type WeaponRuneCfgID int64
+
 type WeaponRuneTable map[WeaponRuneCfgID]*WeaponRuneCfg
 
 type WeaponRuneCfg struct {
@@ -20,8 +22,6 @@ func (x WeaponRuneTable) Lookup(cfgID WeaponRuneCfgID) *WeaponRuneCfg {
 }
 
 // region Trifles
-
-type WeaponRuneCfgID int64
 
 func (x WeaponRuneTable) ApplyKeys() {
 	for k, v := range x {

@@ -3,6 +3,8 @@
 
 package conf
 
+type RaceCfgID string
+
 type RaceTable map[RaceCfgID]*RaceCfg
 
 type RaceCfg struct {
@@ -23,8 +25,6 @@ func (x RaceTable) Lookup(cfgID RaceCfgID) *RaceCfg {
 }
 
 // region Trifles
-
-type RaceCfgID string
 
 func (x RaceTable) ApplyKeys() {
 	for k, v := range x {

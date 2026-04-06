@@ -3,6 +3,8 @@
 
 package conf
 
+type HeroCfgID int64
+
 type HeroTable map[HeroCfgID]*HeroCfg
 
 type HeroCfg struct {
@@ -31,8 +33,6 @@ func (x HeroTable) Lookup(cfgID HeroCfgID) *HeroCfg {
 }
 
 // region Trifles
-
-type HeroCfgID int64
 
 func (x HeroTable) ApplyKeys() {
 	for k, v := range x {

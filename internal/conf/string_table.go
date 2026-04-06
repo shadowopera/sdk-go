@@ -3,6 +3,8 @@
 
 package conf
 
+type StringCfgID string
+
 type StringTable map[StringCfgID]*StringCfg
 
 type StringCfg struct {
@@ -50,8 +52,6 @@ func (x StringTable) Lookup(cfgID StringCfgID) *StringCfg {
 }
 
 // region Trifles
-
-type StringCfgID string
 
 func (x StringTable) ApplyKeys() {
 	for k, v := range x {

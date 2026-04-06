@@ -26,6 +26,8 @@ type GameCfg struct {
 	XRef XRef[WeaponRuneCfgID, WeaponRuneCfg] `json:"x-ref"`
 	// desc-x-l10n
 	XL10n L10n `json:"x-l10n"`
+	// desc-x-rgba
+	XRgba RGBA `json:"x-rgba"`
 	// desc-x-array1
 	XArray1 []int `json:"x-array1"`
 	// desc-x-array2

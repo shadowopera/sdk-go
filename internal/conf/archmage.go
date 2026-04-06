@@ -34,6 +34,10 @@ type (
 )
 
 type (
+	RGBA = archmage.RGBA
+)
+
+type (
 	AtlasItem = archmage.AtlasItem
 )
 

@@ -3,6 +3,8 @@
 
 package conf
 
+type MagicCfgID int64
+
 type MagicTable map[MagicCfgID]*MagicCfg
 
 type MagicCfg struct {
@@ -19,8 +21,6 @@ func (x MagicTable) Lookup(cfgID MagicCfgID) *MagicCfg {
 }
 
 // region Trifles
-
-type MagicCfgID int64
 
 func (x MagicTable) ApplyKeys() {
 	for k, v := range x {

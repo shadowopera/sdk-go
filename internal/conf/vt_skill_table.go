@@ -3,6 +3,8 @@
 
 package conf
 
+type VtSkillCfgID int64
+
 type VtSkillTable map[VtSkillCfgID]*VtSkillCfg
 
 type VtSkillCfg struct {
@@ -33,8 +35,6 @@ func (x VtSkillTable) Lookup(cfgID VtSkillCfgID) *VtSkillCfg {
 }
 
 // region Trifles
-
-type VtSkillCfgID int64
 
 func (x VtSkillTable) ApplyKeys() {
 	for k, v := range x {

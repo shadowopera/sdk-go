@@ -12,6 +12,7 @@
 	"x-datetime": "0001-01-02T15:30:00+08:00",
 	"x-ref": 3,
 	"x-l10n": "game.x-l10n",
+	"x-rgba": "#ABC123",
 	"x-array1": [
 		1,
 		2,

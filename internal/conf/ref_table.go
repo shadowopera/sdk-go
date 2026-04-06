@@ -3,6 +3,8 @@
 
 package conf
 
+type RefCfgID int64
+
 type RefTable map[RefCfgID]*RefCfg
 
 type RefCfg struct {
@@ -36,8 +38,6 @@ func (x RefTable) Lookup(cfgID RefCfgID) *RefCfg {
 }
 
 // region Trifles
-
-type RefCfgID int64
 
 func (x RefTable) ApplyKeys() {
 	for k, v := range x {
