@@ -23,6 +23,10 @@ func (x WeaponRuneTable) Lookup(cfgID WeaponRuneCfgID) *WeaponRuneCfg {
 
 // region Trifles
 
+func (x WeaponRuneCfgID) Cfg() *WeaponRuneCfg {
+	return GetConfigAtlas().WeaponRuneTable[x]
+}
+
 func (x WeaponRuneTable) ApplyKeys() {
 	for k, v := range x {
 		if v != nil {

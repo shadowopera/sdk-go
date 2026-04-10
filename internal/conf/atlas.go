@@ -16,6 +16,11 @@ var (
 	_ archmage.Atlas = (*ConfigAtlas)(nil)
 )
 
+var (
+	// GetConfigAtlas must be set before calling any XxxCfgId.Cfg().
+	GetConfigAtlas func() *ConfigAtlas
+)
+
 type ConfigAtlas struct {
 	m map[string]*AtlasItem
 	AtlasExtension

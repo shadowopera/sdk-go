@@ -34,6 +34,10 @@ func (x HeroTable) Lookup(cfgID HeroCfgID) *HeroCfg {
 
 // region Trifles
 
+func (x HeroCfgID) Cfg() *HeroCfg {
+	return GetConfigAtlas().HeroTable[x]
+}
+
 func (x HeroTable) ApplyKeys() {
 	for k, v := range x {
 		if v != nil {

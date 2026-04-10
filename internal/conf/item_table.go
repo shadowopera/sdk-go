@@ -29,6 +29,10 @@ func (x ItemTable) Lookup(cfgID ItemCfgID) *ItemCfg {
 
 // region Trifles
 
+func (x ItemCfgID) Cfg() *ItemCfg {
+	return GetConfigAtlas().ItemTable[x]
+}
+
 func (x ItemTable) ApplyKeys() {
 	for k, v := range x {
 		if v != nil {

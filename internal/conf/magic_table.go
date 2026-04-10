@@ -22,6 +22,10 @@ func (x MagicTable) Lookup(cfgID MagicCfgID) *MagicCfg {
 
 // region Trifles
 
+func (x MagicCfgID) Cfg() *MagicCfg {
+	return GetConfigAtlas().MagicTable[x]
+}
+
 func (x MagicTable) ApplyKeys() {
 	for k, v := range x {
 		if v != nil {

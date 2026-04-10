@@ -26,6 +26,10 @@ func (x RaceTable) Lookup(cfgID RaceCfgID) *RaceCfg {
 
 // region Trifles
 
+func (x RaceCfgID) Cfg() *RaceCfg {
+	return GetConfigAtlas().RaceTable[x]
+}
+
 func (x RaceTable) ApplyKeys() {
 	for k, v := range x {
 		if v != nil {

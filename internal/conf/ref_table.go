@@ -39,6 +39,10 @@ func (x RefTable) Lookup(cfgID RefCfgID) *RefCfg {
 
 // region Trifles
 
+func (x RefCfgID) Cfg() *RefCfg {
+	return GetConfigAtlas().RefTable[x]
+}
+
 func (x RefTable) ApplyKeys() {
 	for k, v := range x {
 		if v != nil {

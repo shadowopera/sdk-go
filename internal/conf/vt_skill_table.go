@@ -36,6 +36,10 @@ func (x VtSkillTable) Lookup(cfgID VtSkillCfgID) *VtSkillCfg {
 
 // region Trifles
 
+func (x VtSkillCfgID) Cfg() *VtSkillCfg {
+	return GetConfigAtlas().VtSkillTable[x]
+}
+
 func (x VtSkillTable) ApplyKeys() {
 	for k, v := range x {
 		if v != nil {

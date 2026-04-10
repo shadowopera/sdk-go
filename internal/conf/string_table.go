@@ -53,6 +53,10 @@ func (x StringTable) Lookup(cfgID StringCfgID) *StringCfg {
 
 // region Trifles
 
+func (x StringCfgID) Cfg() *StringCfg {
+	return GetConfigAtlas().StringTable[x]
+}
+
 func (x StringTable) ApplyKeys() {
 	for k, v := range x {
 		if v != nil {

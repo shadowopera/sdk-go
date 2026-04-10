@@ -36,6 +36,10 @@ func (x VtItemXTable) Lookup(cfgID VtItemXCfgID) *VtItemXCfg {
 
 // region Trifles
 
+func (x VtItemXCfgID) Cfg() *VtItemXCfg {
+	return GetConfigAtlas().VtItemXTable[x]
+}
+
 func (x VtItemXTable) ApplyKeys() {
 	for k, v := range x {
 		if v != nil {

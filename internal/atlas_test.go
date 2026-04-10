@@ -58,6 +58,13 @@ func TestAtlas_Basic(t *testing.T) {
 		t.Fatalf("unexpected item ID: %d", itemEntry.ID)
 	}
 
+	conf.GetConfigAtlas = func() *conf.ConfigAtlas {
+		return atlas
+	}
+	if conf.ItemCfgID(20).Cfg() != itemEntry {
+		t.Fatalf("conf.GetConfigAtlas does not work correctly")
+	}
+
 	if atlas.CharacterArray[0].Race.Ref == nil {
 		t.Fatalf("expected Race.Ref to be bound, got nil")
 	}
