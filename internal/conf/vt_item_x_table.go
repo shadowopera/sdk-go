@@ -12,10 +12,10 @@ type VtItemXCfg struct {
 	Name           string                         `json:"name"`
 	Price          int                            `json:"price"`
 	Desc           string                         `json:"desc"`
-	SpecialSkill   int64                          `json:"special-skill"`
+	SpecialSkill   string                         `json:"special-skill"`
 	Armor          float32                        `json:"armor"`
 	Dps            float32                        `json:"dps"`
-	ShieldSkills   []int64                        `json:"shield-skills"`
+	ShieldSkills   []string                       `json:"shield-skills"`
 	Power          float32                        `json:"power"`
 	AttributeBonus []*vtItemX_AttributeBonusEntry `json:"attributeBonus"`
 }

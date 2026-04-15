@@ -13,7 +13,7 @@
 			"block",
 			"charge"
 		],
-		"ultimateSkill": 1
+		"ultimateSkill": "sk1"
 	},
 	{
 		"attack": 35,
@@ -32,7 +32,7 @@
 			"heal",
 			"teleport"
 		],
-		"ultimateSkill": 2
+		"ultimateSkill": "sk2"
 	},
 	{
 		"attack": 28.5,
@@ -48,7 +48,7 @@
 			"multi_shot",
 			"stealth"
 		],
-		"ultimateSkill": 3
+		"ultimateSkill": "sk3"
 	},
 	{
 		"attack": 45,
@@ -67,6 +67,6 @@
 			"fly",
 			"roar"
 		],
-		"ultimateSkill": 102
+		"ultimateSkill": "sk102"
 	}
 ]

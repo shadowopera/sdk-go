@@ -18,7 +18,7 @@ type CharacterCfg struct {
 	Skills     []string `json:"skills"`
 	// my runes
 	Runes         []XRef[WeaponRuneCfgID, WeaponRuneCfg] `json:"runes"`
-	UltimateSkill int64                                  `json:"ultimateSkill"`
+	UltimateSkill string                                 `json:"ultimateSkill"`
 	RefCrude      *character_RefCrude                    `json:"ref-crude"`
 }
 

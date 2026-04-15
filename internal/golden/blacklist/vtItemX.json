@@ -9,7 +9,7 @@
 		"power": 0,
 		"price": 100,
 		"shield-skills": null,
-		"special-skill": 0
+		"special-skill": ""
 	},
 	"1000": {
 		"armor": 0,
@@ -21,7 +21,7 @@
 		"power": 0,
 		"price": 1000,
 		"shield-skills": null,
-		"special-skill": 0
+		"special-skill": ""
 	},
 	"1001": {
 		"armor": 0,
@@ -33,7 +33,7 @@
 		"power": 0,
 		"price": 2000,
 		"shield-skills": null,
-		"special-skill": 0
+		"special-skill": ""
 	},
 	"1002": {
 		"armor": 0,
@@ -45,7 +45,7 @@
 		"power": 0,
 		"price": 3000,
 		"shield-skills": null,
-		"special-skill": 0
+		"special-skill": ""
 	},
 	"11": {
 		"armor": 0,
@@ -57,7 +57,7 @@
 		"power": 0,
 		"price": 0,
 		"shield-skills": null,
-		"special-skill": 2
+		"special-skill": "sk2"
 	},
 	"1100": {
 		"armor": 500,
@@ -69,7 +69,7 @@
 		"power": 0,
 		"price": 1000,
 		"shield-skills": null,
-		"special-skill": 0
+		"special-skill": ""
 	},
 	"1101": {
 		"armor": 1000,
@@ -81,10 +81,10 @@
 		"power": 0,
 		"price": 2000,
 		"shield-skills": [
-			3,
-			103
+			"sk3",
+			"sk103"
 		],
-		"special-skill": 0
+		"special-skill": ""
 	},
 	"1102": {
 		"armor": 1500,
@@ -96,7 +96,7 @@
 		"power": 0,
 		"price": 3000,
 		"shield-skills": null,
-		"special-skill": 0
+		"special-skill": ""
 	},
 	"1103": {
 		"armor": 2000,
@@ -108,9 +108,9 @@
 		"power": 0,
 		"price": 4000,
 		"shield-skills": [
-			102
+			"sk102"
 		],
-		"special-skill": 0
+		"special-skill": ""
 	},
 	"1104": {
 		"armor": 2500,
@@ -122,7 +122,7 @@
 		"power": 0,
 		"price": 5000,
 		"shield-skills": null,
-		"special-skill": 0
+		"special-skill": ""
 	},
 	"12": {
 		"armor": 0,
@@ -134,7 +134,7 @@
 		"power": 0,
 		"price": 0,
 		"shield-skills": null,
-		"special-skill": 0
+		"special-skill": ""
 	},
 	"1200": {
 		"armor": 0,
@@ -151,7 +151,7 @@
 		"power": 120,
 		"price": 1500,
 		"shield-skills": null,
-		"special-skill": 0
+		"special-skill": ""
 	},
 	"1201": {
 		"armor": 0,
@@ -172,7 +172,7 @@
 		"power": 150,
 		"price": 2000,
 		"shield-skills": null,
-		"special-skill": 0
+		"special-skill": ""
 	},
 	"13": {
 		"armor": 0,
@@ -184,7 +184,7 @@
 		"power": 0,
 		"price": 0,
 		"shield-skills": null,
-		"special-skill": 102
+		"special-skill": "sk102"
 	},
 	"2": {
 		"armor": 0,
@@ -196,7 +196,7 @@
 		"power": 0,
 		"price": 200,
 		"shield-skills": null,
-		"special-skill": 0
+		"special-skill": ""
 	},
 	"3": {
 		"armor": 0,
@@ -208,6 +208,6 @@
 		"power": 0,
 		"price": 300,
 		"shield-skills": null,
-		"special-skill": 0
+		"special-skill": ""
 	}
 }

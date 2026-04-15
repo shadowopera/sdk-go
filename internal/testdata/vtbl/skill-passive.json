@@ -1,5 +1,5 @@
 {
-	"101": {
+	"sk101": {
 		"name": "Arcane Mastery",
 		"class": "Mage",
 		"Foo": {
@@ -8,9 +8,10 @@
 				"X1": "X1-1"
 			}
 		},
-		"weapons": null
+		"weapons": null,
+		"cross-skill2": "sk2"
 	},
-	"102": {
+	"sk102": {
 		"name": "Toughness",
 		"class": "Warrior",
 		"Foo": {
@@ -27,9 +28,10 @@
 			1,
 			13,
 			1103
-		]
+		],
+		"cross-skill2": "sk1"
 	},
-	"103": {
+	"sk103": {
 		"name": "Spiritual Guidance",
 		"class": "Priest",
 		"Foo": {
@@ -41,6 +43,7 @@
 		"weapons": [
 			1101,
 			1201
-		]
+		],
+		"cross-skill2": ""
 	}
 }

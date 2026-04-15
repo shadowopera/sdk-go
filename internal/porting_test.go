@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json/v2"
 	"flag"
+	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -111,6 +112,7 @@ func comparePortingGoldenFile(t *testing.T, goFile, langFile string, langName st
 	}
 
 	if bytes.Equal(goData, langData) {
+		fmt.Printf("[v] %s\n", strings.TrimLeft(langFile, "./\\"))
 		return
 	}
 
@@ -121,6 +123,7 @@ func comparePortingGoldenFile(t *testing.T, goFile, langFile string, langName st
 		t.Fatalf("unmarshal go golden %s: %v", goFile, err)
 	}
 	if jsonEqualLoose(goObj, langObj) {
+		fmt.Printf("[v] %s\n", strings.TrimLeft(langFile, "./\\"))
 		return
 	}
 

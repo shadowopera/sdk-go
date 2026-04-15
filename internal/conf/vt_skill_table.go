@@ -3,7 +3,7 @@
 
 package conf
 
-type VtSkillCfgID int64
+type VtSkillCfgID string
 
 type VtSkillTable map[VtSkillCfgID]*VtSkillCfg
 
@@ -13,8 +13,10 @@ type VtSkillCfg struct {
 	Class string                    `json:"class"`
 	Foo   map[int]*vtSkill_FooEntry `json:"Foo"`
 	// reagent
-	Reagent int64   `json:"reagent"`
-	Weapons []int64 `json:"weapons"`
+	Reagent     int64   `json:"reagent"`
+	CrossSkill1 string  `json:"cross-skill1"`
+	Weapons     []int64 `json:"weapons"`
+	CrossSkill2 string  `json:"cross-skill2"`
 }
 
 // vtSkill_FooEntry represents $.*.Foo.*

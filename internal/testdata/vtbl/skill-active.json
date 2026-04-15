@@ -1,5 +1,5 @@
 {
-	"1": {
+	"sk1": {
 		"name": "Fireball",
 		"class": "Mage",
 		"Foo": {
@@ -11,9 +11,10 @@
 				]
 			}
 		},
-		"reagent": 1
+		"reagent": 1,
+		"cross-skill1": ""
 	},
-	"2": {
+	"sk2": {
 		"name": "Cleave",
 		"class": "Warrior",
 		"Foo": {
@@ -29,9 +30,10 @@
 				]
 			}
 		},
-		"reagent": 11
+		"reagent": 11,
+		"cross-skill1": ""
 	},
-	"3": {
+	"sk3": {
 		"name": "Power Word",
 		"class": "Priest",
 		"Foo": {
@@ -43,6 +45,7 @@
 				]
 			}
 		},
-		"reagent": 1101
+		"reagent": 1101,
+		"cross-skill1": "sk103"
 	}
 }
