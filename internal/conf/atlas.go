@@ -17,14 +17,18 @@ var (
 )
 
 var (
-	// GetConfigAtlas must be set before calling any XxxCfgId.Cfg().
+	// GetConfigAtlas returns the active ConfigAtlas. It must be set before
+	// calling any XxxCfgId.Cfg.
 	GetConfigAtlas func() *ConfigAtlas
 )
 
+// ConfigAtlas holds all game configuration tables and provides cross-table
+// reference binding.
 type ConfigAtlas struct {
 	m map[string]*AtlasItem
 	AtlasExtension
 
+	// DataVersion is the version info of the config repo at export time.
 	DataVersion *archmage.VersionInfo
 
 	CharacterArray  CharacterArray
@@ -66,6 +70,7 @@ func (atlas *ConfigAtlas) buildMap() {
 	}
 }
 
+// SetDataVersion is for internal use only.
 func (atlas *ConfigAtlas) SetDataVersion(v *archmage.VersionInfo) {
 	atlas.DataVersion = v
 }
@@ -74,6 +79,7 @@ type refBinder interface {
 	bindRefs(atlas *ConfigAtlas)
 }
 
+// BindRefs is for internal use only.
 func (atlas *ConfigAtlas) BindRefs() {
 	keys := slices.SortedFunc(maps.Keys(atlas.m), func(k1 string, k2 string) int {
 		return cmp.Compare(strings.ToLower(k1), strings.ToLower(k2))
@@ -86,10 +92,13 @@ func (atlas *ConfigAtlas) BindRefs() {
 	}
 }
 
+// AtlasItems returns the internal map of config-name to AtlasItem.
 func (atlas *ConfigAtlas) AtlasItems() map[string]*AtlasItem {
 	return atlas.m
 }
 
+// OnLoaded is called after all config data has been loaded and refs bound.
+// It delegates to AtlasExtension.OnLoaded. For internal use only.
 func (atlas *ConfigAtlas) OnLoaded() error {
 	return atlas.AtlasExtension.OnLoaded(atlas)
 }

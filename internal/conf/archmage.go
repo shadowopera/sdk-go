@@ -46,6 +46,7 @@ var (
 	_codeVersion []byte
 )
 
+// CodeVersion returns the version info of the config repo at codegen time.
 func CodeVersion() *archmage.VersionInfo {
 	var info archmage.VersionInfo
 	err := json.Unmarshal(_codeVersion, &info)
