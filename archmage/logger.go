@@ -11,6 +11,9 @@ var (
 
 // Logger represents a simple logging capability.
 type Logger interface {
+	// Info logs an informational message.
+	// The args parameter is unused and exists solely to maintain signature
+	// compatibility with slog.Logger.
 	Info(msg string, args ...any)
 }
 
