@@ -78,6 +78,9 @@ func (atlas *AtlasJSON) pickFromSingle(key string) (string, bool) {
 // applies any overrides, calls BindRefs to resolve cross-table references,
 // and finally calls OnLoaded on the atlas.
 func LoadAtlas(atlasFile string, cfgRoot string, atlas Atlas, opts ...Option) error {
+	if atlas.AtlasItems() == nil {
+		return fmt.Errorf("<archmage> atlas must be created using NewConfigAtlas")
+	}
 	atlasOpts := newAtlasOptions()
 	atlasOpts.loadStrategy = func(seq iter.Seq2[string, *AtlasItem], itemLoadFunc AtlasItemLoadFunc) error {
 		for key, item := range seq {
