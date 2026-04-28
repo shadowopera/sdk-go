@@ -13,7 +13,11 @@ func newScavenger() *scavenger {
 	return &scavenger{}
 }
 
-func (scv *scavenger) Info(msg string) {
+func (scv *scavenger) Info(msg string, args ...any) {
+	if len(args) > 0 {
+		panic("unreachable")
+	}
+
 	msg = "INF " + msg
 	scv.mu.Lock()
 	defer scv.mu.Unlock()
