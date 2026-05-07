@@ -11,6 +11,7 @@ type CharacterCfg struct {
 	Name L10n `json:"name"`
 	// race config
 	Race XRef[RaceCfgID, RaceCfg] `json:"race"`
+	Root Vec3[int]                `json:"root"`
 	// health config
 	Health     int      `json:"health"`
 	Attack     float64  `json:"attack"`
