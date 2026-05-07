@@ -34,7 +34,7 @@ cd archmage && bash coverage.sh
 - `atlas.go` — Core `Atlas` interface and `LoadAtlas` function. Three mapping strategies: Unique (1:1), Single (pick one from array), Multiple (merge arrays)
 - `xref.go` — Generic `XRef[V, T]` for cross-table lazy reference resolution
 - `duration.go` — Custom `Duration` type with compact JSON array format `[unitType, value]`
-- `vec.go` — Generic `Vec2/Vec3/Vec4` types with JSON array marshaling
+- `vec.go` — Generic `Vec2/Vec3/Vec4` types
 - `tuple.go` — Generic `Tuple1`–`Tuple7` fixed-size typed collections
 - `i18n.go` — Multi-language text loading with fallback support
 - `logger.go` — Minimal `Logger` interface (single `Info` method)

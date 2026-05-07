@@ -1,7 +1,6 @@
 package archmage
 
 // Vec2 represents a 2D vector with comparable values.
-// It marshals to JSON as a two-element array.
 type Vec2[T comparable] struct {
 	X T `json:"x"`
 	Y T `json:"y"`
@@ -13,7 +12,6 @@ func MakeVec2[T comparable](x, y T) Vec2[T] {
 }
 
 // Vec3 represents a 3D vector with comparable values.
-// It marshals to JSON as a three-element array.
 type Vec3[T comparable] struct {
 	X T `json:"x"`
 	Y T `json:"y"`
@@ -26,7 +24,6 @@ func MakeVec3[T comparable](x, y, z T) Vec3[T] {
 }
 
 // Vec4 represents a 4D vector with comparable values.
-// It marshals to JSON as a four-element array.
 type Vec4[T comparable] struct {
 	X T `json:"x"`
 	Y T `json:"y"`
