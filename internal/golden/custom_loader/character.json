@@ -28,7 +28,11 @@
 		"name": "character[1].name",
 		"race": "",
 		"ref-crude": null,
-		"root": null,
+		"root": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
 		"runes": [
 			1,
 			3
@@ -48,7 +52,11 @@
 		"name": "character[2].name",
 		"race": "",
 		"ref-crude": null,
-		"root": null,
+		"root": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
 		"runes": null,
 		"skills": [
 			"arrow_shot",
@@ -68,7 +76,11 @@
 			"r1": 1,
 			"r2": "Human"
 		},
-		"root": null,
+		"root": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
 		"runes": null,
 		"skills": [
 			"flame_breath",

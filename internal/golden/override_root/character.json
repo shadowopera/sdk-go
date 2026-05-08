@@ -7,7 +7,11 @@
 		"name": "characters[2].name",
 		"race": "",
 		"ref-crude": null,
-		"root": null,
+		"root": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
 		"runes": null,
 		"skills": [
 			"arrow_shot",

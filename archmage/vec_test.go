@@ -48,13 +48,6 @@ func TestVec2(t *testing.T) {
 			t.Fatalf("expected %v, got %v", v1, v2)
 		}
 	}
-
-	vec := archmage.MakeVec2(1, 2)
-	if err := json.Unmarshal([]byte("null"), &vec); err != nil {
-		t.Fatalf("json.Unmarshal null failed: %v", err)
-	} else if vec != archmage.MakeVec2(0, 0) {
-		t.Fatalf("expected zero vec, got %v", vec)
-	}
 }
 
 func TestVec3(t *testing.T) {
@@ -83,13 +76,6 @@ func TestVec3(t *testing.T) {
 			t.Fatalf("expected %v, got %v", v1, v2)
 		}
 	}
-
-	vec := archmage.MakeVec3(1, 2, 3)
-	if err := json.Unmarshal([]byte("null"), &vec); err != nil {
-		t.Fatalf("json.Unmarshal null failed: %v", err)
-	} else if vec != archmage.MakeVec3(0, 0, 0) {
-		t.Fatalf("expected zero vec, got %v", vec)
-	}
 }
 
 func TestVec4(t *testing.T) {
@@ -117,12 +103,5 @@ func TestVec4(t *testing.T) {
 		if v2 != v1 {
 			t.Fatalf("expected %v, got %v", v1, v2)
 		}
-	}
-
-	vec := archmage.MakeVec4(1, 2, 3, 4)
-	if err := json.Unmarshal([]byte("null"), &vec); err != nil {
-		t.Fatalf("json.Unmarshal null failed: %v", err)
-	} else if vec != archmage.MakeVec4(0, 0, 0, 0) {
-		t.Fatalf("expected zero vec, got %v", vec)
 	}
 }

@@ -133,17 +133,15 @@ func comparePortingGoldenFile(t *testing.T, goFile, langFile string, langName st
 
 // jsonEqualLoose recursively compares two JSON-unmarshalled values with the
 // following extra equivalences beyond strict equality:
-//   - nil equals any zero value (false, 0, "", [], {})
-//   - nil equals an object with 2–4 fields named x/y/z/w (in order) all zero
-//     (zero Vec2/Vec3/Vec4 represented as objects by other language SDKs)
+//   - nil equals any zero value (nil, [], {})
 //   - two strings that both parse as RFC3339 timestamps are equal when they
 //     represent the same instant in UTC
 func jsonEqualLoose(a, b any) bool {
-	// nil equals any zero value or a zero vec object.
-	if a == nil && (isJSONZero(b) || isZeroVecObject(b)) {
+	// nil equals any zero value.
+	if a == nil && isJSONZero(b) {
 		return true
 	}
-	if b == nil && (isJSONZero(a) || isZeroVecObject(a)) {
+	if b == nil && isJSONZero(a) {
 		return true
 	}
 	if a == nil || b == nil {
@@ -197,39 +195,13 @@ func jsonEqualLoose(a, b any) bool {
 	}
 }
 
-// isZeroVecObject reports whether v is a map[string]any with 2–4 fields named
-// x, y, z, w (in order by field count) where every value is the float64 0.
-// This matches zero Vec2/Vec3/Vec4 values serialized as objects by other language SDKs.
-func isZeroVecObject(v any) bool {
-	m, ok := v.(map[string]any)
-	if !ok || len(m) < 2 || len(m) > 4 {
-		return false
-	}
-	for _, k := range []string{"x", "y", "z", "w"}[:len(m)] {
-		val, exists := m[k]
-		if !exists {
-			return false
-		}
-		if f, ok := val.(float64); !ok || f != 0 {
-			return false
-		}
-	}
-	return true
-}
-
 // isJSONZero reports whether v is a zero value for its JSON-unmarshalled type:
-// nil, false, 0, "", [], or {}.
+// nil, [], or {}.
 func isJSONZero(v any) bool {
 	if v == nil {
 		return true
 	}
 	switch val := v.(type) {
-	case bool:
-		return !val
-	case float64:
-		return val == 0
-	case string:
-		return val == ""
 	case []any:
 		return len(val) == 0
 	case map[string]any:
