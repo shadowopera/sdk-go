@@ -23,13 +23,13 @@ func NewPCG(seeds ...uint64) *rand.Rand {
 }
 
 func TestVec2(t *testing.T) {
-	rnd := NewPCG(0, 1)
+	rng := NewPCG(0, 1)
 	genNum := func() int {
-		w := rnd.IntN(100)
+		w := rng.IntN(100)
 		if w < 35 {
 			return 0
 		} else {
-			return rnd.Int()
+			return rng.Int()
 		}
 	}
 
@@ -51,13 +51,13 @@ func TestVec2(t *testing.T) {
 }
 
 func TestVec3(t *testing.T) {
-	rnd := NewPCG(0, 1)
+	rng := NewPCG(0, 1)
 	genNum := func() float64 {
-		w := rnd.IntN(100)
+		w := rng.IntN(100)
 		if w < 35 {
 			return 0
 		} else {
-			return rnd.Float64()
+			return rng.Float64()
 		}
 	}
 
@@ -79,13 +79,13 @@ func TestVec3(t *testing.T) {
 }
 
 func TestVec4(t *testing.T) {
-	rnd := NewPCG(0, 1)
+	rng := NewPCG(0, 1)
 	genNum := func() uint32 {
-		w := rnd.IntN(100)
+		w := rng.IntN(100)
 		if w < 35 {
 			return 0
 		} else {
-			return rnd.Uint32()
+			return rng.Uint32()
 		}
 	}
 

@@ -7,7 +7,7 @@ import (
 )
 
 func BenchmarkMinMax(b *testing.B) {
-	rnd := NewPCG()
+	rng := NewPCG()
 
 	b.Run("NativeInt64", func(b *testing.B) {
 		b.ReportAllocs()
@@ -17,7 +17,7 @@ func BenchmarkMinMax(b *testing.B) {
 			Max: 10000,
 		}
 		for b.Loop() {
-			result = minMax.Min + rnd.Int64N(minMax.Max-minMax.Min+1)
+			result = minMax.Min + rng.Int64N(minMax.Max-minMax.Min+1)
 		}
 		_ = result
 	})
@@ -30,7 +30,7 @@ func BenchmarkMinMax(b *testing.B) {
 			Max: 10000,
 		}
 		for b.Loop() {
-			result = minMax.Sample(rnd)
+			result = minMax.Sample(rng)
 		}
 		_ = result
 	})
@@ -43,7 +43,7 @@ func BenchmarkMinMax(b *testing.B) {
 			Max: 10000,
 		}
 		for b.Loop() {
-			result = minMax.Min + rnd.Float32()*(minMax.Max-minMax.Min)
+			result = minMax.Min + rng.Float32()*(minMax.Max-minMax.Min)
 		}
 		_ = result
 	})
@@ -56,7 +56,7 @@ func BenchmarkMinMax(b *testing.B) {
 			Max: 10000,
 		}
 		for b.Loop() {
-			result = minMax.Sample(rnd)
+			result = minMax.Sample(rng)
 		}
 		_ = result
 	})

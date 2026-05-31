@@ -34,6 +34,10 @@ type (
 )
 
 type (
+	MinMax[T comparable] = archmage.MinMax[T]
+)
+
+type (
 	RGBA = archmage.RGBA
 )
 
