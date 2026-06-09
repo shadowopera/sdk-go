@@ -6,11 +6,18 @@ import (
 	"unsafe"
 )
 
+// MinMax represents an inclusive numeric range bounded by Min and Max.
+// It supports the standard Go integer and floating-point types and is used
+// to draw random values within the range.
 type MinMax[T comparable] struct {
+	// Min is the lower bound of the range, inclusive.
 	Min T `json:"min"`
+	// Max is the upper bound of the range, inclusive.
 	Max T `json:"max"`
 }
 
+// Sample returns a random value drawn uniformly from the inclusive range [Min, Max].
+// It panics if T is not a supported integer or floating-point type.
 func (mm *MinMax[T]) Sample(rng *rand.Rand) T {
 	switch any((*T)(nil)).(type) {
 	case *int:
