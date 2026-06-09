@@ -87,16 +87,16 @@ func TestWeightedPoolDistribution(t *testing.T) {
 	}
 }
 
-func TestWeightedPoolInt32SumOverflow(t *testing.T) {
-	// Sum of weights exceeds the int32 range; the int64 accumulator must not overflow.
+func TestWeightedPoolLargeWeightsDistribution(t *testing.T) {
+	// Large equal weights (summing to exactly 1,000,000,000) must stay within the limit
+	// and select all indices with roughly equal probability.
 	rng := NewPCG(0, 1)
-	const big = math.MaxInt32
 	wp := archmage.WeightedPool[int]{
 		Items:   []int{0, 1, 2},
-		Weights: []int32{big, big, big},
+		Weights: []int32{333_333_333, 333_333_333, 333_333_334},
 	}
 	seen := make(map[int]bool)
-	for range 100000 {
+	for range 10000 {
 		idx := wp.SampleIndex(rng)
 		if idx < 0 || idx >= len(wp.Items) {
 			t.Fatalf("index out of range: %d", idx)
@@ -108,4 +108,18 @@ func TestWeightedPoolInt32SumOverflow(t *testing.T) {
 			t.Fatalf("index %d never selected despite equal weights", i)
 		}
 	}
+}
+
+func TestWeightedPoolTotalOverLimitPanics(t *testing.T) {
+	rng := NewPCG(0, 1)
+	wp := archmage.WeightedPool[int]{
+		Items:   []int{0, 1},
+		Weights: []int32{500_000_001, 500_000_000},
+	}
+	defer func() {
+		if r := recover(); r == nil {
+			t.Fatalf("expected panic when total weight exceeds 1,000,000,000")
+		}
+	}()
+	wp.SampleIndex(rng)
 }

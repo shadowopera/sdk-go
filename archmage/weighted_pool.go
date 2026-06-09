@@ -39,12 +39,15 @@ func (wp *WeightedPool[T]) SampleIndex(rng *rand.Rand) int {
 	if total == 0 {
 		panic("<archmage> WeightedPool.SampleIndex: total weight is zero")
 	}
+	if total > 1_000_000_000 {
+		panic("<archmage> WeightedPool.SampleIndex: total weight exceeds 1,000,000,000")
+	}
 
-	r := rng.Int64N(total)
-	var acc int64
+	value := rng.Int32N(int32(total))
+	var acc int32
 	for i, w := range wp.Weights {
-		acc += int64(w)
-		if acc > r {
+		acc += w
+		if acc > value {
 			return i
 		}
 	}
