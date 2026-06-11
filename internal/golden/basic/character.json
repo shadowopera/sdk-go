@@ -2,6 +2,7 @@
 	{
 		"attack": 25.5,
 		"health": 120,
+		"hero": 2,
 		"id": "char_001",
 		"isPlayable": true,
 		"name": "character[0].name",
@@ -23,6 +24,7 @@
 	{
 		"attack": 35,
 		"health": 80,
+		"hero": 5,
 		"id": "char_002",
 		"isPlayable": true,
 		"name": "character[1].name",
@@ -48,6 +50,7 @@
 	{
 		"attack": 28.5,
 		"health": 100,
+		"hero": 5,
 		"id": "char_003",
 		"isPlayable": true,
 		"name": "character[2].name",
@@ -69,6 +72,7 @@
 	{
 		"attack": 45,
 		"health": 500,
+		"hero": 5,
 		"id": "char_004",
 		"isPlayable": false,
 		"name": "character[3].name",

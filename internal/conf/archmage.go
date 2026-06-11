@@ -35,6 +35,7 @@ type (
 
 type (
 	MinMax[T comparable] = archmage.MinMax[T]
+	WeightedPool[T any]  = archmage.WeightedPool[T]
 )
 
 type (

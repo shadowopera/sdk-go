@@ -2,6 +2,7 @@
 	{
 		"attack": 28.5,
 		"health": 100,
+		"hero": 0,
 		"id": "char_003",
 		"isPlayable": true,
 		"name": "characters[2].name",

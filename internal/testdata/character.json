@@ -18,7 +18,8 @@
 		],
 		"runes": null,
 		"ultimateSkill": "sk1",
-		"ref-crude": null
+		"ref-crude": null,
+		"hero": 2
 	},
 	{
 		"id": "char_002",
@@ -43,7 +44,8 @@
 			4
 		],
 		"ultimateSkill": "sk2",
-		"ref-crude": null
+		"ref-crude": null,
+		"hero": 5
 	},
 	{
 		"id": "char_003",
@@ -64,7 +66,8 @@
 		],
 		"runes": null,
 		"ultimateSkill": "sk3",
-		"ref-crude": null
+		"ref-crude": null,
+		"hero": 5
 	},
 	{
 		"id": "char_004",
@@ -88,6 +91,7 @@
 		"ref-crude": {
 			"r1": 1,
 			"r2": "Human"
-		}
+		},
+		"hero": 5
 	}
 ]
