@@ -124,17 +124,17 @@ func TestWeightedPoolTotalOverLimitPanics(t *testing.T) {
 	wp.SampleIndex(rng)
 }
 
-func TestWeightedPoolWithNoiseEmptyPanics(t *testing.T) {
+func TestWeightedPoolWithEmptyPanics(t *testing.T) {
 	wp := archmage.WeightedPool[int]{}
 	defer func() {
 		if r := recover(); r == nil {
 			t.Fatalf("expected panic on empty pool")
 		}
 	}()
-	wp.SampleWithNoise(0.5)
+	wp.SampleWith(0.5)
 }
 
-func TestWeightedPoolWithNoiseZeroTotalPanics(t *testing.T) {
+func TestWeightedPoolWithZeroTotalPanics(t *testing.T) {
 	wp := archmage.WeightedPool[int]{
 		Items:   []int{1, 2, 3},
 		Weights: []int32{0, 0, 0},
@@ -144,10 +144,10 @@ func TestWeightedPoolWithNoiseZeroTotalPanics(t *testing.T) {
 			t.Fatalf("expected panic when total weight is zero")
 		}
 	}()
-	wp.SampleIndexWithNoise(0.5)
+	wp.SampleIndexWith(0.5)
 }
 
-func TestWeightedPoolWithNoiseTotalOverLimitPanics(t *testing.T) {
+func TestWeightedPoolWithTotalOverLimitPanics(t *testing.T) {
 	wp := archmage.WeightedPool[int]{
 		Items:   []int{0, 1},
 		Weights: []int32{500_000_001, 500_000_000},
@@ -157,36 +157,36 @@ func TestWeightedPoolWithNoiseTotalOverLimitPanics(t *testing.T) {
 			t.Fatalf("expected panic when total weight exceeds 1,000,000,000")
 		}
 	}()
-	wp.SampleIndexWithNoise(0.5)
+	wp.SampleIndexWith(0.5)
 }
 
-func TestWeightedPoolWithNoiseClampHigh(t *testing.T) {
-	// noise >= 1 must return the last item with non-zero weight.
+func TestWeightedPoolWithClampHigh(t *testing.T) {
+	// value >= 1 must return the last item with non-zero weight.
 	wp := archmage.WeightedPool[string]{
 		Items:   []string{"a", "b", "c"},
 		Weights: []int32{1, 2, 3},
 	}
-	for _, noise := range []float32{1.0, 1.5, 100.0} {
-		if got := wp.SampleWithNoise(noise); got != "c" {
-			t.Fatalf("noise=%.1f: expected \"c\", got %q", noise, got)
+	for _, value := range []float32{1.0, 1.5, 100.0} {
+		if got := wp.SampleWith(value); got != "c" {
+			t.Fatalf("value=%.1f: expected \"c\", got %q", value, got)
 		}
 	}
 }
 
-func TestWeightedPoolWithNoiseClampLow(t *testing.T) {
-	// noise < 0 must return the first item with non-zero weight.
+func TestWeightedPoolWithClampLow(t *testing.T) {
+	// value < 0 must return the first item with non-zero weight.
 	wp := archmage.WeightedPool[string]{
 		Items:   []string{"a", "b", "c"},
 		Weights: []int32{1, 2, 3},
 	}
-	for _, noise := range []float32{0.0, -0.1, -100.0} {
-		if got := wp.SampleWithNoise(noise); got != "a" {
-			t.Fatalf("noise=%.1f: expected \"a\", got %q", noise, got)
+	for _, value := range []float32{0.0, -0.1, -100.0} {
+		if got := wp.SampleWith(value); got != "a" {
+			t.Fatalf("value=%.1f: expected \"a\", got %q", value, got)
 		}
 	}
 }
 
-func TestWeightedPoolWithNoiseProportionalSlots(t *testing.T) {
+func TestWeightedPoolWithProportionalSlots(t *testing.T) {
 	// Weights 1:2:3 split [0,6) into slots [0,1), [1,3), [3,6).
 	// Verify exact boundary probes map to the expected index.
 	wp := archmage.WeightedPool[int]{
@@ -195,33 +195,33 @@ func TestWeightedPoolWithNoiseProportionalSlots(t *testing.T) {
 	}
 	// total == 6
 	cases := []struct {
-		noise float32
+		value float32
 		want  int
 	}{
-		{0.0, 0},                     // value=0  -> slot 0
-		{0.1666, 0},                  // value≈1  -> still slot 0 (acc=1 > 0)
-		{1.0 / 6.0 * 1.5, 1},        // value≈1.5 -> slot 1
-		{4.0 / 6.0, 2},              // value≈4   -> slot 2
-		{5.0/6.0 + 0.001, 2},        // value≈5   -> slot 2
+		{0.0, 0},             // pos=0      -> slot 0
+		{0.1666, 0},          // pos≈0.9996 -> still slot 0
+		{1.0 / 6.0 * 1.5, 1}, // pos≈1.5    -> slot 1
+		{4.0 / 6.0, 2},       // pos≈4      -> slot 2
+		{5.0/6.0 + 0.001, 2}, // pos≈5      -> slot 2
 	}
 	for _, c := range cases {
-		if got := wp.SampleIndexWithNoise(c.noise); got != c.want {
-			t.Fatalf("noise=%.4f: expected index %d, got %d", c.noise, c.want, got)
+		if got := wp.SampleIndexWith(c.value); got != c.want {
+			t.Fatalf("value=%.4f: expected index %d, got %d", c.value, c.want, got)
 		}
 	}
 }
 
-func TestWeightedPoolWithNoiseZeroWeightNeverSelected(t *testing.T) {
-	// Zero-weight item must never be reached regardless of noise value.
+func TestWeightedPoolWithZeroWeightNeverSelected(t *testing.T) {
+	// Zero-weight item must never be reached regardless of value.
 	wp := archmage.WeightedPool[int]{
 		Items:   []int{10, 20, 30},
 		Weights: []int32{5, 0, 5},
 	}
 	const steps = 1001
 	for i := range steps {
-		noise := float32(i) / float32(steps-1) // 0.0 … 1.0
-		if idx := wp.SampleIndexWithNoise(noise); idx == 1 {
-			t.Fatalf("zero-weight item at index 1 was selected for noise=%.4f", noise)
+		value := float32(i) / float32(steps-1) // 0.0 … 1.0
+		if idx := wp.SampleIndexWith(value); idx == 1 {
+			t.Fatalf("zero-weight item at index 1 was selected for value=%.4f", value)
 		}
 	}
 }
