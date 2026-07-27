@@ -104,6 +104,7 @@ func LoadAtlas(atlasFile string, cfgRoot string, atlas Atlas, opts ...Option) er
 }
 
 func loadAtlasImpl(atlasFile string, cfgRoot string, atlas Atlas, opts *atlasOptions) error {
+	start := time.Now()
 	for _, cfg := range opts.overrideConfigs {
 		if cfg.fsys != nil {
 			continue
@@ -170,6 +171,9 @@ func loadAtlasImpl(atlasFile string, cfgRoot string, atlas Atlas, opts *atlasOpt
 	}
 
 	atlas.BindRefs()
+
+	elapsed := time.Since(start).Milliseconds()
+	opts.Info(fmt.Sprintf("<archmage> loaded %d config items in %dms", len(filtered), elapsed))
 	return nil
 }
 
