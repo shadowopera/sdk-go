@@ -41,8 +41,8 @@ func dumpAtlasItem(item *AtlasItem, k string, outputDir string, opts []json.Opti
 
 // Canonicalize marshals obj to indented, canonical JSON.
 // It applies archmage's standard marshal options (nil maps/slices as null,
-// zero time.Time and zero Vec pointers as null), then sorts object keys and
-// indents the output. Additional opts are appended after the defaults.
+// zero time.Time as null), then sorts object keys and indents the output.
+// Additional opts are appended after the defaults.
 // Returns the formatted JSON bytes or an error.
 func Canonicalize(obj any, opts ...json.Options) ([]byte, error) {
 	data, err := json.Marshal(obj, getMarshalOptions(opts)...)

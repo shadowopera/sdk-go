@@ -311,7 +311,11 @@ func readOverrideFile(cfg overrideConfig, name string) (string, []byte, error) {
 }
 
 type overrideConfig struct {
+	// fsys supplies the override files when set.
 	fsys fs.FS
+	// root is the directory holding the override files. It applies only when
+	// fsys is nil: an fs.FS is already rooted at the directory it exposes, so
+	// no extra prefix is needed.
 	root string
 }
 
