@@ -148,7 +148,7 @@ func loadAtlasImpl(atlasFile string, cfgRoot string, atlas Atlas, opts *atlasOpt
 	filtered := slices.DeleteFunc(keys, func(k string) bool {
 		cause, yes := opts.shouldSkip(k)
 		if yes {
-			opts.Info(fmt.Sprintf("<archmage> skipping atlas item: %s. cause: %s", k, cause))
+			opts.Info(fmt.Sprintf("<archmage> Skipping atlas item: %s. cause: %s", k, cause))
 		}
 		return yes
 	})
@@ -173,7 +173,7 @@ func loadAtlasImpl(atlasFile string, cfgRoot string, atlas Atlas, opts *atlasOpt
 	atlas.BindRefs()
 
 	elapsed := time.Since(start).Milliseconds()
-	opts.Info(fmt.Sprintf("<archmage> loaded %d config items in %dms", len(filtered), elapsed))
+	opts.Info(fmt.Sprintf("<archmage> Loaded %d config items in %dms", len(filtered), elapsed))
 	return nil
 }
 
@@ -290,7 +290,7 @@ func loadItem(ctx context.Context, key string, item *AtlasItem,
 		supplement = fmt.Sprintf(" with %d overrides", len(fd.overrides))
 	}
 	elapsed := time.Since(start).Milliseconds()
-	opts.Info(fmt.Sprintf("<archmage> loaded (%s) %s%s (%dms)", item.Mapping, fd.paths, supplement, elapsed))
+	opts.Info(fmt.Sprintf("<archmage> Loaded (%s) %s%s (%dms)", item.Mapping, fd.paths, supplement, elapsed))
 	item.Ready = true
 	return nil
 }
