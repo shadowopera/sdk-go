@@ -22,7 +22,7 @@
 		"string": "sdk/string.json",
 		"weapon-rune": "weapon-rune.json"
 	},
-	"single": {
+	"variant": {
 		"game": {
 			"/": "game.json"
 		},
@@ -31,7 +31,7 @@
 			"x5": "sdk/prop-floats.x5.json"
 		}
 	},
-	"multiple": {
+	"many": {
 		"vtItemX": [
 			"vtbl/item1-common.json",
 			"vtbl/item1-special.json",

@@ -120,10 +120,10 @@ func TestAtlas_DataVersion(t *testing.T) {
 
 func TestAtlas_WithAtlasModifier(t *testing.T) {
 	atlasModifier := func(atlasJSON *archmage.AtlasJSON) {
-		atlasJSON.Single["prop_floats"]["/"] = atlasJSON.Single["prop_floats"]["x5"]
+		atlasJSON.Variant["prop_floats"]["/"] = atlasJSON.Variant["prop_floats"]["x5"]
 		delete(atlasJSON.Unique, "character")
 		delete(atlasJSON.Unique, "matrix2")
-		delete(atlasJSON.Single, "game")
+		delete(atlasJSON.Variant, "game")
 	}
 
 	opts := []archmage.Option{
@@ -342,7 +342,7 @@ func TestAtlas_NotFoundCallback(t *testing.T) {
 		t.Fatal("expected error, got nil")
 	}
 	if err.Error() != `<archmage> failed to load atlas item "prop_floats". atlasFile: testdata/atlas.json, cfgRoot: testdata | `+
-		`could not find $.single['prop_floats']['/'] in testdata/atlas.json` {
+		`could not find $.variant['prop_floats']['/'] in testdata/atlas.json` {
 		t.Fatalf("unexpected error, got %s", err)
 	}
 }

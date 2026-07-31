@@ -16,12 +16,12 @@ import (
 )
 
 const (
-	// MappingUnique indicates one-to-one mapping between key and file.
+	// MappingUnique indicates a one-to-one mapping between a key and a file.
 	MappingUnique = "unique"
-	// MappingSingle indicates that a key maps to a single file from a set of files.
-	MappingSingle = "single"
-	// MappingMultiple indicates that a key maps to multiple files loaded and merged as one.
-	MappingMultiple = "multiple"
+	// MappingVariant indicates that a key maps to multiple file variants, only one of which is loaded.
+	MappingVariant = "variant"
+	// MappingMany indicates that a key maps to multiple files loaded separately and merged into one.
+	MappingMany = "many"
 )
 
 // Atlas is the interface a configuration collection must implement to be
@@ -42,8 +42,7 @@ type Atlas interface {
 type AtlasItem struct {
 	// Cfg is a pointer to the configuration struct that receives unmarshaled data.
 	Cfg any
-	// Mapping specifies how this item maps to files (MappingUnique,
-	// MappingSingle, or MappingMultiple).
+	// Mapping specifies how this item maps to files (MappingUnique, MappingVariant, or MappingMany).
 	Mapping string
 	// Key is the item's key in atlas.json.
 	Key string
@@ -57,14 +56,14 @@ type AtlasJSON struct {
 	Version *VersionInfo `json:"version"`
 	// Unique maps each key to a unique file path (one-to-one).
 	Unique map[string]string `json:"unique"`
-	// Single maps each key to a set of candidate files, where "/" denotes the default.
-	Single map[string]map[string]string `json:"single"`
-	// Multiple maps each key to an ordered list of files to merge.
-	Multiple map[string][]string `json:"multiple"`
+	// Variant maps each key to its file variants, where "/" denotes the default.
+	Variant map[string]map[string]string `json:"variant"`
+	// Many maps each key to an ordered list of files to merge.
+	Many map[string][]string `json:"many"`
 }
 
-func (atlas *AtlasJSON) pickFromSingle(key string) (string, bool) {
-	m, ok := atlas.Single[key]
+func (atlas *AtlasJSON) pickFromVariant(key string) (string, bool) {
+	m, ok := atlas.Variant[key]
 	if ok {
 		f, ok := m["/"]
 		if ok {
@@ -231,16 +230,16 @@ func loadItem(ctx context.Context, key string, item *AtlasItem,
 		} else {
 			keyPath = fmt.Sprintf("$.unique['%s']", key)
 		}
-	case MappingSingle:
-		if f, ok := atlasJSON.pickFromSingle(key); ok {
+	case MappingVariant:
+		if f, ok := atlasJSON.pickFromVariant(key); ok {
 			files = []string{f}
 		} else {
-			keyPath = fmt.Sprintf("$.single['%s']['/']", key)
+			keyPath = fmt.Sprintf("$.variant['%s']['/']", key)
 		}
-	case MappingMultiple:
-		files = atlasJSON.Multiple[key]
+	case MappingMany:
+		files = atlasJSON.Many[key]
 		if len(files) == 0 {
-			keyPath = fmt.Sprintf("$.multiple['%s']", key)
+			keyPath = fmt.Sprintf("$.many['%s']", key)
 		}
 	default:
 		return fmt.Errorf("unsupported mapping: %s", item.Mapping)
@@ -366,7 +365,7 @@ func WithLogger(logger Logger) Option {
 //
 //	archmage.LoadAtlas("atlas.json", "config", atlas,
 //	    archmage.WithAtlasModifier(func(aj *archmage.AtlasJSON) {
-//	        aj.Single["game"]["/"] = aj.Single["game"]["dev"]
+//	        aj.Variant["game"]["/"] = aj.Variant["game"]["dev"]
 //	    }))
 func WithAtlasModifier(cb func(atlasJSON *AtlasJSON)) Option {
 	return func(opts *atlasOptions) {

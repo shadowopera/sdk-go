@@ -55,17 +55,17 @@ func NewConfigAtlas() *ConfigAtlas {
 func (atlas *ConfigAtlas) buildMap() {
 	atlas.m = map[string]*AtlasItem{
 		"character":   {Cfg: &atlas.CharacterArray, Mapping: "unique"},
-		"game":        {Cfg: &atlas.GameCfg, Mapping: "single"},
+		"game":        {Cfg: &atlas.GameCfg, Mapping: "variant"},
 		"hero":        {Cfg: &atlas.HeroTable, Mapping: "unique"},
 		"Item":        {Cfg: &atlas.ItemTable, Mapping: "unique"},
 		"Magic":       {Cfg: &atlas.MagicTable, Mapping: "unique"},
 		"matrix2":     {Cfg: &atlas.Matrix2Table, Mapping: "unique"},
-		"prop_floats": {Cfg: &atlas.PropFloatsCfg, Mapping: "single"},
+		"prop_floats": {Cfg: &atlas.PropFloatsCfg, Mapping: "variant"},
 		"Race":        {Cfg: &atlas.RaceTable, Mapping: "unique"},
 		"ref":         {Cfg: &atlas.RefTable, Mapping: "unique"},
 		"string":      {Cfg: &atlas.StringTable, Mapping: "unique"},
-		"vtItemX":     {Cfg: &atlas.VtItemXTable, Mapping: "multiple"},
-		"vtSkill":     {Cfg: &atlas.VtSkillTable, Mapping: "multiple"},
+		"vtItemX":     {Cfg: &atlas.VtItemXTable, Mapping: "many"},
+		"vtSkill":     {Cfg: &atlas.VtSkillTable, Mapping: "many"},
 		"weapon-rune": {Cfg: &atlas.WeaponRuneTable, Mapping: "unique"},
 	}
 }
