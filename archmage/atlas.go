@@ -46,6 +46,9 @@ type AtlasItem struct {
 	Mapping string
 	// Key is the item's key in atlas.json.
 	Key string
+	// Variant is the variant used by a variant-mapped item, defaulting to "/".
+	// It is empty for other mappings.
+	Variant string
 	// Ready reports whether the item was successfully loaded.
 	Ready bool
 }
@@ -62,10 +65,10 @@ type AtlasJSON struct {
 	Many map[string][]string `json:"many"`
 }
 
-func (atlas *AtlasJSON) pickFromVariant(key string) (string, bool) {
+func (atlas *AtlasJSON) pickFromVariant(key, variant string) (string, bool) {
 	m, ok := atlas.Variant[key]
 	if ok {
-		f, ok := m["/"]
+		f, ok := m[variant]
 		if ok {
 			return f, true
 		}
@@ -140,6 +143,14 @@ func loadAtlasImpl(atlasFile string, cfgRoot string, atlas Atlas, opts *atlasOpt
 	for _, v := range opts.blacklist {
 		if _, ok := items[v]; !ok {
 			return fmt.Errorf("<archmage> atlas blacklist: unknown item %q", v)
+		}
+	}
+	for _, v := range slices.SortedFunc(maps.Keys(opts.variants), compareLower) {
+		if _, ok := items[v]; !ok {
+			return fmt.Errorf("<archmage> atlas variant: unknown item %q", v)
+		}
+		if opts.variants[v] == "" {
+			return fmt.Errorf("<archmage> atlas variant: empty variant for item %q", v)
 		}
 	}
 
@@ -231,10 +242,12 @@ func loadItem(ctx context.Context, key string, item *AtlasItem,
 			keyPath = fmt.Sprintf("$.unique['%s']", key)
 		}
 	case MappingVariant:
-		if f, ok := atlasJSON.pickFromVariant(key); ok {
+		variant := cmp.Or(opts.variants[key], "/")
+		item.Variant = variant
+		if f, ok := atlasJSON.pickFromVariant(key, variant); ok {
 			files = []string{f}
 		} else {
-			keyPath = fmt.Sprintf("$.variant['%s']['/']", key)
+			keyPath = fmt.Sprintf("$.variant['%s']['%s']", key, variant)
 		}
 	case MappingMany:
 		files = atlasJSON.Many[key]
@@ -328,12 +341,15 @@ type atlasOptions struct {
 
 	whitelist []string
 	blacklist []string
+
+	variants map[string]string
 }
 
 func newAtlasOptions() *atlasOptions {
 	return &atlasOptions{
 		Logger:          &defaultLogger{},
 		cbAtlasModifier: func(atlasJSON *AtlasJSON) {},
+		variants:        make(map[string]string),
 	}
 }
 
@@ -365,7 +381,7 @@ func WithLogger(logger Logger) Option {
 //
 //	archmage.LoadAtlas("atlas.json", "config", atlas,
 //	    archmage.WithAtlasModifier(func(aj *archmage.AtlasJSON) {
-//	        aj.Variant["game"]["/"] = aj.Variant["game"]["dev"]
+//	        aj.Unique["item"] = "custom/item.json"
 //	    }))
 func WithAtlasModifier(cb func(atlasJSON *AtlasJSON)) Option {
 	return func(opts *atlasOptions) {
@@ -395,6 +411,20 @@ func WithWhitelist(whitelist []string) Option {
 func WithBlacklist(blacklist []string) Option {
 	return func(opts *atlasOptions) {
 		opts.blacklist = blacklist
+	}
+}
+
+// WithVariant selects the variant to load for the item identified by key.
+// A variant-mapped item that is not given a variant falls back to "/".
+//
+// Example:
+//
+//	archmage.LoadAtlas("atlas.json", "config", atlas,
+//	    archmage.WithVariant("prop_floats", "x5"),
+//	    archmage.WithVariant("game", "dev"))
+func WithVariant(key, variant string) Option {
+	return func(opts *atlasOptions) {
+		opts.variants[key] = variant
 	}
 }
 

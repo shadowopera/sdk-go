@@ -200,6 +200,144 @@ func TestAtlas_WithBlacklist_Error(t *testing.T) {
 	}
 }
 
+func TestAtlas_WithVariant(t *testing.T) {
+	for _, variant := range []string{"x3", "x5"} {
+		t.Run(variant, func(t *testing.T) {
+			opts := []archmage.Option{
+				archmage.WithLogger(newScavenger()),
+				archmage.WithWhitelist([]string{"prop_floats"}),
+				archmage.WithVariant("prop_floats", variant),
+			}
+
+			atlas := conf.NewConfigAtlas()
+			err := archmage.LoadAtlas("testdata/atlas.json", "testdata", atlas, opts...)
+			if err != nil {
+				t.Fatal(err)
+			}
+			checkUpdateGoldenFiles(t, atlas, "golden/variant_"+variant)
+
+			if v := atlas.AtlasItems()["prop_floats"].Variant; v != variant {
+				t.Fatalf(`expected Variant to be %q, got %q`, variant, v)
+			}
+		})
+	}
+}
+
+func TestAtlas_WithVariant_Default(t *testing.T) {
+	opts := []archmage.Option{
+		archmage.WithLogger(newScavenger()),
+		archmage.WithWhitelist([]string{"game", "weapon-rune", "vtSkill"}),
+	}
+
+	atlas := conf.NewConfigAtlas()
+	err := archmage.LoadAtlas("testdata/atlas.json", "testdata", atlas, opts...)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	items := atlas.AtlasItems()
+	if v := items["game"].Variant; v != "/" {
+		t.Fatalf(`expected game Variant to be "/", got %q`, v)
+	}
+	if v := items["weapon-rune"].Variant; v != "" {
+		t.Fatalf(`expected weapon-rune Variant to be empty, got %q`, v)
+	}
+	if v := items["vtSkill"].Variant; v != "" {
+		t.Fatalf(`expected vtSkill Variant to be empty, got %q`, v)
+	}
+}
+
+func TestAtlas_WithVariant_LastWins(t *testing.T) {
+	opts := []archmage.Option{
+		archmage.WithLogger(newScavenger()),
+		archmage.WithWhitelist([]string{"prop_floats"}),
+		archmage.WithVariant("prop_floats", "x3"),
+		archmage.WithVariant("prop_floats", "x5"),
+	}
+
+	atlas := conf.NewConfigAtlas()
+	err := archmage.LoadAtlas("testdata/atlas.json", "testdata", atlas, opts...)
+	if err != nil {
+		t.Fatal(err)
+	}
+	checkUpdateGoldenFiles(t, atlas, "golden/variant_x5")
+}
+
+func TestAtlas_WithVariant_UnknownItem(t *testing.T) {
+	opts := []archmage.Option{
+		archmage.WithLogger(newScavenger()),
+		archmage.WithBlacklist([]string{"prop_floats"}),
+		archmage.WithVariant("prop_float", "x5"),
+	}
+
+	atlas := conf.NewConfigAtlas()
+	err := archmage.LoadAtlas("testdata/atlas.json", "testdata", atlas, opts...)
+	if err == nil {
+		t.Fatal("expected error, got nil")
+	}
+	if !strings.HasPrefix(err.Error(), `<archmage> atlas variant: unknown item "prop_float"`) {
+		t.Fatalf("unexpected error: %v", err)
+	}
+}
+
+func TestAtlas_WithVariant_EmptyVariant(t *testing.T) {
+	opts := []archmage.Option{
+		archmage.WithLogger(newScavenger()),
+		archmage.WithWhitelist([]string{"prop_floats"}),
+		archmage.WithVariant("prop_floats", ""),
+	}
+
+	atlas := conf.NewConfigAtlas()
+	err := archmage.LoadAtlas("testdata/atlas.json", "testdata", atlas, opts...)
+	if err == nil {
+		t.Fatal("expected error, got nil")
+	}
+	if !strings.HasPrefix(err.Error(), `<archmage> atlas variant: empty variant for item "prop_floats"`) {
+		t.Fatalf("unexpected error: %v", err)
+	}
+}
+
+func TestAtlas_WithVariant_NotFound(t *testing.T) {
+	opts := []archmage.Option{
+		archmage.WithLogger(newScavenger()),
+		archmage.WithWhitelist([]string{"prop_floats"}),
+		archmage.WithVariant("prop_floats", "x9"),
+	}
+
+	atlas := conf.NewConfigAtlas()
+	err := archmage.LoadAtlas("testdata/atlas.json", "testdata", atlas, opts...)
+	if err == nil {
+		t.Fatal("expected error, got nil")
+	}
+	if err.Error() != `<archmage> failed to load atlas item "prop_floats". atlasFile: testdata/atlas.json, cfgRoot: testdata | `+
+		`could not find $.variant['prop_floats']['x9'] in testdata/atlas.json` {
+		t.Fatalf("unexpected error, got %s", err)
+	}
+}
+
+func TestAtlas_WithVariant_SkippedItem(t *testing.T) {
+	opts := []archmage.Option{
+		archmage.WithLogger(newScavenger()),
+		archmage.WithBlacklist([]string{"prop_floats"}),
+		archmage.WithVariant("prop_floats", "x9"),
+		archmage.WithVariant("hero", "x5"),
+	}
+
+	atlas := conf.NewConfigAtlas()
+	err := archmage.LoadAtlas("testdata/atlas.json", "testdata", atlas, opts...)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	items := atlas.AtlasItems()
+	if items["prop_floats"].Ready {
+		t.Fatal("expected prop_floats to be skipped")
+	}
+	if v := items["hero"].Variant; v != "" {
+		t.Fatalf(`expected hero Variant to be empty, got %q`, v)
+	}
+}
+
 func TestAtlas_WithOverrideRoot(t *testing.T) {
 	opts := []archmage.Option{
 		archmage.WithLogger(newScavenger()),
