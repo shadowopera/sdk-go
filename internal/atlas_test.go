@@ -86,8 +86,11 @@ func TestAtlas_Basic(t *testing.T) {
 	if len(atlas.VtItemXTable) != 16 {
 		t.Fatalf("expected len(vtItemXTable) = 16, got %d", len(atlas.VtItemXTable))
 	}
-	if atlas.DataVersion != nil {
-		t.Fatalf("expected DataVersion to be nil, got %v", atlas.DataVersion)
+	if atlas.DataVersion == nil {
+		t.Fatalf("expected DataVersion to be non-nil")
+	}
+	if atlas.DataVersion.Semver != "v1.0.0" {
+		t.Fatalf(`expected atlas.DataVersion.Semver to be "v1.0.0", got "%s"`, atlas.DataVersion.Semver)
 	}
 	if conf.CodeVersion() == nil {
 		t.Fatalf("expected CodeVersion to be non-nil")

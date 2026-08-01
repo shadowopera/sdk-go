@@ -1,4 +1,7 @@
 {
+	"version": {
+		"semver": "v1.0.0"
+	},
 	"unique": {
 		"character": "character.json",
 		"hero": "hero.json",

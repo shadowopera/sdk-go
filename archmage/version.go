@@ -4,8 +4,10 @@ import (
 	"time"
 )
 
-// VersionInfo represents VCS version metadata.
+// VersionInfo holds the version metadata for a build.
 type VersionInfo struct {
+	// Semver is the semantic version supplied via the --semver CLI flag.
+	Semver string `json:"semver"`
 	// Workspace is the workspace name.
 	Workspace string `json:"workspace"`
 	// Tags are tags associated with this version.
