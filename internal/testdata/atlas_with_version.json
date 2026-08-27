@@ -39,6 +39,11 @@
 			"vtbl/weapon-staff.json",
 			"vtbl/weapon-sword.json"
 		],
+		"vtQuest": [
+			"vtbl/quest-board.json",
+			"vtbl/quest-chain.json",
+			"vtbl/quest-common.json"
+		],
 		"vtSkill": [
 			"vtbl/skill-active.json",
 			"vtbl/skill-passive.json"

@@ -1,0 +1,15 @@
+{
+	"6": {
+		"name": "Ember Hollow",
+		"chosenBy": [
+			1,
+			2
+		],
+		"nextQuest": 0
+	},
+	"7": {
+		"name": "Trail Marker",
+		"chosenBy": null,
+		"nextQuest": 3
+	}
+}

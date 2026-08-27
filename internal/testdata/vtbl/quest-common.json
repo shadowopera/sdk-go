@@ -1,0 +1,24 @@
+{
+	"1": {
+		"name": "Awaken",
+		"nextQuest": 6,
+		"refreshInterval": {
+			"min": null,
+			"max": null
+		}
+	},
+	"2": {
+		"name": "Gather Herbs",
+		"nextQuest": 6,
+		"refreshInterval": {
+			"min": [
+				0,
+				180
+			],
+			"max": [
+				0,
+				300
+			]
+		}
+	}
+}

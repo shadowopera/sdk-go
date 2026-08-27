@@ -1,0 +1,102 @@
+{
+	"1": {
+		"chosenBy": null,
+		"desc": "",
+		"id": 1,
+		"name": "Awaken",
+		"nextQuest": 6,
+		"origin": "",
+		"refreshInterval": {
+			"max": null,
+			"min": null
+		},
+		"unlockedBy": 0
+	},
+	"2": {
+		"chosenBy": null,
+		"desc": "",
+		"id": 2,
+		"name": "Gather Herbs",
+		"nextQuest": 6,
+		"origin": "",
+		"refreshInterval": {
+			"max": [
+				0,
+				300
+			],
+			"min": [
+				0,
+				180
+			]
+		},
+		"unlockedBy": 0
+	},
+	"3": {
+		"chosenBy": null,
+		"desc": "",
+		"id": 3,
+		"name": "Into the Forest",
+		"nextQuest": 0,
+		"origin": "quest-chain",
+		"refreshInterval": {
+			"max": null,
+			"min": null
+		},
+		"unlockedBy": 7
+	},
+	"4": {
+		"chosenBy": null,
+		"desc": "",
+		"id": 4,
+		"name": "Cave Depths",
+		"nextQuest": 0,
+		"origin": "quest-chain",
+		"refreshInterval": {
+			"max": null,
+			"min": null
+		},
+		"unlockedBy": 0
+	},
+	"5": {
+		"chosenBy": null,
+		"desc": "",
+		"id": 5,
+		"name": "Boss Fight",
+		"nextQuest": 0,
+		"origin": "quest-chain",
+		"refreshInterval": {
+			"max": null,
+			"min": null
+		},
+		"unlockedBy": 0
+	},
+	"6": {
+		"chosenBy": [
+			1,
+			2
+		],
+		"desc": "",
+		"id": 6,
+		"name": "Ember Hollow",
+		"nextQuest": 0,
+		"origin": "",
+		"refreshInterval": {
+			"max": null,
+			"min": null
+		},
+		"unlockedBy": 0
+	},
+	"7": {
+		"chosenBy": null,
+		"desc": "",
+		"id": 7,
+		"name": "Trail Marker",
+		"nextQuest": 3,
+		"origin": "",
+		"refreshInterval": {
+			"max": null,
+			"min": null
+		},
+		"unlockedBy": 0
+	}
+}

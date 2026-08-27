@@ -3,12 +3,13 @@ package archmage
 import (
 	"fmt"
 	"math/rand/v2"
+	"time"
 	"unsafe"
 )
 
 // MinMax represents an inclusive numeric range bounded by Min and Max.
-// It supports the standard Go integer and floating-point types and is used
-// to draw random values within the range.
+// It supports the standard Go integer and floating-point types, as well as
+// Duration, and is used to draw random values within the range.
 type MinMax[T comparable] struct {
 	// Min is the lower bound of the range, inclusive.
 	Min T `json:"min"`
@@ -17,7 +18,10 @@ type MinMax[T comparable] struct {
 }
 
 // Sample returns a random value drawn uniformly from the inclusive range [Min, Max].
-// It panics if T is not a supported integer or floating-point type.
+// It panics if T is not a supported type.
+//
+// For Duration, the draw has millisecond precision: every value it can return is a
+// whole number of milliseconds.
 func (mm *MinMax[T]) Sample(rng *rand.Rand) T {
 	switch any((*T)(nil)).(type) {
 	case *int:
@@ -98,6 +102,12 @@ func (mm *MinMax[T]) Sample(rng *rand.Rand) T {
 		xMin := *(*float64)(unsafe.Pointer(&mm.Min))
 		xMax := *(*float64)(unsafe.Pointer(&mm.Max))
 		v := xMin + r64*(xMax-xMin)
+		return *(*T)(unsafe.Pointer(&v))
+
+	case *Duration:
+		xMin := *(*int64)(unsafe.Pointer(&mm.Min)) / 1e6
+		xMax := *(*int64)(unsafe.Pointer(&mm.Max)) / 1e6
+		v := Duration{Duration: time.Duration((xMin + rng.Int64N(xMax-xMin+1)) * 1e6)}
 		return *(*T)(unsafe.Pointer(&v))
 
 	default:

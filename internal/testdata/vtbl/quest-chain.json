@@ -1,0 +1,20 @@
+{
+	"3": {
+		"desc": "",
+		"name": "Into the Forest",
+		"origin": "quest-chain",
+		"unlockedBy": 7
+	},
+	"4": {
+		"desc": "",
+		"name": "Cave Depths",
+		"origin": "quest-chain",
+		"unlockedBy": 0
+	},
+	"5": {
+		"desc": "",
+		"name": "Boss Fight",
+		"origin": "quest-chain",
+		"unlockedBy": 0
+	}
+}
