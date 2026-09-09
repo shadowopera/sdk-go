@@ -1,6 +1,6 @@
 module shadop.dev/pkg/sdk-go
 
-go 1.26.2
+go 1.27
 
 require (
 	golang.org/x/sync v0.20.0

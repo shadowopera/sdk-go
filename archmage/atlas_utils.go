@@ -3,6 +3,7 @@ package archmage
 import (
 	"encoding/json/jsontext"
 	"encoding/json/v2"
+	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -69,7 +70,9 @@ func getMarshalOptions(opts []json.Options) []json.Options {
 				if t.IsZero() {
 					return enc.WriteToken(jsontext.Null)
 				}
-				return json.SkipFunc
+				// Fall back to the default marshaler. Nothing has been written to
+				// enc, as json/v2 requires when signaling ErrUnsupported.
+				return errors.ErrUnsupported
 			}),
 		)),
 	}, opts...)

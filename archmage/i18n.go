@@ -4,6 +4,7 @@ import (
 	"encoding/json/v2"
 	"errors"
 	"fmt"
+	"maps"
 	"os"
 
 	"golang.org/x/text/language"
@@ -41,9 +42,7 @@ func (i18n *I18n) MergeTexts(texts map[string]string, lang language.Tag) {
 		i18n.texts[lang] = make(map[string]string)
 	}
 	store := i18n.texts[lang]
-	for k, v := range texts {
-		store[k] = v
-	}
+	maps.Copy(store, texts)
 }
 
 // MergeL10nData parses JSON translation data and merges it for the language.

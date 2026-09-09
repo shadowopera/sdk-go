@@ -79,7 +79,11 @@ func (d *Duration) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
 		}
 		switch tok.Kind() {
 		case '0':
-			a = append(a, tok.Int())
+			v, err := tok.Int()
+			if err != nil {
+				return err
+			}
+			a = append(a, v)
 			continue
 		case ']':
 		default:
