@@ -22,9 +22,9 @@ type portingLanguage struct {
 	goldenDir string
 }
 
-// portingLanguages lists all language SDKs whose golden files should be compared
+// _portingLanguages lists all language SDKs whose golden files should be compared
 // against the Go golden files. Add new entries here as more SDKs are ported.
-var portingLanguages = []portingLanguage{
+var _portingLanguages = []portingLanguage{
 	{name: "cs", goldenDir: "../../sdk-cs/tests/golden"},
 }
 
@@ -33,7 +33,7 @@ func TestPortingGoldenFiles(t *testing.T) {
 		t.Skip("skipping porting test; run with -porting to enable")
 	}
 
-	for _, lang := range portingLanguages {
+	for _, lang := range _portingLanguages {
 		comparePortingGoldenRoot(t, "golden", lang.goldenDir, lang.name)
 	}
 }

@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	_hexUpper = "0123456789ABCDEF"
+	hexUpper = "0123456789ABCDEF"
 )
 
 var (
@@ -86,19 +86,19 @@ func (c *RGBA) String() string {
 	case 0xFF:
 		buf := [7]byte{
 			'#',
-			_hexUpper[c.R>>4], _hexUpper[c.R&0xF],
-			_hexUpper[c.G>>4], _hexUpper[c.G&0xF],
-			_hexUpper[c.B>>4], _hexUpper[c.B&0xF],
+			hexUpper[c.R>>4], hexUpper[c.R&0xF],
+			hexUpper[c.G>>4], hexUpper[c.G&0xF],
+			hexUpper[c.B>>4], hexUpper[c.B&0xF],
 		}
 		return string(buf[:])
 
 	default:
 		buf := [9]byte{
 			'#',
-			_hexUpper[c.R>>4], _hexUpper[c.R&0xF],
-			_hexUpper[c.G>>4], _hexUpper[c.G&0xF],
-			_hexUpper[c.B>>4], _hexUpper[c.B&0xF],
-			_hexUpper[c.A>>4], _hexUpper[c.A&0xF],
+			hexUpper[c.R>>4], hexUpper[c.R&0xF],
+			hexUpper[c.G>>4], hexUpper[c.G&0xF],
+			hexUpper[c.B>>4], hexUpper[c.B&0xF],
+			hexUpper[c.A>>4], hexUpper[c.A&0xF],
 		}
 		return string(buf[:])
 	}
@@ -114,9 +114,9 @@ func (c *RGBA) MarshalJSONTo(enc *jsontext.Encoder) error {
 	case 0xFF:
 		buf := [9]byte{
 			'"', '#',
-			_hexUpper[c.R>>4], _hexUpper[c.R&0xF],
-			_hexUpper[c.G>>4], _hexUpper[c.G&0xF],
-			_hexUpper[c.B>>4], _hexUpper[c.B&0xF],
+			hexUpper[c.R>>4], hexUpper[c.R&0xF],
+			hexUpper[c.G>>4], hexUpper[c.G&0xF],
+			hexUpper[c.B>>4], hexUpper[c.B&0xF],
 			'"',
 		}
 		return enc.WriteValue(buf[:])
@@ -130,10 +130,10 @@ func (c *RGBA) MarshalJSONTo(enc *jsontext.Encoder) error {
 	default:
 		buf := [11]byte{
 			'"', '#',
-			_hexUpper[c.R>>4], _hexUpper[c.R&0xF],
-			_hexUpper[c.G>>4], _hexUpper[c.G&0xF],
-			_hexUpper[c.B>>4], _hexUpper[c.B&0xF],
-			_hexUpper[c.A>>4], _hexUpper[c.A&0xF],
+			hexUpper[c.R>>4], hexUpper[c.R&0xF],
+			hexUpper[c.G>>4], hexUpper[c.G&0xF],
+			hexUpper[c.B>>4], hexUpper[c.B&0xF],
+			hexUpper[c.A>>4], hexUpper[c.A&0xF],
 			'"',
 		}
 		return enc.WriteValue(buf[:])
