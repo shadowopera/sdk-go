@@ -8,7 +8,7 @@ access config data exported by Archmage.
 [Archmage](https://shadop.dev/archmage/) is a configuration solution for
 game development: specifications for how to structure config data, define
 fields, and fill in each value; pipelines that export runtime data and
-generate strongly typed code; multi-language SDKs for loading and accessing
+generate strongly-typed code; multi-language SDKs for loading and accessing
 that data at runtime; and a collaborative editing workflow for teams.
 
 The SDK is built around the concept of an **Atlas** — a registry that maps named
