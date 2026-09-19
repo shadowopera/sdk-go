@@ -24,7 +24,7 @@ generated Go types, resolves cross-table references, and calls post-load hooks.
 - **MinMax** — random value selection within a range
 - **WeightedPool** — weighted random selection with probability proportional to item weight
 - **Variants** — switch an item to an alternative data set at load time via `WithVariant`
-- **Whitelist/Blacklist** — load only a subset of items
+- **Whitelist/Blacklist** — load only a subset of atlas items
 - **Layered overrides** — merge files with matching relative paths from additional override sources (a directory path or an `fs.FS`) into the base configs, field by field, at load time
 - **Pluggable load strategies** — parallel loading via `WithLoadStrategy`
 - **Versioning** — VCS metadata (branch, commit, timestamp, etc.), when present in `atlas.json`, is available on the loaded atlas

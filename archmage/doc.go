@@ -16,11 +16,12 @@
 //   - [I18n] — multi-language text management with automatic fallback
 //   - [XRef] — cross-table reference resolution via [Atlas.BindRefs]
 //   - [MinMax] — random value selection within a range
+//   - [Duration] — nanosecond precision; formats as human-readable strings
 //   - [WeightedPool] — weighted random selection with probability proportional
 //     to item weight
 //   - Variants — switch an item to an alternative data set at load time via
 //     [WithVariant]
-//   - Whitelist/Blacklist — load only a subset of items
+//   - Whitelist/Blacklist — load only a subset of atlas items
 //   - Layered overrides — merge files with matching relative paths from
 //     additional override sources (a directory path or an [fs.FS]) into the
 //     base configs, field by field, at load time
