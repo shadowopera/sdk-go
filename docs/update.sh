@@ -48,6 +48,19 @@ printMessage "Generating $outDir/sdk-go.mdx ..."
         perl -pe 's|\./images/archmage\.jpg|../../../assets/archmage/archmage.jpg|g'
 } > "$outDir/sdk-go.mdx"
 
+genDir=../docs/archmage/src/content/docs/gen-go
+if [[ ! -d "$genDir" ]]; then
+    printError "$genDir does not exist"
+    exit 1
+fi
+
+# Derive the generated-code reference from internal/conf via go/doc
+printMessage "Generating $genDir/*.mdx ..."
+if ! go run ./docs/__impl/update -out "$genDir"; then
+    printError "failed to generate the reference pages"
+    exit 1
+fi
+
 # Stage all changes
 printMessage "Staging changes in docs site ..."
 cd ../docs
