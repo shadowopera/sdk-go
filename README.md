@@ -20,6 +20,7 @@ generated Go types, resolves cross-table references, and calls post-load hooks.
 
 - **I18n** — multi-language text management with automatic fallback
 - **XRef** — cross-table reference resolution via `Atlas.BindRefs`
+- **Duration** — nanosecond precision; formats as human-readable strings
 - **MinMax** — random value selection within a range
 - **WeightedPool** — weighted random selection with probability proportional to item weight
 - **Variants** — switch an item to an alternative data set at load time via `WithVariant`
@@ -183,6 +184,15 @@ Boss XRef[HeroCfgID, HeroCfg] `json:"boss"`
 
 // After loading:
 boss := atlas.HeroTable[1].Boss.Ref   // resolved *HeroCfg
+```
+
+### Duration
+
+A nanosecond-precision duration type. It serializes as a compact integer array in JSON (e.g., `[0, 5]` = 5 seconds) and formats as human-readable strings. It wraps the standard `time.Duration`.
+
+```go
+var d archmage.Duration
+d.Duration = 90*time.Second + 500*time.Millisecond
 ```
 
 ### RGBA
