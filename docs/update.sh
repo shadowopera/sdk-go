@@ -48,6 +48,19 @@ printMessage "Generating $outDir/sdk-go.mdx ..."
         perl -pe 's|\./images/archmage\.jpg|../../../assets/archmage/archmage.jpg|g'
 } > "$outDir/sdk-go.mdx"
 
+# Process CHANGELOG.md for Starlight
+printMessage "Generating $outDir/CHANGELOG.md ..."
+{
+    echo "---"
+    echo "title: 'Go SDK Changelog'"
+    echo "sidebar:"
+    echo "  label: Changelog"
+    echo "  order: 100"
+    echo "---"
+    echo ""
+    tail -n +3 CHANGELOG.md
+} > "$outDir/CHANGELOG.md"
+
 genDir=../docs/archmage/src/content/docs/gen-go
 if [[ ! -d "$genDir" ]]; then
     printError "$genDir does not exist"
