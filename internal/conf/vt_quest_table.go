@@ -8,14 +8,14 @@ type VtQuestCfgID int64
 type VtQuestTable map[VtQuestCfgID]*VtQuestCfg
 
 type VtQuestCfg struct {
-	ID              VtQuestCfgID     `json:"id"`
-	Name            string           `json:"name"`
-	ChosenBy        []int64          `json:"chosenBy"`
-	NextQuest       int64            `json:"nextQuest"`
-	Desc            L10n             `json:"desc"`
-	Origin          string           `json:"origin"`
-	UnlockedBy      int64            `json:"unlockedBy"`
-	RefreshInterval MinMax[Duration] `json:"refreshInterval"`
+	ID              VtQuestCfgID                     `json:"id"`
+	Name            string                           `json:"name"`
+	ChosenBy        []XRef[VtQuestCfgID, VtQuestCfg] `json:"chosenBy"`
+	NextQuest       XRef[VtQuestCfgID, VtQuestCfg]   `json:"nextQuest"`
+	Desc            L10n                             `json:"desc"`
+	Origin          string                           `json:"origin"`
+	UnlockedBy      XRef[VtQuestCfgID, VtQuestCfg]   `json:"unlockedBy"`
+	RefreshInterval MinMax[Duration]                 `json:"refreshInterval"`
 }
 
 func (x VtQuestTable) TryLookup(cfgID VtQuestCfgID) (*VtQuestCfg, error) {
@@ -38,6 +38,22 @@ func (x VtQuestTable) ApplyKeys() {
 			v.ID = k
 		}
 	}
+}
+
+func (x VtQuestTable) bindRefs(atlas *ConfigAtlas) {
+	for _, v1 := range x {
+		if v1 != nil {
+			v1.bindRefs(atlas)
+		}
+	}
+}
+
+func (x *VtQuestCfg) bindRefs(atlas *ConfigAtlas) {
+	for i, ref := range x.ChosenBy {
+		x.ChosenBy[i].Ref = atlas.VtQuestTable.Lookup(ref.CfgID)
+	}
+	x.NextQuest.Ref = atlas.VtQuestTable.Lookup(x.NextQuest.CfgID)
+	x.UnlockedBy.Ref = atlas.VtQuestTable.Lookup(x.UnlockedBy.CfgID)
 }
 
 // endregion

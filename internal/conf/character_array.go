@@ -19,7 +19,7 @@ type CharacterCfg struct {
 	Skills     []string `json:"skills"`
 	// my runes
 	Runes         []XRef[WeaponRuneCfgID, WeaponRuneCfg] `json:"runes"`
-	UltimateSkill string                                 `json:"ultimateSkill"`
+	UltimateSkill XRef[VtSkillCfgID, VtSkillCfg]         `json:"ultimateSkill"`
 	RefCrude      *character_RefCrude                    `json:"ref-crude"`
 	Hero          XRef[HeroCfgID, HeroCfg]               `json:"hero"`
 }
@@ -45,6 +45,7 @@ func (x *CharacterCfg) bindRefs(atlas *ConfigAtlas) {
 	for i, v1 := range x.Runes {
 		x.Runes[i].Ref = atlas.WeaponRuneTable.Lookup(v1.CfgID)
 	}
+	x.UltimateSkill.Ref = atlas.VtSkillTable.Lookup(x.UltimateSkill.CfgID)
 	x.Hero.Ref = atlas.HeroTable.Lookup(x.Hero.CfgID)
 }
 

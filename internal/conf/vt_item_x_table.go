@@ -8,16 +8,16 @@ type VtItemXCfgID int64
 type VtItemXTable map[VtItemXCfgID]*VtItemXCfg
 
 type VtItemXCfg struct {
-	ID             VtItemXCfgID                   `json:"id"`
-	Name           string                         `json:"name"`
-	Price          int                            `json:"price"`
-	Desc           string                         `json:"desc"`
-	SpecialSkill   string                         `json:"special-skill"`
-	Armor          float32                        `json:"armor"`
-	Dps            float32                        `json:"dps"`
-	ShieldSkills   []string                       `json:"shield-skills"`
-	Power          float32                        `json:"power"`
-	AttributeBonus []*vtItemX_AttributeBonusEntry `json:"attributeBonus"`
+	ID             VtItemXCfgID                     `json:"id"`
+	Name           string                           `json:"name"`
+	Price          int                              `json:"price"`
+	Desc           string                           `json:"desc"`
+	SpecialSkill   XRef[VtSkillCfgID, VtSkillCfg]   `json:"special-skill"`
+	Armor          float32                          `json:"armor"`
+	Dps            float32                          `json:"dps"`
+	ShieldSkills   []XRef[VtSkillCfgID, VtSkillCfg] `json:"shield-skills"`
+	Power          float32                          `json:"power"`
+	AttributeBonus []*vtItemX_AttributeBonusEntry   `json:"attributeBonus"`
 }
 
 // vtItemX_AttributeBonusEntry represents $.*.attributeBonus.*
@@ -45,6 +45,21 @@ func (x VtItemXTable) ApplyKeys() {
 		if v != nil {
 			v.ID = k
 		}
+	}
+}
+
+func (x VtItemXTable) bindRefs(atlas *ConfigAtlas) {
+	for _, v1 := range x {
+		if v1 != nil {
+			v1.bindRefs(atlas)
+		}
+	}
+}
+
+func (x *VtItemXCfg) bindRefs(atlas *ConfigAtlas) {
+	x.SpecialSkill.Ref = atlas.VtSkillTable.Lookup(x.SpecialSkill.CfgID)
+	for i, ref := range x.ShieldSkills {
+		x.ShieldSkills[i].Ref = atlas.VtSkillTable.Lookup(ref.CfgID)
 	}
 }
 

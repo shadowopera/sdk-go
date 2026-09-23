@@ -229,7 +229,7 @@ func TestAtlas_WithVariant(t *testing.T) {
 func TestAtlas_WithVariant_Default(t *testing.T) {
 	opts := []archmage.Option{
 		archmage.WithLogger(newScavenger()),
-		archmage.WithWhitelist([]string{"game", "weapon-rune", "vtSkill"}),
+		archmage.WithWhitelist([]string{"game", "weapon-rune", "vtSkill", "vtItemX"}),
 	}
 
 	atlas := conf.NewConfigAtlas()

@@ -13,10 +13,10 @@ type VtSkillCfg struct {
 	Class string                    `json:"class"`
 	Foo   map[int]*vtSkill_FooEntry `json:"Foo"`
 	// reagent
-	Reagent     int64   `json:"reagent"`
-	CrossSkill1 string  `json:"cross-skill1"`
-	Weapons     []int64 `json:"weapons"`
-	CrossSkill2 string  `json:"cross-skill2"`
+	Reagent     XRef[VtItemXCfgID, VtItemXCfg]   `json:"reagent"`
+	CrossSkill1 XRef[VtSkillCfgID, VtSkillCfg]   `json:"cross-skill1"`
+	Weapons     []XRef[VtItemXCfgID, VtItemXCfg] `json:"weapons"`
+	CrossSkill2 XRef[VtSkillCfgID, VtSkillCfg]   `json:"cross-skill2"`
 }
 
 // vtSkill_FooEntry represents $.*.Foo.*
@@ -48,6 +48,23 @@ func (x VtSkillTable) ApplyKeys() {
 			v.ID = k
 		}
 	}
+}
+
+func (x VtSkillTable) bindRefs(atlas *ConfigAtlas) {
+	for _, v1 := range x {
+		if v1 != nil {
+			v1.bindRefs(atlas)
+		}
+	}
+}
+
+func (x *VtSkillCfg) bindRefs(atlas *ConfigAtlas) {
+	x.Reagent.Ref = atlas.VtItemXTable.Lookup(x.Reagent.CfgID)
+	x.CrossSkill1.Ref = atlas.VtSkillTable.Lookup(x.CrossSkill1.CfgID)
+	for i, v1 := range x.Weapons {
+		x.Weapons[i].Ref = atlas.VtItemXTable.Lookup(v1.CfgID)
+	}
+	x.CrossSkill2.Ref = atlas.VtSkillTable.Lookup(x.CrossSkill2.CfgID)
 }
 
 // endregion
