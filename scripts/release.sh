@@ -42,15 +42,28 @@ function ensureCleanWorktree() {
     fi
 }
 
+if ! command -v relstep > /dev/null; then
+    printError "relstep not found. Install it with: go install github.com/shadowopera/archmage/tools/relstep@latest"
+    exit 1
+fi
+
+STEP_LIST=(
+    checkVersion
+    runTests
+    updateChangelog
+    tagRelease
+)
+STEPS=$(IFS=,; echo "${STEP_LIST[*]}")
+
 function markStepDone() {
-    go run scripts/__impl/release/main.go mark "$1" || exit 1
+    relstep mark -steps "$STEPS" "$1" || exit 1
 }
 
 VERSION_ARG="${1:-}"
 
 while true; do
-    # Run release.go (pass version arg only on first iteration)
-    RESULT=$(go run scripts/__impl/release/main.go $VERSION_ARG 2>&1) || {
+    # Run relstep (pass version arg only on first iteration)
+    RESULT=$(relstep next -steps "$STEPS" $VERSION_ARG 2>&1) || {
         printError "$RESULT"
         exit 1
     }
@@ -65,7 +78,7 @@ while true; do
     fi
 
     NEXT_STEP="$RESULT"
-    VERSION=$(go run scripts/__impl/release/main.go version 2>&1) || {
+    VERSION=$(relstep version 2>&1) || {
         printError "Failed to get version: $VERSION"
         exit 1
     }
@@ -117,7 +130,7 @@ while true; do
             markStepDone "updateChangelog"
             ;;
 
-        createTag)
+        tagRelease)
             printMessage "Running defensive tests..."
             if ! go test ./...; then
                 printError "Tests failed."
@@ -143,7 +156,7 @@ while true; do
             fi
 
             ensureCleanWorktree
-            markStepDone "createTag"
+            markStepDone "tagRelease"
             ;;
 
         *)
