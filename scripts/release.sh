@@ -114,6 +114,11 @@ while true; do
                 exit 1
             fi
 
+            if ! awk -v h="## [$VERSION]" 'index($0, h) == 1 { found = 1; exit } END { exit !found }' CHANGELOG.md; then
+                printError "Heading \"## [$VERSION]\" is not found in CHANGELOG.md."
+                exit 1
+            fi
+
             printMessage "Staging CHANGELOG.md..."
             if ! git add CHANGELOG.md; then
                 printError "Failed to stage CHANGELOG.md."
