@@ -59,6 +59,12 @@ func TestAtlas_Basic(t *testing.T) {
 	if text := atlas.RaceTable["Elf"].Birthplace.Text(); text != "Silverwood" {
 		t.Fatalf("unexpected l10n fallback value: %s", text)
 	}
+	if text, err := atlas.HeroTable[4].Name.GetText(cn); err != nil || text != "" {
+		t.Fatalf("unexpected blank l10n value: %q, %v", text, err)
+	}
+	if text := atlas.HeroTable[4].Name.Text(); text != "" {
+		t.Fatalf("unexpected blank l10n value: %q", text)
+	}
 
 	if key := enums.HeroClassWarrior.L10nKey(); key != "enum::HeroClass.Warrior" {
 		t.Fatalf("unexpected HeroClassWarrior.L10nKey: %s", key)

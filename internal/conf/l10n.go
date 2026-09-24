@@ -20,13 +20,20 @@ var (
 type L10n string
 
 // GetText returns the translation for the given language, or an error if the
-// key is not found.
+// key is not found. An empty key yields an empty string.
 func (l L10n) GetText(lang language.Tag) (string, error) {
+	if l == "" {
+		return "", nil
+	}
 	return GetI18n().GetText(string(l), lang)
 }
 
 // Text returns the translation for the player's preferred language, falling
-// back to the default language if the key isn't found.
+// back to the default language if the key isn't found. An empty key yields an
+// empty string.
 func (l L10n) Text() string {
+	if l == "" {
+		return ""
+	}
 	return GetI18n().Text(string(l), GetPreferredLanguage())
 }
