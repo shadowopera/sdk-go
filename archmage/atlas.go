@@ -192,6 +192,11 @@ func loadAtlasImpl(atlasFile string, cfgRoot string, atlas Atlas, opts *atlasOpt
 //   - null → resets the target field to its default value or raises an error.
 //   - JSON object → recursively merges: only fields present in the input are updated, others remain unchanged.
 //   - Any other value → overwrites the field.
+//
+// Overrides follow json.Unmarshal exactly: null is a regular value, not a
+// deletion marker. A null map entry keeps its key and holds the zero value.
+// Replacing a whole map or removing individual map entries is left to the
+// application layer.
 func loadItem(ctx context.Context, key string, item *AtlasItem,
 	atlasJSON *AtlasJSON, atlasFile string, cfgRoot string, opts *atlasOptions,
 ) error {
