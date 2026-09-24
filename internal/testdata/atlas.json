@@ -3,40 +3,28 @@
 		"semver": "v1.0.0"
 	},
 	"unique": {
-		"character": "character.json",
+		"chapter": "chapter.json",
+		"drop": "drop.json",
 		"hero": "hero.json",
-		"Item": "clutter/item.json",
-		"Magic": "clutter/magic.json",
-		"matrix2": "matrix2.json",
-		"Race": "clutter/race.json",
-		"ref": "sdk/ref.json",
-		"string": "sdk/string.json",
-		"weapon-rune": "weapon-rune.json"
+		"item": "item.json",
+		"monster": "monster.json",
+		"Race": "race.json",
+		"Region": "region.json",
+		"route": "route.json"
 	},
 	"variant": {
+		"balance": {
+			"easy": "balance.easy.json",
+			"hard": "balance.hard.json"
+		},
 		"game": {
 			"/": "game.json"
-		},
-		"prop_floats": {
-			"x3": "sdk/prop-floats.x3.json",
-			"x5": "sdk/prop-floats.x5.json"
 		}
 	},
 	"many": {
-		"vtItemX": [
-			"vtbl/item1-common.json",
-			"vtbl/item1-special.json",
-			"vtbl/weapon-shield.json",
-			"vtbl/weapon-staff.json",
-			"vtbl/weapon-sword.json"
-		],
-		"vtQuest": [
-			"vtbl/quest-board.json",
-			"vtbl/quest-chain.json",
-			"vtbl/quest-common.json"
-		],
-		"vtSkill": [
-			"vtbl/skill-active.json",
+		"skill": [
+			"vtbl/skill-magic.json",
+			"vtbl/skill-melee.json",
 			"vtbl/skill-passive.json"
 		]
 	}

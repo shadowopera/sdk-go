@@ -1,55 +1,89 @@
 {
-	"x-array1": null,
-	"x-array2": [
+	"allowedClasses": [
+		1,
 		2,
 		3
 	],
-	"x-bool": false,
-	"x-datetime": "0900-01-01T15:30:00+08:00",
-	"x-duration": [
-		1,
-		3600
+	"bannedWords": [],
+	"bgColor": "#102030",
+	"bgm": "audio/theme.ogg",
+	"bossSpawn": {
+		"item0": 2,
+		"item1": 2,
+		"item2": [
+			0,
+			90
+		],
+		"item3": -3,
+		"item4": 1.5,
+		"item5": true,
+		"item6": " boss "
+	},
+	"cameraOffset": {
+		"x": 0,
+		"y": 20,
+		"z": -7
+	},
+	"classColors": {
+		"1": "#FF0000",
+		"2": "#0000FF"
+	},
+	"dailyResets": [
+		[
+			0,
+			14400
+		],
+		[
+			0,
+			57600
+		]
 	],
-	"x-float64": 13.14,
-	"x-int": 1000,
-	"x-int32": 1320,
-	"x-l10n": "l10n.xlsx[menu.start]",
-	"x-map": {
-		"8": "foo",
-		"9": "bar"
+	"features": {
+		"guild": true,
+		"pvp": true,
+		"trade": true
 	},
-	"x-object": {
-		"fieldX": 100,
-		"fieldY": "bar"
+	"gridSize": {
+		"x": 64,
+		"y": 48
 	},
-	"x-path": "x/y/z.bin",
-	"x-ref": 1,
-	"x-rgba": "#ABC123",
-	"x-string": "hello world",
-	"x-tuple": {
-		"item0": 100,
-		"item1": 12.5,
-		"item2": " bar "
+	"launchDate": "2025-01-01T00:00:00+08:00",
+	"levelCaps": null,
+	"levelRewards": {
+		"10": 103,
+		"20": 101,
+		"30": 105
 	},
-	"x-vector2": {
+	"maxLevel": 80,
+	"motd": {
+		"item0": "Welcome to Avalon"
+	},
+	"slotSizes": [
+		10
+	],
+	"startHero": 2,
+	"starterItems": [
+		104
+	],
+	"tickRate": [
+		1,
+		50
+	],
+	"tint": {
+		"w": 0.5,
 		"x": 1,
-		"y": 2
+		"y": 0.5,
+		"z": 0.25
 	},
-	"x-vector3": {
-		"x": 1.1,
-		"y": 2.2,
-		"z": 3.3
+	"tips": {
+		"login": "game.tips.login",
+		"logout": "l10n.xlsx[common.tbd]"
 	},
-	"x-vector4": {
-		"w": 9.9,
-		"x": 1.1,
-		"y": 2.2,
-		"z": 3.3
-	},
-	"x-vector4x": {
-		"w": 9,
-		"x": 1,
-		"y": 2,
-		"z": 3
+	"title": "l10n.xlsx[game.title]",
+	"worldBounds": {
+		"w": 100,
+		"x": -100,
+		"y": -100,
+		"z": 100
 	}
 }

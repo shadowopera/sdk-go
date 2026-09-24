@@ -1,0 +1,15 @@
+{
+	"hpScale": 0.8,
+	"dmgScale": 1,
+	"goldBonus": 0.5,
+	"enemyLevel": -2,
+	"spawnInterval": [
+		0,
+		10
+	],
+	"xpCurve": [
+		100,
+		200,
+		400
+	]
+}

@@ -1,0 +1,33 @@
+{
+	"Camelot": {
+		"climate": "temperate",
+		"id": "Camelot",
+		"monsters": null,
+		"name": "Camelot",
+		"neighbors": [
+			"Darkwood"
+		]
+	},
+	"Darkwood": {
+		"climate": "humid",
+		"id": "Darkwood",
+		"monsters": [
+			1001,
+			1002
+		],
+		"name": "Dark Wood",
+		"neighbors": [
+			"Camelot",
+			"Frostpeak"
+		]
+	},
+	"Frostpeak": {
+		"climate": "",
+		"id": "Frostpeak",
+		"monsters": [
+			1003
+		],
+		"name": "Frost Peak",
+		"neighbors": []
+	}
+}

@@ -1,0 +1,67 @@
+{
+	"slash": {
+		"name": "Slash",
+		"cooldown": [
+			0,
+			1
+		],
+		"damage": {
+			"min": 10,
+			"max": 20
+		},
+		"src": "skill-melee",
+		"buffs": {
+			"might": {
+				"stacks": 1,
+				"time": [
+					0,
+					10
+				],
+				"source": 101
+			},
+			"haste": {
+				"stacks": 2,
+				"time": [
+					0,
+					5
+				],
+				"source": 0
+			}
+		}
+	},
+	"rally": {
+		"name": "Rally",
+		"cooldown": [
+			0,
+			30
+		],
+		"damage": {
+			"min": 0,
+			"max": 0
+		},
+		"src": "skill-melee",
+		"buffs": {}
+	},
+	"cleave": {
+		"name": "Cleave",
+		"cooldown": [
+			3,
+			500
+		],
+		"damage": {
+			"min": 15,
+			"max": 30
+		},
+		"src": "skill-melee",
+		"buffs": {
+			"bleed": {
+				"stacks": 3,
+				"time": [
+					0,
+					4
+				],
+				"source": 102
+			}
+		}
+	}
+}

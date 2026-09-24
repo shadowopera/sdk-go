@@ -1,72 +1,205 @@
 {
-	"2": {
-		"heroName": "hero[2].heroName",
-		"startLevel": 5,
-		"referrer": [
-			3,
-			1
+	"1": {
+		"name": "l10n.xlsx[hero.arthur]",
+		"title": "  the Once and Future King  ",
+		"class": 1,
+		"elements": 17,
+		"level": 60,
+		"luck": 127,
+		"rank": 32767,
+		"hp": 2147483647,
+		"mp": 65535,
+		"fame": 4294967295,
+		"gold": 999999999999999,
+		"exp": 999999999999999,
+		"power": 123456789012,
+		"souls": 42,
+		"critRate": 0.25,
+		"dodge": 0.125,
+		"moveSpeed": 5.5,
+		"stats": {
+			"hp": 1200,
+			"atk": 88.5
+		},
+		"growth": {
+			"hp": 30,
+			"atk": 2.5
+		},
+		"birthday": "1990-05-20T08:30:00+01:00",
+		"respawn": [
+			0,
+			216000
 		],
-		"race-combo": [
+		"themeColor": "#FFD700",
+		"portrait": "heroes/arthur.png",
+		"playable": true,
+		"weapon": 101,
+		"weaponId": 101,
+		"race": "Human",
+		"spawnPos": {
+			"x": 10,
+			"y": 0,
+			"z": -5
+		},
+		"facing": {
+			"x": 0,
+			"y": 1
+		},
+		"talents": [
 			{
-				"race1": "Dark Elf",
-				"race2": "Halfling"
+				"skill": "slash",
+				"tier": 1
 			},
 			{
-				"race1": "Halfling",
-				"race2": ""
+				"skill": "rally",
+				"tier": 3
 			}
-		],
-		"referrer-sort": [
+		]
+	},
+	"2": {
+		"name": "hero[2].name",
+		"title": "Archmage\nof Camelot",
+		"class": 2,
+		"elements": 6,
+		"level": 255,
+		"luck": -128,
+		"rank": -32768,
+		"hp": -2147483648,
+		"mp": 0,
+		"fame": 0,
+		"gold": -999999999999999,
+		"exp": 0,
+		"power": -1,
+		"souls": 0,
+		"critRate": -0.015,
+		"dodge": 6674.28,
+		"moveSpeed": 3,
+		"stats": {
+			"hp": 800,
+			"atk": 120
+		},
+		"growth": {
+			"hp": 20,
+			"atk": 4
+		},
+		"birthday": "1990-05-20T08:30:00+08:00",
+		"respawn": [
 			1,
-			3
+			1500
 		],
-		"referrer-compact": [
-			3,
-			1
-		],
-		"referrer-sort-compact": [
-			1,
-			3
+		"themeColor": "#11223344",
+		"portrait": "heroes/merlin.png",
+		"playable": false,
+		"weapon": 102,
+		"weaponId": 0,
+		"race": "Elf",
+		"spawnPos": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"facing": {
+			"x": -0.5,
+			"y": 0.5
+		},
+		"talents": [
+			{
+				"skill": "fireball",
+				"tier": 5
+			}
 		]
 	},
 	"3": {
-		"heroName": "hero[3].heroName",
-		"startLevel": 7,
-		"referrer": null,
-		"race-combo": [
-			{
-				"race1": "Halfling",
-				"race2": ""
-			}
+		"name": "l10n.xlsx[common.tbd]",
+		"title": "Fay's \"dark\" \\ art",
+		"class": 3,
+		"elements": 0,
+		"level": 1,
+		"luck": 0,
+		"rank": 0,
+		"hp": 1,
+		"mp": 0,
+		"fame": 0,
+		"gold": 0,
+		"exp": 0,
+		"power": 0,
+		"souls": 0,
+		"critRate": 0,
+		"dodge": 0,
+		"moveSpeed": 0,
+		"stats": {
+			"hp": 0,
+			"atk": 0
+		},
+		"growth": {
+			"hp": 0,
+			"atk": 0
+		},
+		"birthday": "2001-02-03T00:00:00+08:00",
+		"respawn": [
+			0,
+			-5400
 		],
-		"referrer-sort": null,
-		"referrer-compact": null,
-		"referrer-sort-compact": null
+		"themeColor": "",
+		"portrait": "",
+		"playable": false,
+		"weapon": 0,
+		"weaponId": 103,
+		"race": "Human",
+		"spawnPos": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"facing": {
+			"x": 0,
+			"y": 0
+		},
+		"talents": null
 	},
-	"5": {
-		"heroName": "hero[5].heroName",
-		"startLevel": 10,
-		"referrer": [
-			2
-		],
-		"race-combo": [
-			{
-				"race1": "",
-				"race2": "Dwarf"
-			},
-			{
-				"race1": "",
-				"race2": "Dwarf"
-			}
-		],
-		"referrer-sort": [
-			2
-		],
-		"referrer-compact": [
-			2
-		],
-		"referrer-sort-compact": [
-			2
-		]
+	"4": {
+		"name": "",
+		"title": "",
+		"class": 0,
+		"elements": 0,
+		"level": 1,
+		"luck": 0,
+		"rank": 0,
+		"hp": 100,
+		"mp": 0,
+		"fame": 0,
+		"gold": 0,
+		"exp": 0,
+		"power": 0,
+		"souls": 0,
+		"critRate": 0,
+		"dodge": 0,
+		"moveSpeed": 0,
+		"stats": {
+			"hp": 0,
+			"atk": 0
+		},
+		"growth": {
+			"hp": 0,
+			"atk": 0
+		},
+		"birthday": null,
+		"respawn": null,
+		"themeColor": "",
+		"portrait": "",
+		"playable": false,
+		"weapon": 0,
+		"weaponId": 0,
+		"race": "",
+		"spawnPos": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"facing": {
+			"x": 0,
+			"y": 0
+		},
+		"talents": null
 	}
 }

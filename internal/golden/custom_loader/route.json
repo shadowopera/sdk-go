@@ -1,0 +1,24 @@
+{
+	"Camelot": {
+		"east": [
+			[
+				"Darkwood"
+			],
+			[]
+		],
+		"north": [
+			[
+				"Darkwood",
+				"Frostpeak"
+			]
+		]
+	},
+	"Frostpeak": {
+		"south": [
+			[
+				"Darkwood",
+				"Camelot"
+			]
+		]
+	}
+}

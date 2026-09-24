@@ -1,0 +1,177 @@
+{
+	"1": {
+		"bonusRate": {
+			"max": 0.5,
+			"min": 0.1
+		},
+		"buffTime": {
+			"items": [
+				[
+					0,
+					10
+				],
+				[
+					0,
+					60
+				]
+			],
+			"weights": [
+				3,
+				1
+			]
+		},
+		"coins": {
+			"items": [
+				1,
+				10,
+				100
+			],
+			"weights": [
+				90,
+				9,
+				1
+			]
+		},
+		"despawn": {
+			"max": [
+				0,
+				120
+			],
+			"min": [
+				0,
+				30
+			]
+		},
+		"gold": {
+			"max": 5,
+			"min": 1
+		},
+		"id": 1,
+		"items": {
+			"items": [
+				103,
+				104
+			],
+			"weights": [
+				50,
+				5
+			]
+		},
+		"name": "Slime Drop",
+		"rarity": {
+			"items": [
+				0,
+				2,
+				4
+			],
+			"weights": [
+				70,
+				25,
+				5
+			]
+		},
+		"titles": {
+			"items": [
+				"Lucky",
+				"Blessed"
+			],
+			"weights": [
+				3,
+				1
+			]
+		}
+	},
+	"2": {
+		"bonusRate": {
+			"max": 3,
+			"min": 1.5
+		},
+		"buffTime": {
+			"items": [
+				[
+					0,
+					86400
+				]
+			],
+			"weights": [
+				1
+			]
+		},
+		"coins": {
+			"items": [
+				1000
+			],
+			"weights": [
+				1
+			]
+		},
+		"despawn": {
+			"max": [
+				0,
+				5400
+			],
+			"min": [
+				0,
+				3600
+			]
+		},
+		"gold": {
+			"max": 500,
+			"min": 100
+		},
+		"id": 2,
+		"items": {
+			"items": [
+				101,
+				102,
+				105
+			],
+			"weights": [
+				1,
+				4,
+				5
+			]
+		},
+		"name": "Dragon Hoard",
+		"rarity": {
+			"items": [
+				3
+			],
+			"weights": [
+				1
+			]
+		},
+		"titles": null
+	},
+	"3": {
+		"bonusRate": {
+			"max": 0,
+			"min": 0
+		},
+		"buffTime": null,
+		"coins": {
+			"items": [
+				1
+			],
+			"weights": [
+				1
+			]
+		},
+		"despawn": {
+			"max": null,
+			"min": null
+		},
+		"gold": {
+			"max": 0,
+			"min": 0
+		},
+		"id": 3,
+		"items": null,
+		"name": "Empty Chest",
+		"rarity": {
+			"items": [],
+			"weights": []
+		},
+		"titles": null
+	}
+}

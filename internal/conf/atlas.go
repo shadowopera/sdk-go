@@ -31,20 +31,17 @@ type ConfigAtlas struct {
 	// DataVersion is the version info of the config repo at export time.
 	DataVersion *archmage.VersionInfo
 
-	CharacterArray  CharacterArray
-	GameCfg         GameCfg
-	HeroTable       HeroTable
-	ItemTable       ItemTable
-	MagicTable      MagicTable
-	Matrix2Table    Matrix2Table
-	PropFloatsCfg   PropFloatsCfg
-	RaceTable       RaceTable
-	RefTable        RefTable
-	StringTable     StringTable
-	VtItemXTable    VtItemXTable
-	VtQuestTable    VtQuestTable
-	VtSkillTable    VtSkillTable
-	WeaponRuneTable WeaponRuneTable
+	BalanceCfg   BalanceCfg
+	ChapterArray ChapterArray
+	DropTable    DropTable
+	GameCfg      GameCfg
+	HeroTable    HeroTable
+	ItemTable    ItemTable
+	MonsterTable MonsterTable
+	RaceTable    RaceTable
+	RegionTable  RegionTable
+	RouteTable   RouteTable
+	SkillTable   SkillTable
 }
 
 func NewConfigAtlas() *ConfigAtlas {
@@ -55,20 +52,17 @@ func NewConfigAtlas() *ConfigAtlas {
 
 func (atlas *ConfigAtlas) buildMap() {
 	atlas.m = map[string]*AtlasItem{
-		"character":   {Cfg: &atlas.CharacterArray, Mapping: "unique"},
-		"game":        {Cfg: &atlas.GameCfg, Mapping: "variant"},
-		"hero":        {Cfg: &atlas.HeroTable, Mapping: "unique"},
-		"Item":        {Cfg: &atlas.ItemTable, Mapping: "unique"},
-		"Magic":       {Cfg: &atlas.MagicTable, Mapping: "unique"},
-		"matrix2":     {Cfg: &atlas.Matrix2Table, Mapping: "unique"},
-		"prop_floats": {Cfg: &atlas.PropFloatsCfg, Mapping: "variant"},
-		"Race":        {Cfg: &atlas.RaceTable, Mapping: "unique"},
-		"ref":         {Cfg: &atlas.RefTable, Mapping: "unique"},
-		"string":      {Cfg: &atlas.StringTable, Mapping: "unique"},
-		"vtItemX":     {Cfg: &atlas.VtItemXTable, Mapping: "many"},
-		"vtQuest":     {Cfg: &atlas.VtQuestTable, Mapping: "many"},
-		"vtSkill":     {Cfg: &atlas.VtSkillTable, Mapping: "many"},
-		"weapon-rune": {Cfg: &atlas.WeaponRuneTable, Mapping: "unique"},
+		"balance": {Cfg: &atlas.BalanceCfg, Mapping: "variant"},
+		"chapter": {Cfg: &atlas.ChapterArray, Mapping: "unique"},
+		"drop":    {Cfg: &atlas.DropTable, Mapping: "unique"},
+		"game":    {Cfg: &atlas.GameCfg, Mapping: "variant"},
+		"hero":    {Cfg: &atlas.HeroTable, Mapping: "unique"},
+		"item":    {Cfg: &atlas.ItemTable, Mapping: "unique"},
+		"monster": {Cfg: &atlas.MonsterTable, Mapping: "unique"},
+		"Race":    {Cfg: &atlas.RaceTable, Mapping: "unique"},
+		"Region":  {Cfg: &atlas.RegionTable, Mapping: "unique"},
+		"route":   {Cfg: &atlas.RouteTable, Mapping: "unique"},
+		"skill":   {Cfg: &atlas.SkillTable, Mapping: "many"},
 	}
 }
 
@@ -132,8 +126,9 @@ func xLookup[V comparable, R any](cfgID V, tbl map[V]R, tblName string) R {
 
 func init() {
 	m := make(map[string]bool)
-	m["Rab"] = true // string
-	if len(m) != 1 {
+	m["Stats"] = true // hero
+	m["Price"] = true // item
+	if len(m) != 2 {
 		panic("conflicting pubtype detected")
 	}
 }

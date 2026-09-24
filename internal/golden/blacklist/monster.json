@@ -1,0 +1,118 @@
+{
+	"1001": {
+		"aggro": {
+			"max": 8.5,
+			"min": 2
+		},
+		"habitat": "Darkwood",
+		"id": 1001,
+		"loot": {
+			"items": [
+				103,
+				104
+			],
+			"weights": [
+				10,
+				1
+			]
+		},
+		"name": "Slime",
+		"phases": [
+			{
+				"cast": "",
+				"hpBelow": 50,
+				"summon": 1002
+			}
+		],
+		"resist": {
+			"1": 20,
+			"2": -10
+		},
+		"size": [
+			0.5,
+			0.5,
+			0.5
+		],
+		"speed": {
+			"x": 1.5,
+			"y": 0
+		},
+		"stats": {
+			"atk": 3.5,
+			"hp": 50
+		}
+	},
+	"1002": {
+		"aggro": {
+			"max": 12,
+			"min": 5
+		},
+		"habitat": "Darkwood",
+		"id": 1002,
+		"loot": null,
+		"name": "Goblin",
+		"phases": [],
+		"resist": {},
+		"size": [
+			1,
+			1.2,
+			1
+		],
+		"speed": {
+			"x": 3,
+			"y": 0.5
+		},
+		"stats": {
+			"atk": 8,
+			"hp": 120
+		}
+	},
+	"1003": {
+		"aggro": {
+			"max": 30,
+			"min": 30
+		},
+		"habitat": "Frostpeak",
+		"id": 1003,
+		"loot": {
+			"items": [
+				101,
+				104
+			],
+			"weights": [
+				1,
+				4
+			]
+		},
+		"name": "Frost Wyrm",
+		"phases": [
+			{
+				"cast": "fireball",
+				"hpBelow": 50,
+				"summon": 1001
+			},
+			{
+				"cast": "blink",
+				"hpBelow": 10,
+				"summon": 0
+			}
+		],
+		"resist": {
+			"1": -50,
+			"2": 80
+		},
+		"size": [
+			6,
+			3,
+			12
+		],
+		"speed": {
+			"x": 0,
+			"y": 9
+		},
+		"stats": {
+			"atk": 250,
+			"hp": 9000
+		}
+	}
+}

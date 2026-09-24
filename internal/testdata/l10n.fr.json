@@ -1,3 +1,5 @@
 {
-	"game.x-l10n": "C’est une belle journée"
+	"enum::HeroClass.Warrior": "Guerrier",
+	"l10n.xlsx[game.title]": "Légendes d’Avalon",
+	"hero[2].name": "Merlin l’Enchanteur"
 }

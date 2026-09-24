@@ -1,0 +1,27 @@
+{
+	"Human": {
+		"birthplace": "l10n.xlsx[race.human.home]",
+		"heroes": [
+			1,
+			3
+		],
+		"heroIds": [
+			1,
+			3
+		]
+	},
+	"Elf": {
+		"birthplace": "Race[Elf].birthplace",
+		"heroes": [
+			2
+		],
+		"heroIds": [
+			2
+		]
+	},
+	"Dwarf": {
+		"birthplace": "",
+		"heroes": null,
+		"heroIds": []
+	}
+}

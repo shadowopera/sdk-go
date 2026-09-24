@@ -1,0 +1,47 @@
+[
+	{
+		"id": "prologue",
+		"title": "The Sword in the Stone",
+		"hero": 1,
+		"monsters": [
+			1001,
+			1002
+		],
+		"recommended": [
+			1,
+			2
+		],
+		"timeLimit": [
+			0,
+			1800
+		],
+		"waves": [
+			3,
+			5,
+			8
+		]
+	},
+	{
+		"id": "darkwood",
+		"title": "Into the Dark Wood",
+		"hero": 2,
+		"monsters": [],
+		"recommended": null,
+		"timeLimit": [
+			0,
+			5400
+		],
+		"waves": []
+	},
+	{
+		"id": "finale",
+		"title": "The Frozen Throne",
+		"hero": 0,
+		"monsters": null,
+		"recommended": [
+			4
+		],
+		"timeLimit": null,
+		"waves": null
+	}
+]

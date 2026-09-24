@@ -1,0 +1,155 @@
+{
+	"aura": {
+		"buffs": null,
+		"cooldown": null,
+		"damage": {
+			"max": 0,
+			"min": 0
+		},
+		"id": "aura",
+		"mana": 0,
+		"name": "Holy Aura",
+		"radius": 5.5,
+		"school": 0,
+		"src": "skill-passive"
+	},
+	"blink": {
+		"buffs": null,
+		"cooldown": [
+			1,
+			250
+		],
+		"damage": {
+			"max": 0,
+			"min": 0
+		},
+		"id": "blink",
+		"mana": 15,
+		"name": "Blink",
+		"radius": 0,
+		"school": 0,
+		"src": "skill-magic"
+	},
+	"cleave": {
+		"buffs": {
+			"bleed": {
+				"source": 102,
+				"stacks": 3,
+				"time": [
+					0,
+					4
+				]
+			}
+		},
+		"cooldown": [
+			3,
+			500
+		],
+		"damage": {
+			"max": 30,
+			"min": 15
+		},
+		"id": "cleave",
+		"mana": 0,
+		"name": "Cleave",
+		"radius": 0,
+		"school": 0,
+		"src": "skill-melee"
+	},
+	"fireball": {
+		"buffs": null,
+		"cooldown": [
+			0,
+			3
+		],
+		"damage": {
+			"max": 0,
+			"min": 0
+		},
+		"id": "fireball",
+		"mana": 30,
+		"name": "Fireball",
+		"radius": 0,
+		"school": 1,
+		"src": "skill-magic"
+	},
+	"fortitude": {
+		"buffs": null,
+		"cooldown": null,
+		"damage": {
+			"max": 0,
+			"min": 0
+		},
+		"id": "fortitude",
+		"mana": 0,
+		"name": "Fortitude",
+		"radius": 0,
+		"school": 0,
+		"src": "skill-passive"
+	},
+	"heal": {
+		"buffs": null,
+		"cooldown": null,
+		"damage": {
+			"max": 0,
+			"min": 0
+		},
+		"id": "heal",
+		"mana": 20,
+		"name": "Heal",
+		"radius": 0,
+		"school": 16,
+		"src": "skill-magic"
+	},
+	"rally": {
+		"buffs": {},
+		"cooldown": [
+			0,
+			30
+		],
+		"damage": {
+			"max": 0,
+			"min": 0
+		},
+		"id": "rally",
+		"mana": 0,
+		"name": "Rally",
+		"radius": 0,
+		"school": 0,
+		"src": "skill-melee"
+	},
+	"slash": {
+		"buffs": {
+			"haste": {
+				"source": 0,
+				"stacks": 2,
+				"time": [
+					0,
+					5
+				]
+			},
+			"might": {
+				"source": 102,
+				"stacks": 1,
+				"time": [
+					0,
+					10
+				]
+			}
+		},
+		"cooldown": [
+			0,
+			1
+		],
+		"damage": {
+			"max": 30,
+			"min": 10
+		},
+		"id": "slash",
+		"mana": 0,
+		"name": "Slash",
+		"radius": 0,
+		"school": 0,
+		"src": "skill-melee"
+	}
+}

@@ -1,0 +1,29 @@
+{
+	"fireball": {
+		"name": "Fireball",
+		"cooldown": [
+			0,
+			3
+		],
+		"mana": 30,
+		"school": 1,
+		"src": "skill-magic"
+	},
+	"heal": {
+		"name": "Heal",
+		"cooldown": null,
+		"mana": 20,
+		"school": 16,
+		"src": "skill-magic"
+	},
+	"blink": {
+		"name": "Blink",
+		"cooldown": [
+			1,
+			250
+		],
+		"mana": 15,
+		"school": 0,
+		"src": "skill-magic"
+	}
+}

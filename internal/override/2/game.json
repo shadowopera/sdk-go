@@ -1,10 +1,9 @@
 {
-	"x-int": 1000,
-	"x-int32": 1320,
-	"x-object": {
-		"fieldX": 100
-	},
-	"x-tuple": {
-		"item1": 12.5
+	"maxLevel": 80,
+	"slotSizes": [
+		10
+	],
+	"tint": {
+		"w": 0.5
 	}
 }

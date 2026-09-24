@@ -1,0 +1,110 @@
+{
+	"101": {
+		"bestOwner": 1,
+		"enchants": [
+			{
+				"bonus": 50,
+				"element": 16,
+				"scroll": 104
+			},
+			null
+		],
+		"icon": "items/excalibur.png",
+		"id": 101,
+		"name": "Excalibur",
+		"price": {
+			"gem": 50,
+			"gold": 5000
+		},
+		"rarity": 4,
+		"sellPrice": {
+			"gem": 0,
+			"gold": 2500
+		},
+		"stackable": false,
+		"tags": [
+			"weapon",
+			"sword",
+			"legendary"
+		]
+	},
+	"102": {
+		"bestOwner": 2,
+		"enchants": [
+			{
+				"bonus": 10,
+				"element": 1,
+				"scroll": 103
+			},
+			{
+				"bonus": 5,
+				"element": 2,
+				"scroll": 0
+			}
+		],
+		"icon": "items/staff.png",
+		"id": 102,
+		"name": "Oak Staff",
+		"price": {
+			"gem": 0,
+			"gold": 800
+		},
+		"rarity": 2,
+		"sellPrice": null,
+		"stackable": false,
+		"tags": [
+			"weapon",
+			"staff"
+		]
+	},
+	"103": {
+		"bestOwner": 0,
+		"enchants": null,
+		"icon": "items/potion.png",
+		"id": 103,
+		"name": "Healing Potion",
+		"price": {
+			"gem": 0,
+			"gold": 10
+		},
+		"rarity": 0,
+		"sellPrice": {
+			"gem": 0,
+			"gold": 5
+		},
+		"stackable": true,
+		"tags": [
+			"consumable"
+		]
+	},
+	"104": {
+		"bestOwner": 0,
+		"enchants": null,
+		"icon": "",
+		"id": 104,
+		"name": "Elixir of Life",
+		"price": {
+			"gem": 5,
+			"gold": 1000
+		},
+		"rarity": 3,
+		"sellPrice": null,
+		"stackable": true,
+		"tags": []
+	},
+	"105": {
+		"bestOwner": 0,
+		"enchants": null,
+		"icon": "",
+		"id": 105,
+		"name": "Aegis Shield",
+		"price": {
+			"gem": 0,
+			"gold": 0
+		},
+		"rarity": 0,
+		"sellPrice": null,
+		"stackable": false,
+		"tags": []
+	}
+}

@@ -16,9 +16,10 @@ var (
 
 // checkUpdateGoldenFiles serializes all ready atlas items and either writes them to
 // disk (when -update is set) or compares them byte-for-byte with existing
-// golden files.
+// golden files. It also checks the binding of every XRef in atlas.
 func checkUpdateGoldenFiles(t *testing.T, atlas archmage.Atlas, goldenDir string) {
 	t.Helper()
+	checkXRefs(t, atlas)
 	for k, item := range atlas.AtlasItems() {
 		if item.Ready {
 			data, err := archmage.Canonicalize(item.Cfg)

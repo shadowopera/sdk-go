@@ -1,0 +1,12 @@
+{
+	"slash": {
+		"damage": {
+			"max": 25
+		},
+		"buffs": {
+			"might": {
+				"source": 102
+			}
+		}
+	}
+}

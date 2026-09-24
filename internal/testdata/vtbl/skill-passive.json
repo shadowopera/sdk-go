@@ -1,49 +1,14 @@
 {
-	"sk101": {
-		"name": "Arcane Mastery",
-		"class": "Mage",
-		"Foo": {
-			"10": {
-				"X5": 100,
-				"X1": "X1-1"
-			}
-		},
-		"weapons": null,
-		"cross-skill2": "sk2"
+	"aura": {
+		"name": "Holy Aura",
+		"cooldown": null,
+		"radius": 5.5,
+		"src": "skill-passive"
 	},
-	"sk102": {
-		"name": "Toughness",
-		"class": "Warrior",
-		"Foo": {
-			"20": {
-				"X5": 200,
-				"X1": "X1-2-1"
-			},
-			"25": {
-				"X5": 201,
-				"X1": "X1-2-2"
-			}
-		},
-		"weapons": [
-			1,
-			13,
-			1103
-		],
-		"cross-skill2": "sk1"
-	},
-	"sk103": {
-		"name": "Spiritual Guidance",
-		"class": "Priest",
-		"Foo": {
-			"30": {
-				"X5": 300,
-				"X1": "X1-3"
-			}
-		},
-		"weapons": [
-			1101,
-			1201
-		],
-		"cross-skill2": ""
+	"fortitude": {
+		"name": "Fortitude",
+		"cooldown": null,
+		"radius": 0,
+		"src": "skill-passive"
 	}
 }

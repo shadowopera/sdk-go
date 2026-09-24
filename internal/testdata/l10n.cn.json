@@ -1,3 +1,5 @@
 {
-	"game.x-l10n": "今儿天气真好"
+	"enum::HeroClass.Warrior": "战士",
+	"l10n.xlsx[game.title]": "阿瓦隆传说",
+	"hero[2].name": "梅林"
 }
