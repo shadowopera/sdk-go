@@ -9,6 +9,7 @@ import (
 	"iter"
 	"maps"
 	"os"
+	"path"
 	"path/filepath"
 	"slices"
 	"strings"
@@ -111,7 +112,7 @@ func loadAtlasImpl(atlasFile string, cfgRoot string, atlas Atlas, opts *atlasOpt
 		if cfg.fsys != nil {
 			continue
 		}
-		stat, err := os.Stat(cfg.root)
+		stat, err := opts.stat(cfg.root)
 		if err != nil {
 			return fmt.Errorf("<archmage> invalid override root directory %q | %w", cfg.root, err)
 		}
@@ -120,7 +121,7 @@ func loadAtlasImpl(atlasFile string, cfgRoot string, atlas Atlas, opts *atlasOpt
 		}
 	}
 
-	atlasData, err := os.ReadFile(atlasFile)
+	atlasData, err := opts.readFile(atlasFile)
 	if err != nil {
 		return err
 	}
@@ -219,12 +220,12 @@ func loadItem(ctx context.Context, key string, item *AtlasItem,
 					continue
 				}
 			} else {
-				ovr := filepath.Join(cfg.root, file)
-				if _, err := os.Stat(ovr); err != nil {
+				ovr := opts.joinPath(cfg.root, file)
+				if _, err := opts.stat(ovr); err != nil {
 					continue
 				}
 			}
-			ovrFile, ovrData, err := readOverrideFile(cfg, file)
+			ovrFile, ovrData, err := opts.readOverrideFile(cfg, file)
 			if err != nil {
 				return fmt.Errorf("failed to read override file: %s | %w", file, err)
 			}
@@ -268,8 +269,8 @@ func loadItem(ctx context.Context, key string, item *AtlasItem,
 	}
 
 	for i, f := range files {
-		fp := filepath.Join(cfgRoot, f)
-		data, err := os.ReadFile(fp)
+		fp := opts.joinPath(cfgRoot, f)
+		data, err := opts.readFile(fp)
 		if err != nil {
 			return err
 		}
@@ -316,29 +317,21 @@ func compareLower(a, b string) int {
 	return cmp.Compare(strings.ToLower(a), strings.ToLower(b))
 }
 
-func readOverrideFile(cfg overrideConfig, name string) (string, []byte, error) {
-	if cfg.fsys != nil {
-		data, err := fs.ReadFile(cfg.fsys, name)
-		return name, data, err
-	}
-
-	p := filepath.Join(cfg.root, name)
-	data, err := os.ReadFile(p)
-	return p, data, err
-}
-
 type overrideConfig struct {
 	// fsys supplies the override files when set.
 	fsys fs.FS
-	// root is the directory holding the override files. It applies only when
-	// fsys is nil: an fs.FS is already rooted at the directory it exposes, so
-	// no extra prefix is needed.
+	// root is the directory holding the override files. It is used only when
+	// fsys is nil, and is resolved in atlasOptions.fsys. An fs.FS is already
+	// rooted at the directory it exposes, so no extra prefix is needed.
 	root string
 }
 
 type atlasOptions struct {
 	Logger
 
+	// fsys supplies atlas.json, the config files and the WithOverrideRoot
+	// directories. nil means the OS file system.
+	fsys            fs.FS
 	overrideConfigs []overrideConfig
 
 	loadStrategy    func(iter.Seq2[string, *AtlasItem], AtlasItemLoadFunc) error
@@ -369,6 +362,40 @@ func (opts *atlasOptions) shouldSkip(key string) (string, bool) {
 	}
 }
 
+func (opts *atlasOptions) stat(name string) (fs.FileInfo, error) {
+	if opts.fsys != nil {
+		return fs.Stat(opts.fsys, name)
+	}
+	return os.Stat(name)
+}
+
+func (opts *atlasOptions) readFile(name string) ([]byte, error) {
+	if opts.fsys != nil {
+		return fs.ReadFile(opts.fsys, name)
+	}
+	return os.ReadFile(name)
+}
+
+func (opts *atlasOptions) joinPath(elem ...string) string {
+	if opts.fsys != nil {
+		return path.Join(elem...)
+	}
+	return filepath.Join(elem...)
+}
+
+// readOverrideFile reads name from the override source cfg. It also returns
+// the path it read, for use in messages.
+func (opts *atlasOptions) readOverrideFile(cfg overrideConfig, name string) (string, []byte, error) {
+	if cfg.fsys != nil {
+		data, err := fs.ReadFile(cfg.fsys, name)
+		return name, data, err
+	}
+
+	p := opts.joinPath(cfg.root, name)
+	data, err := opts.readFile(p)
+	return p, data, err
+}
+
 // Option configures the atlas loading behavior.
 type Option func(*atlasOptions)
 
@@ -376,6 +403,25 @@ type Option func(*atlasOptions)
 func WithLogger(logger Logger) Option {
 	return func(opts *atlasOptions) {
 		opts.Logger = logger
+	}
+}
+
+// WithFS makes LoadAtlas read atlas.json, the config files and the files in
+// WithOverrideRoot directories from fsys instead of the OS file system.
+// WithOverrideFS sources are not affected. The paths passed to LoadAtlas and
+// WithOverrideRoot are then paths in fsys and must be valid fs.FS paths (see
+// [fs.ValidPath]).
+//
+// Example:
+//
+//	//go:embed config
+//	var configFS embed.FS
+//
+//	archmage.LoadAtlas("config/atlas.json", "config", atlas,
+//	    archmage.WithFS(configFS))
+func WithFS(fsys fs.FS) Option {
+	return func(opts *atlasOptions) {
+		opts.fsys = fsys
 	}
 }
 

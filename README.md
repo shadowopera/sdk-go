@@ -27,6 +27,7 @@ generated Go types, resolves cross-table references, and calls post-load hooks.
 - **Whitelist/Blacklist** — load only a subset of atlas items
 - **Layered overrides** — merge files with matching relative paths from additional override sources (a directory path or an `fs.FS`) into the base configs, field by field, at load time
 - **Pluggable load strategies** — parallel loading via `WithLoadStrategy`
+- **Pluggable file system** — load from embedded files, in-memory data, or any other source via an `fs.FS`
 - **Versioning** — VCS metadata (branch, commit, timestamp, etc.), when present in `atlas.json`, is available on the loaded atlas
 
 ## Requirements
@@ -96,6 +97,8 @@ Configure loading via functional options passed to `LoadAtlas`:
 err := archmage.LoadAtlas("configs/atlas.json", "configs/", atlas,
     // custom logger (default: slog.Default(); use &archmage.NullLogger{} to silence)
     archmage.WithLogger(myLogger),
+    // replace the OS file system
+    archmage.WithFS(configFS),
     // load only these keys
     archmage.WithWhitelist([]string{"hero", "item"}),
     // skip these keys
@@ -103,7 +106,7 @@ err := archmage.LoadAtlas("configs/atlas.json", "configs/", atlas,
     // select a variant
     archmage.WithVariant("game", "hard"),
     // add an override directory
-    archmage.WithOverrideRoot("configs/override/"),
+    archmage.WithOverrideRoot("configs/override"),
     // add an override filesystem
     archmage.WithOverrideFS(embeddedFS),
     // mutate atlas.json after parsing

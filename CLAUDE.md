@@ -58,7 +58,7 @@ This SDK mirrors sdk-cs (`../sdk-cs`). The table lists the load options each SDK
 | Option | go | cs |
 |---|---|---|
 | `WithLogger` | ✓ | ✓ |
-| `WithFS` | | ✓ |
+| `WithFS` | ✓ | ✓ |
 | `WithAtlasModifier` | ✓ | ✓ |
 | `WithWhitelist` | ✓ | ✓ |
 | `WithBlacklist` | ✓ | ✓ |

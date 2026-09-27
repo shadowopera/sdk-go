@@ -26,6 +26,8 @@
 //     additional override sources (a directory path or an [fs.FS]) into the
 //     base configs, field by field, at load time
 //   - Pluggable load strategies — parallel loading via [WithLoadStrategy]
+//   - Pluggable file system — load from embedded files, in-memory data, or
+//     any other source via an [fs.FS] and [WithFS]
 //   - Versioning — VCS metadata (branch, commit, timestamp, etc.), when present
 //     in atlas.json, is available on the loaded atlas
 //

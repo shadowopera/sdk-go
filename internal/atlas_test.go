@@ -446,6 +446,56 @@ func TestAtlas_WithOverrideRootAndFS(t *testing.T) {
 	checkUpdateGoldenFiles(t, atlas, "golden/override_root_and_fs")
 }
 
+func TestAtlas_WithFS(t *testing.T) {
+	fsys := fstest.MapFS{}
+	fsys["testdata/atlas.json"] = &fstest.MapFile{
+		Data: []byte(`{"version":{"branch":"test-branch","id":"123456"},"variant":{"game":{"/":"game.json"}},"many":{},"unique":{}}`),
+	}
+	fsys["testdata/game.json"] = &fstest.MapFile{
+		Data: []byte(`{"bgm":"hello memory fs","maxLevel":10}`),
+	}
+	fsys["override/game.json"] = &fstest.MapFile{
+		Data: []byte(`{"maxLevel":99}`),
+	}
+
+	atlas := conf.NewConfigAtlas()
+	err := archmage.LoadAtlas("testdata/atlas.json", "testdata", atlas,
+		archmage.WithLogger(newScavenger()),
+		archmage.WithFS(fsys),
+		archmage.WithOverrideRoot("override"),
+		archmage.WithWhitelist([]string{"game"}),
+	)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if atlas.GameCfg.Bgm != "hello memory fs" {
+		t.Fatalf("unexpected bgm: %s", atlas.GameCfg.Bgm)
+	}
+	if atlas.GameCfg.MaxLevel != 99 {
+		t.Fatalf("unexpected maxLevel: %d", atlas.GameCfg.MaxLevel)
+	}
+	if v := atlas.DataVersion; v == nil || v.Branch != "test-branch" || v.ID != "123456" {
+		t.Fatalf("unexpected data version: %+v", v)
+	}
+}
+
+func TestAtlas_WithFS_OverrideRootNotFound(t *testing.T) {
+	// override/1 exists in the OS file system but not in fsys.
+	fsys := fstest.MapFS{}
+	atlas := conf.NewConfigAtlas()
+	err := archmage.LoadAtlas("testdata/atlas.json", "testdata", atlas,
+		archmage.WithLogger(newScavenger()),
+		archmage.WithFS(fsys),
+		archmage.WithOverrideRoot("override/1"),
+	)
+	if err == nil {
+		t.Fatal("expected error, got nil")
+	}
+	if !strings.HasPrefix(err.Error(), `<archmage> invalid override root directory "override/1"`) {
+		t.Fatalf("unexpected error: %v", err)
+	}
+}
+
 func TestAtlas_WithLoadStrategy(t *testing.T) {
 	loadStrategy := func(all iter.Seq2[string, *archmage.AtlasItem], load archmage.AtlasItemLoadFunc) error {
 		eg, ctx := errgroup.WithContext(context.Background())
