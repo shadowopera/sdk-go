@@ -477,7 +477,7 @@ func TestAtlas_WithLoadStrategy(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	checkUpdateGoldenFiles(t, atlas, "golden/custom_loader")
+	checkUpdateGoldenFiles(t, atlas, "golden/max_concurrency")
 }
 
 func TestAtlas_NotFoundCallback(t *testing.T) {
