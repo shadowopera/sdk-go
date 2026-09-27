@@ -23,7 +23,7 @@ generated Go types, resolves cross-table references, and calls post-load hooks.
 - **Duration** — nanosecond precision; formats as human-readable strings
 - **MinMax** — random value selection within a range
 - **WeightedPool** — weighted random selection with probability proportional to item weight
-- **Variants** — switch an item to an alternative data set at load time via `WithVariant`
+- **Variants** — switch an atlas item to use an alternative data set at load time via `WithVariant`
 - **Whitelist/Blacklist** — load only a subset of atlas items
 - **Layered overrides** — merge files with matching relative paths from additional override sources (a directory path or an `fs.FS`) into the base configs, field by field, at load time
 - **Pluggable load strategies** — parallel loading via `WithLoadStrategy`
@@ -84,7 +84,7 @@ Loading proceeds in the following steps:
 
 1. Parse `atlas.json`
 2. Apply `AtlasModifier` (if set)
-3. For each item: read files → deserialize → apply overrides
+3. For each atlas item: read files → deserialize → apply overrides
 4. `BindRefs()` — resolve cross-table references
 5. `OnLoaded()` — post-load initialization
 
@@ -111,14 +111,14 @@ err := archmage.LoadAtlas("configs/atlas.json", "configs/", atlas,
 )
 ```
 
-**Whitelist / Blacklist** — If a non-empty whitelist is set, only listed keys are loaded (blacklist
+**Whitelist and blacklist** — If a non-empty whitelist is set, only listed keys are loaded (blacklist
 is ignored). All keys must exist in the atlas or an error is returned.
 
 **Variant selection** — A variant-mapped key loads its `"/"` variant unless `WithVariant`
 selects another one. The variant in use is recorded in `AtlasItem.Variant`.
 
 **Override layers** — Each `WithOverrideRoot` / `WithOverrideFS` call adds another
-override source. When loading an item, each override source is checked in the order they
+override source. When loading an atlas item, each override source is checked in the order they
 were added; any matching file is deserialized and its fields applied on top of the base
 data. This is useful for environment-specific patches.
 

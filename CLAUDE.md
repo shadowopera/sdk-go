@@ -51,6 +51,29 @@ cd archmage && bash coverage.sh
 - **Error format**: `fmt.Errorf("<archmage> context message | %w", err)`
 - **Unexported sentinel errors**: `_errInvalidDurationShardsType`
 
+## Load Options in Go and C#
+
+This SDK mirrors sdk-cs (`../sdk-cs`). The table lists the load options each SDK has. Update it when either SDK adds or removes an option.
+
+| Option | go | cs |
+|---|---|---|
+| `WithLogger` | ✓ | ✓ |
+| `WithFS` | | ✓ |
+| `WithAtlasModifier` | ✓ | ✓ |
+| `WithWhitelist` | ✓ | ✓ |
+| `WithBlacklist` | ✓ | ✓ |
+| `WithVariant` | ✓ | ✓ |
+| `WithOverrideRoot` | ✓ | ✓ |
+| `WithOverrideFS` | ✓ | ✓ |
+| `WithLoadStrategy` | ✓ | |
+| `WithMaxConcurrency` | | ✓ |
+| `WithInlineParse` | | ✓ |
+| `WithJsonSettings` | | ✓ |
+
+## Changelog
+
+`CHANGELOG.md` is updated only by the release workflow (`scripts/release.sh`). Do not edit it during development.
+
 ## Commit Message Style
 
 - Short imperative subject, no trailing period
