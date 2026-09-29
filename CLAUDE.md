@@ -67,7 +67,7 @@ This SDK mirrors sdk-cs (`../sdk-cs`). The table lists the load options each SDK
 | `WithOverrideFS` | ✓ | ✓ |
 | `WithLoadStrategy` | ✓ | |
 | `WithMaxConcurrency` | | ✓ |
-| `WithInlineParse` | | ✓ |
+| `WithMainThreadParsing` | | ✓ |
 | `WithJsonSettings` | | ✓ |
 
 ## Changelog
