@@ -8,19 +8,20 @@ import (
 )
 
 var (
-	// GetI18n returns the active I18n instance. It must be set before calling
-	// L10n.GetText or L10n.Text.
+	// GetI18n returns the active I18n instance used by L10n.
+	// This is a global setting and must be set before calling L10n.GetText or L10n.Text.
 	GetI18n func() *archmage.I18n
-	// GetPreferredLanguage returns the player's current language tag. It must
-	// be set before calling L10n.Text.
+	// GetPreferredLanguage returns the preferred language tag used by L10n.
+	// This is a global setting and must be set before calling L10n.Text.
 	GetPreferredLanguage func() language.Tag
 )
 
 // L10n is a localization key that resolves to translated text via the active I18n instance.
 type L10n string
 
-// GetText returns the translation for the given language, or an error if the
-// key is not found. An empty key yields an empty string.
+// GetText returns the translation in the given language. It returns an error
+// if the key is not found.
+// An empty key yields an empty string.
 func (l L10n) GetText(lang language.Tag) (string, error) {
 	if l == "" {
 		return "", nil
@@ -28,9 +29,9 @@ func (l L10n) GetText(lang language.Tag) (string, error) {
 	return GetI18n().GetText(string(l), lang)
 }
 
-// Text returns the translation for the player's preferred language, falling
-// back to the default language if the key isn't found. An empty key yields an
-// empty string.
+// Text returns the translation in the globally configured preferred language,
+// falling back to the default language if no translation is found.
+// An empty key yields an empty string.
 func (l L10n) Text() string {
 	if l == "" {
 		return ""
