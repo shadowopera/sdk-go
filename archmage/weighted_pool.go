@@ -2,6 +2,7 @@ package archmage
 
 import (
 	"math/rand/v2"
+	"slices"
 )
 
 // WeightedPool holds items alongside their selection weights in two parallel slices
@@ -18,6 +19,18 @@ type WeightedPool[T any] struct {
 // Len returns the number of items in the pool.
 func (wp *WeightedPool[T]) Len() int {
 	return len(wp.Items)
+}
+
+// Clone returns a copy of the pool. The copy has its own Items and Weights slices,
+// so assigning to their elements does not affect the original pool.
+func (wp *WeightedPool[T]) Clone() *WeightedPool[T] {
+	if wp == nil {
+		return nil
+	}
+	return &WeightedPool[T]{
+		Items:   slices.Clone(wp.Items),
+		Weights: slices.Clone(wp.Weights),
+	}
 }
 
 // Sample returns a randomly selected item, weighted by Weights.

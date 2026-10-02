@@ -2,6 +2,7 @@ package archmage_test
 
 import (
 	"math"
+	"slices"
 	"testing"
 
 	"shadop.dev/pkg/sdk-go/archmage"
@@ -223,5 +224,34 @@ func TestWeightedPoolWithZeroWeightNeverSelected(t *testing.T) {
 		if idx := wp.SampleIndexWith(value); idx == 1 {
 			t.Fatalf("zero-weight item at index 1 was selected for value=%.4f", value)
 		}
+	}
+}
+
+func TestWeightedPoolClone(t *testing.T) {
+	wp := &archmage.WeightedPool[int]{
+		Items:   []int{10, 20, 30},
+		Weights: []int32{1, 2, 3},
+	}
+	c := wp.Clone()
+	if !slices.Equal(c.Items, wp.Items) || !slices.Equal(c.Weights, wp.Weights) {
+		t.Fatalf("clone differs from original: %+v vs %+v", c, wp)
+	}
+
+	c.Items[0] = 99
+	c.Weights[0] = 99
+	if wp.Items[0] != 10 || wp.Weights[0] != 1 {
+		t.Fatalf("modifying the clone changed the original: %+v", wp)
+	}
+}
+
+func TestWeightedPoolCloneNil(t *testing.T) {
+	var wp *archmage.WeightedPool[int]
+	if c := wp.Clone(); c != nil {
+		t.Fatalf("expected nil, got %+v", c)
+	}
+
+	c := (&archmage.WeightedPool[int]{}).Clone()
+	if c == nil || c.Items != nil || c.Weights != nil {
+		t.Fatalf("expected a pool with nil slices, got %+v", c)
 	}
 }

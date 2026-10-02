@@ -217,6 +217,8 @@ color.String()                              // "#FF8000"
 methods draw an item (or its index) at random with probability proportional to its
 weight.
 
+To change weights at runtime, call `Clone` and change the copy.
+
 ### Vec
 
 `Vec2[T]`, `Vec3[T]`, `Vec4[T]` are typed vectors. Fields are accessed as `.X`, `.Y`, `.Z`, `.W`.
