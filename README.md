@@ -159,10 +159,9 @@ _ = i18n.MergeL10nFile("l10n/en.json", language.English)
 _ = i18n.MergeL10nFile("l10n/zh-CN.json", language.SimplifiedChinese)
 
 i18n.Text("ui.ok", language.SimplifiedChinese)  // → "确认"
-i18n.Text("ui.ok", language.Japanese)           // → falls back to "OK"
+i18n.Text("ui.ok", language.Japanese)           // → falls back to "OK" in English
+i18n.Text("ui.xx", language.Japanese)           // → no translation found, so returns "ui.xx"
 ```
-
-`Text` panics if the key is missing in both languages; use `GetText` to get an error instead.
 
 In generated config types, localized fields are typed as `L10n`. In JSON they are
 represented as strings (e.g., `"ui.ok"`); calling `.Text()` on an `L10n` field looks up
@@ -176,6 +175,8 @@ conf.GetPreferredLanguage = func() language.Tag { return language.SimplifiedChin
 // Then in your code:
 label := hero.Name.Text()
 ```
+
+To detect a missing translation, use `GetText`, which returns an error.
 
 ### XRef — Cross-table Reference
 
