@@ -30,8 +30,8 @@ func (l L10n) GetText(lang language.Tag) (string, error) {
 }
 
 // Text returns the translation in the globally configured preferred language,
-// falling back to the default language if no translation is found.
-// An empty key yields an empty string.
+// falling back to the default language if no translation is found, and
+// finally to the key string if neither language has a translation.
 func (l L10n) Text() string {
 	if l == "" {
 		return ""

@@ -365,10 +365,8 @@ func TestI18n_Text(t *testing.T) {
 		t.Fatalf("expected 'Hello', got %q", r1)
 	}
 
-	defer func() {
-		if r := recover(); r == nil {
-			t.Fatalf("expected panic for missing key, but did not panic")
-		}
-	}()
-	i18n.Text("world", language.English)
+	r2 := i18n.Text("world", language.English)
+	if r2 != "world" {
+		t.Fatalf("expected 'world', got %q", r2)
+	}
 }

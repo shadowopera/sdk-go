@@ -18,7 +18,7 @@ type I18n struct {
 	texts    map[language.Tag]map[string]string
 }
 
-// NewI18n creates an I18n instance with the specified fallback language.
+// NewI18n creates an I18n instance with the specified fallback language as the default.
 func NewI18n(fallback language.Tag) *I18n {
 	return &I18n{
 		fallback: fallback,
@@ -69,7 +69,7 @@ func (i18n *I18n) MergeL10nFile(path string, lang language.Tag) error {
 }
 
 // GetText returns the translation for key in the specified language.
-// It falls back to the fallback language if the key isn't found there.
+// It falls back to the default language if the key is not found there.
 // It returns an error if the key is missing in both languages.
 func (i18n *I18n) GetText(key string, lang language.Tag) (string, error) {
 	if m, ok := i18n.texts[lang]; ok {
@@ -86,12 +86,13 @@ func (i18n *I18n) GetText(key string, lang language.Tag) (string, error) {
 	return "", fmt.Errorf("<archmage> i18n: text not found. key: %q, lang: %s", key, lang.String())
 }
 
-// Text returns the translation for key in the specified language, with the
-// same fallback behavior as GetText, or panics if not found.
+// Text returns the translation for key in the specified language, falling back
+// to the default language, and finally to the key string if neither language
+// has a translation. To detect a missing translation, use GetText.
 func (i18n *I18n) Text(key string, lang language.Tag) string {
 	x, err := i18n.GetText(key, lang)
 	if err != nil {
-		panic(err)
+		return key
 	}
 	return x
 }
