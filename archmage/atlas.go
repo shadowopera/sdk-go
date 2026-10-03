@@ -184,7 +184,7 @@ func loadAtlasImpl(atlasFile string, cfgRoot string, atlas Atlas, opts *atlasOpt
 	atlas.BindRefs()
 
 	elapsed := time.Since(start).Milliseconds()
-	opts.Info(fmt.Sprintf("<archmage> Loaded %d config items in %dms", len(filtered), elapsed))
+	opts.Info(fmt.Sprintf("<archmage> Loaded %d atlas items in %dms", len(filtered), elapsed))
 	return nil
 }
 
@@ -307,8 +307,12 @@ func loadItem(ctx context.Context, key string, item *AtlasItem,
 	default:
 		supplement = fmt.Sprintf(" with %d overrides", len(fd.overrides))
 	}
+	mapping := "mapping=" + item.Mapping
+	if item.Mapping == MappingVariant {
+		mapping += ", variant=" + item.Variant
+	}
 	elapsed := time.Since(start).Milliseconds()
-	opts.Info(fmt.Sprintf("<archmage> Loaded (%s) %s%s (%dms)", item.Mapping, fd.paths, supplement, elapsed))
+	opts.Info(fmt.Sprintf("<archmage> Loaded atlas item %q (%s) from %s%s in %dms", key, mapping, fd.paths, supplement, elapsed))
 	item.Ready = true
 	return nil
 }
