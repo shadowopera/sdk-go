@@ -46,7 +46,7 @@ func (x SkillTable) Lookup(cfgID SkillCfgID) *SkillCfg {
 	return xLookup[SkillCfgID, *SkillCfg](cfgID, x, "SkillTable")
 }
 
-// region Trifles
+// region Details
 
 func (x SkillCfgID) Cfg() *SkillCfg {
 	return GetConfigAtlas().SkillTable[x]

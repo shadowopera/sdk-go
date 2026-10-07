@@ -27,7 +27,7 @@ func (x RegionTable) Lookup(cfgID RegionCfgID) *RegionCfg {
 	return xLookup[RegionCfgID, *RegionCfg](cfgID, x, "RegionTable")
 }
 
-// region Trifles
+// region Details
 
 func (x RegionCfgID) Cfg() *RegionCfg {
 	return GetConfigAtlas().RegionTable[x]

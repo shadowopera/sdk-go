@@ -5,7 +5,7 @@ package conf
 
 import "shadop.dev/pkg/sdk-go/internal/enums"
 
-type MonsterCfgID int
+type MonsterCfgID int64
 
 type MonsterTable map[MonsterCfgID]*MonsterCfg
 
@@ -43,7 +43,7 @@ func (x MonsterTable) Lookup(cfgID MonsterCfgID) *MonsterCfg {
 	return xLookup[MonsterCfgID, *MonsterCfg](cfgID, x, "MonsterTable")
 }
 
-// region Trifles
+// region Details
 
 func (x MonsterCfgID) Cfg() *MonsterCfg {
 	return GetConfigAtlas().MonsterTable[x]

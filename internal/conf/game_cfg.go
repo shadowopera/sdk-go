@@ -55,7 +55,7 @@ type GameCfg struct {
 	WorldBounds Vec4[int32] `json:"worldBounds"`
 }
 
-// region Trifles
+// region Details
 
 func (x *GameCfg) bindRefs(atlas *ConfigAtlas) {
 	x.StartHero.Ref = atlas.HeroTable.Lookup(x.StartHero.CfgID)

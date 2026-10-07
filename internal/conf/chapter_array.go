@@ -17,7 +17,7 @@ type ChapterCfg struct {
 	Waves       []int64                          `json:"waves"`
 }
 
-// region Trifles
+// region Details
 
 func (x ChapterArray) bindRefs(atlas *ConfigAtlas) {
 	for _, v1 := range x {

@@ -31,7 +31,6 @@ type ItemCfg struct {
 	Enchants []*item_EnchantsEntry `json:"enchants"`
 }
 
-// Price represents $.*.price
 type Price struct {
 	Gold int32 `json:"gold"`
 	Gem  int16 `json:"gem"`
@@ -55,7 +54,7 @@ func (x ItemTable) Lookup(cfgID ItemCfgID) *ItemCfg {
 	return xLookup[ItemCfgID, *ItemCfg](cfgID, x, "ItemTable")
 }
 
-// region Trifles
+// region Details
 
 func (x ItemCfgID) Cfg() *ItemCfg {
 	return GetConfigAtlas().ItemTable[x]

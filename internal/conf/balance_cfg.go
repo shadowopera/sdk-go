@@ -18,6 +18,6 @@ type BalanceCfg struct {
 	XpCurve []int32 `json:"xpCurve"`
 }
 
-// region Trifles
+// region Details
 
 // endregion

@@ -39,7 +39,7 @@ func (x DropTable) Lookup(cfgID DropCfgID) *DropCfg {
 	return xLookup[DropCfgID, *DropCfg](cfgID, x, "DropTable")
 }
 
-// region Trifles
+// region Details
 
 func (x DropCfgID) Cfg() *DropCfg {
 	return GetConfigAtlas().DropTable[x]

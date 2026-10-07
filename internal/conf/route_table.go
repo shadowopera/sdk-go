@@ -5,7 +5,7 @@ package conf
 
 type RouteTable map[string]map[string][][]XRef[RegionCfgID, RegionCfg]
 
-// region Trifles
+// region Details
 
 func (x RouteTable) bindRefs(atlas *ConfigAtlas) {
 	for _, v1 := range x {

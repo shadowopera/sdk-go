@@ -72,7 +72,6 @@ type HeroCfg struct {
 	Talents []*hero_TalentsEntry `json:"talents"`
 }
 
-// Stats represents $.*.stats
 type Stats struct {
 	// Base HP
 	Hp int32 `json:"hp"`
@@ -96,7 +95,7 @@ func (x HeroTable) Lookup(cfgID HeroCfgID) *HeroCfg {
 	return xLookup[HeroCfgID, *HeroCfg](cfgID, x, "HeroTable")
 }
 
-// region Trifles
+// region Details
 
 func (x HeroCfgID) Cfg() *HeroCfg {
 	return GetConfigAtlas().HeroTable[x]
