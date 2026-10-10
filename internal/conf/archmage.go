@@ -3,9 +3,6 @@
 package conf
 
 import (
-	_ "embed"
-	"encoding/json/v2"
-
 	"shadop.dev/pkg/sdk-go/archmage"
 )
 
@@ -45,18 +42,3 @@ type (
 type (
 	AtlasItem = archmage.AtlasItem
 )
-
-var (
-	//go:embed version.json
-	_codeVersion []byte
-)
-
-// CodeVersion returns the version info of the config repo at codegen time.
-func CodeVersion() *archmage.VersionInfo {
-	var info archmage.VersionInfo
-	err := json.Unmarshal(_codeVersion, &info)
-	if err != nil {
-		panic(err)
-	}
-	return &info
-}
