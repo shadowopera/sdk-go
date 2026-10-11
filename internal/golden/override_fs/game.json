@@ -77,10 +77,10 @@
 		"z": 0.25
 	},
 	"tips": {
-		"login": "game.tips.login",
-		"logout": "l10n.xlsx[common.tbd]"
+		"login": "game|$.tips.login",
+		"logout": "l10n.xlsx|common.tbd"
 	},
-	"title": "l10n.xlsx[game.title]",
+	"title": "l10n.xlsx|game.title",
 	"worldBounds": {
 		"w": 100,
 		"x": -100,

@@ -6,7 +6,7 @@
 		"id": "Dwarf"
 	},
 	"Elf": {
-		"birthplace": "Race[Elf].birthplace",
+		"birthplace": "Race|Elf|$.birthplace",
 		"heroIds": [
 			2
 		],
@@ -16,7 +16,7 @@
 		"id": "Elf"
 	},
 	"Human": {
-		"birthplace": "l10n.xlsx[race.human.home]",
+		"birthplace": "l10n.xlsx|race.human.home",
 		"heroIds": [
 			1,
 			3

@@ -1,6 +1,6 @@
 {
 	"1": {
-		"name": "l10n.xlsx[hero.arthur]",
+		"name": "l10n.xlsx|hero.arthur",
 		"title": "  the Once and Future King  ",
 		"class": 1,
 		"elements": 17,
@@ -57,7 +57,7 @@
 		]
 	},
 	"2": {
-		"name": "hero[2].name",
+		"name": "hero|2|$.name",
 		"title": "Archmage\nof Camelot",
 		"class": 2,
 		"elements": 6,
@@ -110,7 +110,7 @@
 		]
 	},
 	"3": {
-		"name": "l10n.xlsx[common.tbd]",
+		"name": "l10n.xlsx|common.tbd",
 		"title": "Fay's \"dark\" \\ art",
 		"class": 3,
 		"elements": 0,

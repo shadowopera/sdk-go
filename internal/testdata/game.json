@@ -1,5 +1,5 @@
 {
-	"title": "l10n.xlsx[game.title]",
+	"title": "l10n.xlsx|game.title",
 	"maxLevel": 60,
 	"startHero": 1,
 	"tickRate": [
@@ -40,8 +40,8 @@
 		"20": 101
 	},
 	"tips": {
-		"login": "game.tips.login",
-		"logout": "l10n.xlsx[common.tbd]"
+		"login": "game|$.tips.login",
+		"logout": "l10n.xlsx|common.tbd"
 	},
 	"classColors": {
 		"1": "#FF0000",

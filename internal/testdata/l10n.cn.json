@@ -1,5 +1,5 @@
 {
 	"enum::HeroClass.Warrior": "战士",
-	"l10n.xlsx[game.title]": "阿瓦隆传说",
-	"hero[2].name": "梅林"
+	"l10n.xlsx|game.title": "阿瓦隆传说",
+	"hero|2|$.name": "梅林"
 }

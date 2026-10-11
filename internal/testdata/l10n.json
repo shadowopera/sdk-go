@@ -1,11 +1,11 @@
 {
 	"enum::HeroClass.Warrior": "Warrior",
 	"enum::HeroClass.Mage": "Mage",
-	"l10n.xlsx[game.title]": "Legends of Avalon",
-	"l10n.xlsx[hero.arthur]": "Arthur Pendragon",
-	"l10n.xlsx[race.human.home]": "Camelot",
-	"l10n.xlsx[common.tbd]": "To be decided",
-	"game.tips.login": "Welcome back!",
-	"hero[2].name": "Merlin",
-	"Race[Elf].birthplace": "Silverwood"
+	"l10n.xlsx|game.title": "Legends of Avalon",
+	"l10n.xlsx|hero.arthur": "Arthur Pendragon",
+	"l10n.xlsx|race.human.home": "Camelot",
+	"l10n.xlsx|common.tbd": "To be decided",
+	"game|$.tips.login": "Welcome back!",
+	"hero|2|$.name": "Merlin",
+	"Race|Elf|$.birthplace": "Silverwood"
 }
