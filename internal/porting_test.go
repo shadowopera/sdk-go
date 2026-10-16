@@ -26,6 +26,7 @@ type portingLanguage struct {
 // against the Go golden files. Add new entries here as more SDKs are ported.
 var _portingLanguages = []portingLanguage{
 	{name: "cs", goldenDir: "../../sdk-cs/tests/golden"},
+	{name: "gd", goldenDir: "../../sdk-gd/tests/golden"},
 }
 
 func TestPortingGoldenFiles(t *testing.T) {
