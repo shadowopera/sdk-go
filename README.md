@@ -5,7 +5,7 @@
 The Go SDK is the runtime library through which Go applications load and
 access config data exported by Archmage.
 
-[Archmage](https://shadop.dev/archmage/) is a configuration solution for game development. It brings together the following: specifications on how to structure config data, define fields, and fill in values; pipelines that export runtime data and generate strongly-typed code; multi-language SDKs for loading and accessing that data at runtime; and a collaborative editing workflow for teams.
+[Archmage](https://shadop.dev/archmage/) is a config data solution for game development. It brings together the following: specifications on how to structure config data, define fields, and fill in values; pipelines that export runtime data and generate strongly-typed code; multi-language SDKs for loading and accessing that data at runtime; and a collaborative editing workflow for teams. Together, they cut manual config plumbing and keep config work maintainable as the project scales.
 
 The SDK is built around the concept of an **Atlas** — a registry that maps named
 keys to configurations. Each key is associated with one or more JSON files.
